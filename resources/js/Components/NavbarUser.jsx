@@ -4,13 +4,9 @@ import { useState } from "react";
 import MyContext from "./CreateContext";
 import { data } from "@/Data/DataBuku";
 
-function NavbarUser({ profile, logo }) {
+function NavbarUser({ profile, logo, handleBookmark, handleSettting, auth }) {
     const { value, setValue } = useContext(MyContext);
-    const [popUp, setPopUp] = useState(
-        setTimeout(() => {
-            setPopUp(false);
-        }, 8000)
-    );
+    const [popUp, setPopUp] = useState(false);
     const [cs, setCs] = useState(false);
     const [bookmark, setBookmark] = useState(false);
     const [setting, setSetting] = useState(false);
@@ -52,7 +48,7 @@ function NavbarUser({ profile, logo }) {
                 <div></div>
             )}
 
-            <div className="absolute z-50 py-2 w-full">
+            <div className="absolute z-40 py-2 w-full">
                 <div className="flex px-10 justify-between items-center">
                     <div className="flex items-center">
                         <img src={logo} alt="" className="w-[50px] h-[50px]" />
@@ -93,23 +89,33 @@ function NavbarUser({ profile, logo }) {
                         </button>
                     </div>
                     <div className="flex flex-row gap-10 items-center">
-                        <div
-                            className="relative"
-                            onMouseOver={() => setCs(!cs)}
-                            onMouseLeave={() => setCs(!cs)}
+                        <a
+                            href="https://wa.me/62813269032897?text=hallo..."
+                            target="blank"
                         >
-                            <img src="/cs.png" alt="" className="w-10 h-10" />
-                            {cs && (
-                                <p className="text-center text-[10px] w-32 absolute bg-white p-2 rounded-lg top-12 right-0">
-                                    Customer service
-                                    <span className="absolute -mt-3 rotate-45 w-3 h-3 bg-white right-5"></span>
-                                </p>
-                            )}
-                        </div>
+                            <div
+                                className="relative"
+                                onMouseOver={() => setCs(!cs)}
+                                onMouseLeave={() => setCs(!cs)}
+                            >
+                                <img
+                                    src="/cs.png"
+                                    alt=""
+                                    className="w-10 h-10"
+                                />
+                                {cs && (
+                                    <p className="text-center text-[10px] w-32 absolute bg-white p-2 rounded-lg top-12 right-0">
+                                        Customer service
+                                        <span className="absolute -mt-3 rotate-45 w-3 h-3 bg-white right-5"></span>
+                                    </p>
+                                )}
+                            </div>
+                        </a>
                         <div
                             className="relative"
                             onMouseOver={() => setBookmark(!bookmark)}
                             onMouseLeave={() => setBookmark(!bookmark)}
+                            onClick={handleBookmark}
                         >
                             <img
                                 src="/bookmark.png"
@@ -128,6 +134,7 @@ function NavbarUser({ profile, logo }) {
                             className="relative"
                             onMouseOver={() => setSetting(!setting)}
                             onMouseLeave={() => setSetting(!setting)}
+                            onClick={handleSettting}
                         >
                             <img
                                 src="/setting.png"
@@ -142,12 +149,20 @@ function NavbarUser({ profile, logo }) {
                             )}
                         </div>
                     </div>
-                    <div onClick={() => setPopUp(!popUp)} className="relative">
-                        <img
-                            src={profile}
-                            alt=""
-                            className="w-10 h-10 rounded-full object-cover"
-                        />
+                    <div
+                        onClick={() => setPopUp(!popUp)}
+                        className="relative cursor-pointer"
+                    >
+                        <div className="flex gap-2 items-center">
+                            <p className="text-white text-xs w-20 truncate capitalize">
+                                {auth}
+                            </p>
+                            <img
+                                src={profile}
+                                alt=""
+                                className="w-10 h-10 rounded-full object-cover"
+                            />
+                        </div>
                         {popUp && (
                             <Link
                                 href="/logout"

@@ -3,32 +3,29 @@ import MyContext from "@/Components/CreateContext";
 import DownloadExcelButton from "@/Components/DownloadExcelButton";
 import DownloadPDFButton from "@/Components/DownloadPDFButton";
 import Dropdown from "@/Components/Dropdown";
-import InputText from "@/Components/InputText";
 import Pagination from "@/Components/Pagination";
-import { user } from "@/Data/DataUser";
+import PopOver from "@/Components/PopOver";
+import axios from "axios";
 import React, { useContext, useState } from "react";
-const data = user;
+import { useEffect } from "react";
 
-function TabelUser() {
+function TabelUser({ data }) {
     const { value, setValue } = useContext(MyContext);
-    const uniqueGender = [
-        ...new Set(data.map((slide) => slide.gender.toLocaleLowerCase())),
-    ];
-    const uniqueStatus = [
-        ...new Set(data.map((slide) => slide.status.toLocaleLowerCase())),
-    ];
+    const uniqueGender = [...new Set(data.map((slide) => slide.gender))];
+    const uniqueStatus = [...new Set(data.map((slide) => slide.status))];
     const ITEMS_PER_PAGE = 10;
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedIds, setSelectedIds] = useState([]);
-    const [viewBuku, setViewBuku] = useState();
+    const [viewUser, setViewUser] = useState();
     const [filterStatus, setFilterStatus] = useState(null);
     const [filterGender, setFilterGender] = useState(null);
-    const [openPopup, setOpenPopup] = useState(false);
+    const [user, setUser] = useState([]);
 
     const handleRefresh = () => {
         setFilterGender(null);
         setFilterGender(null);
         setValue(null);
+        setViewUser(null);
     };
 
     const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
@@ -56,7 +53,7 @@ function TabelUser() {
         }
     };
     const handleViewDetail = (id) => {
-        setViewBuku(id);
+        setViewUser(id);
     };
 
     const getCurrentPageData = () => {
@@ -88,49 +85,108 @@ function TabelUser() {
         return selectedIds.includes(id);
     };
 
-    // const handleDelete = () => {
-    //     selectedIds.forEach(async (id) => {
-    //         try {
-    //             await axios.delete(`/pesanan/${id}`);
-    //             setOpenPopup(true);
-    //         } catch (error) {
-    //             console.error("Error deleting data:", error);
-    //         }
-    //     });
-    // };
-    // const HandleKontak = (kontak) => {
-    //     const message = encodeURIComponent(
-    //         `Hallo...\nSaya Mizan Story Id, akan konfirmasi pesanan anda. Terima Kasih.`
-    //     );
-    //     const whatsappUrl = `https://wa.me/${kontak}?text=${message}`;
-    //     window.open(whatsappUrl, "_blank");
-    // };
+    useEffect(() => {
+        const fetchUserData = async (id) => {
+            try {
+                const response = await axios.get(`/admin/user/${id}`);
+
+                setUser(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        fetchUserData(viewUser);
+    }, [viewUser]);
+
+    const handleDelete = () => {
+        selectedIds.forEach(async (id) => {
+            try {
+                await axios.delete(`/admin/user/${id}`);
+                window.location.reload();
+            } catch (error) {
+                console.error("Error deleting data:", error);
+            }
+        });
+    };
     const dataBuku = "data-buku";
     const dataBukuPDF = "data-buku-pdf";
+    console.log(selectedIds);
 
     return (
         <div>
             <div className="relative">
-                <div className="absolute z-50">
-                    {data
-                        .filter((row) => row.id === viewBuku)
-                        .map((row, index) => (
-                            <div key={index}>
+                {viewUser && (
+                    <PopOver>
+                        <div className="bg-white w-[350px] p-5 rounded-lg">
+                            <div className="flex justify-end">
                                 <img
-                                    src={row.foto_profil}
+                                    src="/close.png"
                                     alt=""
-                                    className="w-[300px] h-[400px]"
+                                    className="w-4 h-4"
+                                    onClick={() => setViewUser(null)}
                                 />
                             </div>
-                        ))}
-                </div>
+                            <img
+                                src={user.foto_profil}
+                                alt=""
+                                className="w-32 h-32 mx-auto rounded-full"
+                            />
+                            <form className="text-xs mx-5 mt-3 flex flex-col gap-3 pb-10">
+                                <label className="font-bold">Nama</label>
+                                <input
+                                    type="text"
+                                    name=""
+                                    id=""
+                                    className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
+                                    value={user.nama}
+                                />
+                                <label className="font-bold">Email</label>
+                                <input
+                                    type="text"
+                                    name=""
+                                    id=""
+                                    className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
+                                    value={user.email}
+                                />
+                                <label className="font-bold">Kontak</label>
+                                <input
+                                    type="text"
+                                    name=""
+                                    id=""
+                                    className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
+                                    value={user.kontak}
+                                />
+                                <label className="font-bold">Gender</label>
+                                <input
+                                    type="text"
+                                    name=""
+                                    id=""
+                                    className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
+                                    value={user.gender}
+                                />
+                                <label className="font-bold">Status</label>
+                                <input
+                                    type="text"
+                                    name=""
+                                    id=""
+                                    className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
+                                    value={user.status}
+                                />
+                                <button className="bg-blue-500 text-white mt-5 rounded-md text-xs p-2">
+                                    Simpan perubahan
+                                </button>
+                            </form>
+                        </div>
+                    </PopOver>
+                )}
                 <div className="flex justify-between mb-2 items-center">
                     <div className="flex text-xs items-center relative">
                         <div onClick={handleRefresh}>
                             <Button name={"Refresh All"} />
                         </div>
                         {selectedIds.length > 0 && (
-                            <div className="w-10 ml-3">
+                            <div className="w-10 ml-3" onClick={handleDelete}>
                                 <img
                                     src="/delete.png"
                                     alt=""
@@ -296,7 +352,7 @@ function TabelUser() {
                                     <td className="py-1 leading-6 px-3 capitalize line-clamp-2 overflow-hidden">
                                         {data.nama}
                                     </td>
-                                    <td className="border-r border-l py-1 px-3 capitalize leading-6">
+                                    <td className="border-r border-l py-1 px-3 leading-6">
                                         {data.email}
                                     </td>
                                     <td className="py-1 leading-6 px-3 capitalize line-clamp-2 overflow-hidden">
@@ -386,7 +442,7 @@ function TabelUser() {
                                     <td className="py-1 leading-6 px-3 capitalize line-clamp-2 overflow-hidden">
                                         {data.nama}
                                     </td>
-                                    <td className="border-r border-l py-1 px-3 capitalize leading-6">
+                                    <td className="border-r border-l py-1 px-3 leading-6">
                                         {data.email}
                                     </td>
                                     <td className="py-1 leading-6 px-3 capitalize line-clamp-2 overflow-hidden">
@@ -436,9 +492,6 @@ function TabelUser() {
                                 <th className="border-r px-2 md:px-3 py-4 font-bold text-start text-sm w-20">
                                     Edit
                                 </th>
-                                <th className="px-2 md:px-3 py-4 font-bold text-start text-sm w-10">
-                                    Detail
-                                </th>
                             </tr>
                         </thead>
                         <tbody className="relative text-sm">
@@ -446,7 +499,10 @@ function TabelUser() {
                                 <tr
                                     key={index}
                                     className={`h-10 border-t ${
-                                        isSelected(data.id) ? "bg-blue-100" : ""
+                                        isSelected(data.id) ||
+                                        viewUser === data.id
+                                            ? "bg-blue-100"
+                                            : ""
                                     }`}
                                 >
                                     <td className="border-r px-3 py-2">
@@ -460,13 +516,13 @@ function TabelUser() {
                                             }
                                         />
                                     </td>
-                                    <td className="py-1 leading-6 px-3 capitalize line-clamp-2 overflow-hidden">
+                                    <td className="py-1 leading-6 px-3 capitalize">
                                         {data.nama}
                                     </td>
-                                    <td className="border-r border-l py-1 px-3 capitalize leading-6">
+                                    <td className="border-r border-l py-1 px-3 leading-6">
                                         {data.email}
                                     </td>
-                                    <td className="py-1 leading-6 px-3 capitalize line-clamp-2 overflow-hidden">
+                                    <td className="py-1 leading-6 px-3">
                                         {data.kontak}
                                     </td>
                                     <td className="border-r border-l py-1 px-3 capitalize leading-6">
@@ -475,7 +531,7 @@ function TabelUser() {
                                     <td className="border-r py-1 px-3 capitalize leading-6">
                                         {data.status}
                                     </td>
-                                    <td className="border-r py-1 px-3 capitalize">
+                                    <td className="border-r py-1 px-3 capitalize text-center">
                                         <button
                                             className="bg-blue-50 p-2 rounded-md"
                                             onClick={() =>
@@ -485,21 +541,7 @@ function TabelUser() {
                                             <img
                                                 src="/edit.png"
                                                 alt=""
-                                                className="w-5 h-5"
-                                            />
-                                        </button>
-                                    </td>
-                                    <td className="py-1 px-3 capitalize">
-                                        <button
-                                            className="bg-blue-50 p-2 rounded-md"
-                                            onClick={() =>
-                                                handleViewDetail(data.id)
-                                            }
-                                        >
-                                            <img
-                                                src="/eye.png"
-                                                alt=""
-                                                className="w-5 h-5"
+                                                className="w-3 h-3"
                                             />
                                         </button>
                                     </td>

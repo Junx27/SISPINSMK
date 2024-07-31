@@ -3,7 +3,8 @@ import Navbar from "@/Components/Navbar";
 import Sidebar from "@/Components/Sidebar";
 import DataAnggota from "@/Layouts/DataAnggota";
 import DataPengunjung from "@/Layouts/DataPengunjung";
-import React, { useState } from "react";
+import { Head } from "@inertiajs/react";
+import React, { useEffect, useState } from "react";
 const slides = [
     {
         id: 1,
@@ -142,6 +143,12 @@ const slides = [
 ];
 
 function Dashboard({ auth }) {
+    const userRole = auth.user.role;
+    useEffect(() => {
+        if (userRole === "anggota") {
+            window.location.href = "/daftar-buku";
+        }
+    });
     const [openMenu, setOpenMenu] = useState(false);
     const profile = "/profile.jpg";
     const logo = "/logo.png";
@@ -157,105 +164,123 @@ function Dashboard({ auth }) {
     const probabilitas = Math.round(jumlahAnggota / jumlahPeminjaman);
     return (
         <div>
-            <Navbar
-                profile={profile}
-                logo={logo}
-                handleMenu={handleMenu}
-                showIcon={openMenu ? false : true}
-            />
-            <div className="absolute w-20 overflow-hidden">
-                <Sidebar />
-            </div>
-            <div
-                className={`absolute transition-all duration-500 w-[300px] z-50 backdrop-blur-sm bg-white/75 h-screen ${
-                    openMenu ? "ml-0" : "-ml-96"
-                }`}
-            >
-                <button onClick={() => setOpenMenu(!openMenu)}>
-                    <img
-                        src="/close.png"
-                        alt=""
-                        className={`transition-all duration-1000 w-5 h-5 relative top-4 left-64 ${
-                            openMenu ? "rotate-0" : "rotate-90"
-                        }`}
+            {userRole === "admin" && (
+                <div>
+                    <Head title="Dashboard" />
+                    <Navbar
+                        profile={auth.user.foto_profil}
+                        logo={logo}
+                        handleMenu={handleMenu}
+                        showIcon={openMenu ? false : true}
+                        auth={auth.user.nama}
                     />
-                </button>
-                <div className="-mt-7">
-                    <Sidebar viewicon={true} />
-                </div>
-            </div>
-            <div className="w-full h-screen">
-                <img
-                    src="/footer.jpg"
-                    alt=""
-                    className="w-full h-screen object-cover"
-                />
-                <div
-                    id="dashboard"
-                    className="inset-0 absolute top-20 left-0 ml-20 p-5 bg-opacity-10 bg-white/75 rounded-lg rounded-t-none"
-                >
-                    <div className="bg-white h-full rounded-lg">
-                        <h1 className="font-bold text-3xl text-center pt-10 capitalize">
-                            selamat datang di sistem peminjaman buku
-                        </h1>
-                        <div className="pt-32 flex gap-20 p-5">
-                            <div className="w-[800px]">
-                                <DataPengunjung />
-                            </div>
-                            <div className="w-[200px]">
-                                <DataAnggota />
-                                <div className="mt-8 text-xs flex flex-col gap-3">
-                                    <h1 className="font-bold">Ratio Buku</h1>
-                                    <p>{ratio} % setiap anggota</p>
-                                    <h1 className="font-bold">
-                                        Probabilitas Peminjaman
-                                    </h1>
-                                    <p>{probabilitas} % peminjaman</p>
-                                    <h1 className="font-bold">
-                                        Peminjaman Hari Terakhir
-                                    </h1>
-                                    <p>16 Buku</p>
-                                </div>
-                            </div>
-                            <div>
-                                <div>
-                                    <h1 className="text-xs">Data Buku</h1>
-                                    <p className="my-5 font-bold text-blue-500">
-                                        6574
-                                    </p>
-                                </div>
-                                <div>
-                                    <h1 className="text-xs">Data Anggota</h1>
-                                    <p className="my-5 font-bold text-orange-500">
-                                        234
-                                    </p>
-                                </div>
-                                <div>
-                                    <h1 className="text-xs">Data Peminjaman</h1>
-                                    <p className="my-5 font-bold text-purple-500">
-                                        234
-                                    </p>
-                                </div>
-                                <div>
-                                    <h1 className="text-xs">Buku Kembali</h1>
-                                    <p className="my-5 font-bold text-green-500">
-                                        76
-                                    </p>
-                                </div>
-                                <div>
-                                    <h1 className="text-xs">Buku Dipinjam</h1>
-                                    <p className="mt-5 font-bold text-red-500">
-                                        34
-                                    </p>
+                    <div className="absolute w-20 overflow-hidden">
+                        <Sidebar />
+                    </div>
+                    <div
+                        className={`absolute transition-all duration-500 w-[300px] z-50 backdrop-blur-sm bg-white/75 h-screen ${
+                            openMenu ? "ml-0" : "-ml-96"
+                        }`}
+                    >
+                        <button onClick={() => setOpenMenu(!openMenu)}>
+                            <img
+                                src="/close.png"
+                                alt=""
+                                className={`transition-all duration-1000 w-5 h-5 relative top-4 left-64 ${
+                                    openMenu ? "rotate-0" : "rotate-90"
+                                }`}
+                            />
+                        </button>
+                        <div className="-mt-7">
+                            <Sidebar viewicon={true} />
+                        </div>
+                    </div>
+                    <div className="w-full h-screen">
+                        <img
+                            src="/footer.jpg"
+                            alt=""
+                            className="w-full h-screen object-cover"
+                        />
+                        <div
+                            id="dashboard"
+                            className="inset-0 absolute top-20 left-0 ml-20 p-5 bg-opacity-10 bg-white/75 rounded-lg rounded-t-none"
+                        >
+                            <div className="bg-white h-full rounded-lg">
+                                <h1 className="font-bold text-3xl text-center pt-10 capitalize">
+                                    selamat datang di sistem peminjaman buku
+                                </h1>
+                                <div className="pt-32 flex gap-20 p-5">
+                                    <div className="w-[800px]">
+                                        <DataPengunjung />
+                                    </div>
+                                    <div className="w-[200px]">
+                                        <DataAnggota />
+                                        <div className="mt-8 text-xs flex flex-col gap-3">
+                                            <h1 className="font-bold">
+                                                Ratio Buku
+                                            </h1>
+                                            <p>{ratio} % setiap anggota</p>
+                                            <h1 className="font-bold">
+                                                Probabilitas Peminjaman
+                                            </h1>
+                                            <p>{probabilitas} % peminjaman</p>
+                                            <h1 className="font-bold">
+                                                Peminjaman Hari Terakhir
+                                            </h1>
+                                            <p>16 Buku</p>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div>
+                                            <h1 className="text-xs">
+                                                Data Buku
+                                            </h1>
+                                            <p className="my-5 font-bold text-blue-500">
+                                                6574
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <h1 className="text-xs">
+                                                Data Anggota
+                                            </h1>
+                                            <p className="my-5 font-bold text-orange-500">
+                                                234
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <h1 className="text-xs">
+                                                Data Peminjaman
+                                            </h1>
+                                            <p className="my-5 font-bold text-purple-500">
+                                                234
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <h1 className="text-xs">
+                                                Buku Kembali
+                                            </h1>
+                                            <p className="my-5 font-bold text-green-500">
+                                                76
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <h1 className="text-xs">
+                                                Buku Dipinjam
+                                            </h1>
+                                            <p className="mt-5 font-bold text-red-500">
+                                                34
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <div className="text-xs absolute bottom-10 right-10">
+                            <DownloadPDFButton elementId={"dashboard"} />
+                        </div>
                     </div>
                 </div>
-                <div className="text-xs absolute bottom-10 right-10">
-                    <DownloadPDFButton elementId={"dashboard"} />
-                </div>
-            </div>
+            )}
         </div>
     );
 }

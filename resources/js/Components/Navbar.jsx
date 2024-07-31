@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import { useState } from "react";
 import MyContext from "./CreateContext";
 
-function Navbar({ profile, logo, handleMenu, handleProfile, showIcon }) {
+function Navbar({ profile, logo, handleMenu, handleProfile, showIcon, auth }) {
     const { value, setValue } = useContext(MyContext);
     const [popUp, setPopUp] = useState(false);
     const [cs, setCs] = useState(false);
@@ -128,11 +128,16 @@ function Navbar({ profile, logo, handleMenu, handleProfile, showIcon }) {
                         </div>
                     </div>
                     <div onClick={() => setPopUp(!popUp)} className="relative">
-                        <img
-                            src={profile}
-                            alt=""
-                            className="w-10 h-10 rounded-full object-cover"
-                        />
+                        <div className="flex gap-2 items-center">
+                            <p className="text-white text-xs w-20 truncate capitalize">
+                                {auth}
+                            </p>
+                            <img
+                                src={profile}
+                                alt=""
+                                className="w-10 h-10 rounded-full object-cover"
+                            />
+                        </div>
                         {popUp && (
                             <Link
                                 href="/logout"

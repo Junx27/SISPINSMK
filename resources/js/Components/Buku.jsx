@@ -1,9 +1,22 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import MyQRCodeComponent from "./QrCode";
+import MyContext from "./CreateContext";
 
 function Buku({ slides }) {
+    const { getId, setGetId } = useContext(MyContext);
     const [selectedIndex, setSelectedIndex] = useState(null);
+    const [selectedQR, setSelectedQR] = useState(null);
     const handleIndex = (id) => {
         setSelectedIndex(id);
+        setSelectedQR(handleQRcode(id));
+        setGetId(id);
+    };
+    const handleQRcode = () => {
+        if (selectedIndex) {
+            const dataQRCode = slides.filter((row) => row.id === selectedIndex);
+            return dataQRCode;
+        }
+        return [];
     };
     return (
         <div className="grid grid-cols-6 gap-5 mb-10 py-10">
@@ -29,21 +42,19 @@ function Buku({ slides }) {
                     <p className="text-[13px] group-hover:hidden mt-2 z-50 font-bold w-full h-[40px] line-clamp-2 capitalize">
                         {slide.caption}
                     </p>
-                    <div
-                        className={`absolute top-[18%] left-[30%] ${
+                    <a
+                        href={`/buku/${getId}`}
+                        className={`absolute z-50 top-0 p-5 ${
                             selectedIndex === slide.id ? "block" : "hidden"
                         }`}
                     >
-                        <img src="/bookmark.png" alt="" className="w-20 h-20" />
-                    </div>
+                        <MyQRCodeComponent id={selectedIndex} />
+                    </a>
                     <div
-                        className={`absolute bottom-5 left-2 ${
+                        className={`absolute inset-0 p-2 pt-[200px] ${
                             selectedIndex === slide.id ? "block" : "hidden"
                         }`}
                     >
-                        <p className="text-[13px] text-white font-bold w-full h-[40px] line-clamp-2">
-                            {slide.tahun}
-                        </p>
                         <p className="-mt-5 text-[13px] text-white font-bold w-full h-[40px] line-clamp-2 capitalize">
                             {slide.caption}
                         </p>
@@ -55,6 +66,9 @@ function Buku({ slides }) {
                                 {slide.edisi}
                             </p>
                         </div>
+                        <p className="text-[10px] mt-2 text-end px-3 text-white font-bold w-full">
+                            {slide.tahun}
+                        </p>
                     </div>
                 </div>
             ))}

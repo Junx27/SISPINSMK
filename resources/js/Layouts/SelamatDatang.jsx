@@ -1,23 +1,31 @@
 import Buku from "@/Components/Buku";
 import Carosel from "@/Components/Carosel";
+import PopOver from "@/Components/PopOver";
 import Slider from "@/Components/Slider";
 import { data } from "@/Data/DataBuku";
+import Login from "@/Pages/Auth/Login";
+import Register from "@/Pages/Auth/Register";
 import React from "react";
+import { useState } from "react";
 
 function SelamatDatang() {
-    const navbar = [
-        {
-            nama: "login",
-            href: "/login",
-        },
-        {
-            nama: "register",
-            href: "/register",
-        },
-    ];
+    const [login, setLogin] = useState(false);
+    const [register, setRegister] = useState(false);
+
     return (
         <div>
             <div className="absolute z-50 py-2 w-full">
+                {login && (
+                    <PopOver>
+                        <Login handleClose={() => setLogin(false)} />
+                    </PopOver>
+                )}
+                {register && (
+                    <PopOver>
+                        <Register handleClose={() => setRegister(false)} />
+                    </PopOver>
+                )}
+
                 <div className="flex px-10 justify-between items-center">
                     <div className="flex items-center">
                         <img
@@ -41,21 +49,27 @@ function SelamatDatang() {
                     </div>
                     <div className="flex flex-row gap-10 items-center">
                         <img src="/cs.png" alt="" className="w-10 h-10" />
-                        <img src="/bookmark.png" alt="" className="w-8 h-8" />
+                        <a href="/daftar-buku">
+                            <img
+                                src="/bookmark.png"
+                                alt=""
+                                className="w-8 h-8"
+                            />
+                        </a>
                     </div>
                     <div className="flex gap-10">
-                        {navbar.map((row, index) => (
-                            <div
-                                key={index}
-                                className={`w-20 text-xs py-2 rounded-lg text-center ${
-                                    row.nama === "register"
-                                        ? "bg-blue-500 text-white"
-                                        : "bg-white text-black"
-                                }`}
-                            >
-                                <a href={row.href}>{row.nama}</a>
-                            </div>
-                        ))}
+                        <button
+                            className="bg-blue-500 w-20 text-white text-xs rounded-md p-2"
+                            onClick={() => setRegister(true)}
+                        >
+                            Register
+                        </button>
+                        <button
+                            className="bg-white w-20 text-xs rounded-md p-2"
+                            onClick={() => setLogin(true)}
+                        >
+                            Login
+                        </button>
                     </div>
                 </div>
             </div>
