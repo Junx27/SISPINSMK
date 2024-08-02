@@ -6,10 +6,12 @@ import Dropdown from "@/Components/Dropdown";
 import InputText from "@/Components/InputText";
 import Pagination from "@/Components/Pagination";
 import PopOver from "@/Components/PopOver";
-import { data } from "@/Data/DataBuku";
+import { url } from "@/Data/Url";
 import React, { useContext, useState } from "react";
+import EditBuku from "./EditBuku";
+import axios from "axios";
 
-function TabelBuku() {
+function TabelBuku({ data }) {
     const { value, setValue } = useContext(MyContext);
     const uniqueCategories = [
         ...new Set(data.map((slide) => slide.kategori.toLocaleLowerCase())),
@@ -32,6 +34,12 @@ function TabelBuku() {
     const [filterPenerbit, setFilterPenerbit] = useState(null);
     const [filterEdisi, setFilterEdisi] = useState(null);
     const [openPopup, setOpenPopup] = useState(false);
+    const [bukuId, setBukuId] = useState();
+
+    const handleEditBuku = (id) => {
+        setOpenPopup(true);
+        setBukuId(id);
+    };
 
     const handleRefresh = () => {
         setFilterDate(null);
@@ -112,23 +120,16 @@ function TabelBuku() {
         return selectedIds.includes(id);
     };
 
-    // const handleDelete = () => {
-    //     selectedIds.forEach(async (id) => {
-    //         try {
-    //             await axios.delete(`/pesanan/${id}`);
-    //             setOpenPopup(true);
-    //         } catch (error) {
-    //             console.error("Error deleting data:", error);
-    //         }
-    //     });
-    // };
-    // const HandleKontak = (kontak) => {
-    //     const message = encodeURIComponent(
-    //         `Hallo...\nSaya Mizan Story Id, akan konfirmasi pesanan anda. Terima Kasih.`
-    //     );
-    //     const whatsappUrl = `https://wa.me/${kontak}?text=${message}`;
-    //     window.open(whatsappUrl, "_blank");
-    // };
+    const handleDelete = () => {
+        selectedIds.forEach(async (id) => {
+            try {
+                await axios.delete(`/admin/buku/${id}`);
+                window.location.reload();
+            } catch (error) {
+                console.error("Error deleting data:", error);
+            }
+        });
+    };
     const dataBuku = "data-buku";
     const dataBukuPDF = "data-buku-pdf";
 
@@ -142,7 +143,12 @@ function TabelBuku() {
                             .map((row, index) => (
                                 <div key={index} className="relative">
                                     <img
-                                        src={row.imageUrl}
+                                        src={
+                                            (row.imageUrl === "null") |
+                                            (row.imageUrl === null)
+                                                ? "/default-book.jpg"
+                                                : url + row.imageUrl
+                                        }
                                         alt=""
                                         className="w-full h-full object-cover brightness-95 rounded-lg"
                                     />
@@ -183,7 +189,10 @@ function TabelBuku() {
                                 <Button name={"Refresh All"} />
                             </div>
                             {selectedIds.length > 0 && (
-                                <div className="w-10 ml-3">
+                                <div
+                                    className="w-10 ml-3"
+                                    onClick={handleDelete}
+                                >
                                     <img
                                         src="/delete.png"
                                         alt=""
@@ -632,7 +641,7 @@ function TabelBuku() {
                                         <button
                                             className="bg-blue-50 p-2 rounded-md"
                                             onClick={() =>
-                                                setOpenPopup(!openPopup)
+                                                handleEditBuku(data.id)
                                             }
                                         >
                                             <img
@@ -664,23 +673,18 @@ function TabelBuku() {
                         </tbody>
                     </table>
                 </div>
+                <div></div>
                 {openPopup && (
                     <PopOver>
-                        <div
-                            className="absolute top-32 right-32"
-                            onClick={() => setOpenPopup(false)}
-                        >
-                            <img
-                                src="/closewhite.png"
-                                alt=""
-                                className="w-8 h-8 cursor-pointer"
+                        <div className="">
+                            <EditBuku
+                                id={bukuId}
+                                handleClose={() => setOpenPopup(false)}
                             />
                         </div>
-                        <p className="text-red-500 bg-white p-5 rounded-lg">
-                            open edit buku
-                        </p>
                     </PopOver>
                 )}
+
                 <div className="mb-20">
                     <Pagination
                         currentPage={currentPage}

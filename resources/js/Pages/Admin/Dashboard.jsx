@@ -1,8 +1,10 @@
 import DownloadPDFButton from "@/Components/DownloadPDFButton";
 import Navbar from "@/Components/Navbar";
 import Sidebar from "@/Components/Sidebar";
+import { url } from "@/Data/Url";
 import DataAnggota from "@/Layouts/DataAnggota";
 import DataPengunjung from "@/Layouts/DataPengunjung";
+import EditUser from "@/Layouts/EditUser";
 import { Head } from "@inertiajs/react";
 import React, { useEffect, useState } from "react";
 const slides = [
@@ -162,17 +164,47 @@ function Dashboard({ auth }) {
     const hasilPembagian = totalBuku / jumlahAnggota;
     const ratio = Math.round(hasilPembagian);
     const probabilitas = Math.round(jumlahAnggota / jumlahPeminjaman);
+
+    const [openPopUpSetting, setOpenPopUpSetting] = useState(false);
+
+    const openSetting = () => {
+        setOpenPopUpSetting(!openPopUpSetting);
+    };
     return (
         <div>
             {userRole === "admin" && (
                 <div>
+                    <div
+                        className={`transition-all duration-500 h-screen absolute z-50 backdrop-blur-md bg-opacity-10 bg-white/30 ${
+                            openPopUpSetting ? "w-[300px]" : "w-0"
+                        }`}
+                    >
+                        <div
+                            className={`transition-all duration-200 p-5 ${
+                                openPopUpSetting ? "block" : "hidden"
+                            }`}
+                        >
+                            <div
+                                className="flex justify-end cursor-pointer"
+                                onClick={() => setOpenPopUpSetting(false)}
+                            >
+                                <img
+                                    src="/close.png"
+                                    alt=""
+                                    className="w-3 h-3"
+                                />
+                            </div>
+                            <EditUser id={auth.user.id} />
+                        </div>
+                    </div>
                     <Head title="Dashboard" />
                     <Navbar
-                        profile={auth.user.foto_profil}
+                        profile={url + auth.user.foto_profil}
                         logo={logo}
                         handleMenu={handleMenu}
                         showIcon={openMenu ? false : true}
                         auth={auth.user.nama}
+                        handleSetting={openSetting}
                     />
                     <div className="absolute w-20 overflow-hidden">
                         <Sidebar />

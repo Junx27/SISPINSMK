@@ -5,9 +5,10 @@ import DownloadPDFButton from "@/Components/DownloadPDFButton";
 import Dropdown from "@/Components/Dropdown";
 import Pagination from "@/Components/Pagination";
 import PopOver from "@/Components/PopOver";
+import { useForm } from "@inertiajs/inertia-react";
 import axios from "axios";
 import React, { useContext, useState } from "react";
-import { useEffect } from "react";
+import EditUser from "./EditUser";
 
 function TabelUser({ data }) {
     const { value, setValue } = useContext(MyContext);
@@ -19,7 +20,6 @@ function TabelUser({ data }) {
     const [viewUser, setViewUser] = useState();
     const [filterStatus, setFilterStatus] = useState(null);
     const [filterGender, setFilterGender] = useState(null);
-    const [user, setUser] = useState([]);
 
     const handleRefresh = () => {
         setFilterGender(null);
@@ -54,6 +54,7 @@ function TabelUser({ data }) {
     };
     const handleViewDetail = (id) => {
         setViewUser(id);
+        fetchUserData(id);
     };
 
     const getCurrentPageData = () => {
@@ -84,21 +85,6 @@ function TabelUser({ data }) {
     const isSelected = (id) => {
         return selectedIds.includes(id);
     };
-
-    useEffect(() => {
-        const fetchUserData = async (id) => {
-            try {
-                const response = await axios.get(`/admin/user/${id}`);
-
-                setUser(response.data);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-
-        fetchUserData(viewUser);
-    }, [viewUser]);
-
     const handleDelete = () => {
         selectedIds.forEach(async (id) => {
             try {
@@ -111,7 +97,6 @@ function TabelUser({ data }) {
     };
     const dataBuku = "data-buku";
     const dataBukuPDF = "data-buku-pdf";
-    console.log(selectedIds);
 
     return (
         <div>
@@ -127,56 +112,7 @@ function TabelUser({ data }) {
                                     onClick={() => setViewUser(null)}
                                 />
                             </div>
-                            <img
-                                src={user.foto_profil}
-                                alt=""
-                                className="w-32 h-32 mx-auto rounded-full"
-                            />
-                            <form className="text-xs mx-5 mt-3 flex flex-col gap-3 pb-10">
-                                <label className="font-bold">Nama</label>
-                                <input
-                                    type="text"
-                                    name=""
-                                    id=""
-                                    className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
-                                    value={user.nama}
-                                />
-                                <label className="font-bold">Email</label>
-                                <input
-                                    type="text"
-                                    name=""
-                                    id=""
-                                    className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
-                                    value={user.email}
-                                />
-                                <label className="font-bold">Kontak</label>
-                                <input
-                                    type="text"
-                                    name=""
-                                    id=""
-                                    className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
-                                    value={user.kontak}
-                                />
-                                <label className="font-bold">Gender</label>
-                                <input
-                                    type="text"
-                                    name=""
-                                    id=""
-                                    className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
-                                    value={user.gender}
-                                />
-                                <label className="font-bold">Status</label>
-                                <input
-                                    type="text"
-                                    name=""
-                                    id=""
-                                    className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
-                                    value={user.status}
-                                />
-                                <button className="bg-blue-500 text-white mt-5 rounded-md text-xs p-2">
-                                    Simpan perubahan
-                                </button>
-                            </form>
+                            <EditUser id={viewUser} />
                         </div>
                     </PopOver>
                 )}

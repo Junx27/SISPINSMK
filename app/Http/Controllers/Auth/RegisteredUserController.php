@@ -29,22 +29,38 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        // Validate the request data
         $request->validate([
             'nama' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
+            'email' => 'required|string|email|max:255|unique:users',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'foto_profil' => 'nullable|file|image|max:2048', // Add image validation rules
         ]);
 
+        // Initialize the file path variable
+        $fotoProfilPath = null;
+
+        // Check if a file is uploaded
+        if ($request->hasFile('foto_profil')) {
+            // Store the file and get its path
+            $fotoProfilPath = $request->file('foto_profil')->store('foto_profil', 'public');
+        }
+
+        // Create the user
         $user = User::create([
             'nama' => $request->nama,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'foto_profil' => $fotoProfilPath, // Store the file path in the database
         ]);
 
+        // Trigger the Registered event
         event(new Registered($user));
 
+        // Log in the user
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        // Redirect to the dashboard
+        return redirect()->route('dashboard');
     }
 }

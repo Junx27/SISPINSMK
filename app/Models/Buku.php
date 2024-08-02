@@ -13,6 +13,7 @@ class Buku extends Model
         'imageUrl',
         'caption',
         'kategori',
+        'stok',
         'penerbit',
         'tahun',
         'edisi',

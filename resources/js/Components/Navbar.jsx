@@ -2,8 +2,19 @@ import { Link } from "@inertiajs/react";
 import React, { useContext } from "react";
 import { useState } from "react";
 import MyContext from "./CreateContext";
+import EditUser from "@/Layouts/EditUser";
 
-function Navbar({ profile, logo, handleMenu, handleProfile, showIcon, auth }) {
+function Navbar({
+    profile,
+    logo,
+    handleMenu,
+    handleProfile,
+    showIcon,
+    auth,
+    handleSetting,
+    handleAnggota,
+    handleBookmark,
+}) {
     const { value, setValue } = useContext(MyContext);
     const [popUp, setPopUp] = useState(false);
     const [cs, setCs] = useState(false);
@@ -17,7 +28,7 @@ function Navbar({ profile, logo, handleMenu, handleProfile, showIcon, auth }) {
 
     return (
         <div>
-            <div className="absolute z-50 py-2 w-full">
+            <div className="absolute z-40 py-2 w-full">
                 <div className="flex px-10 justify-between items-center">
                     <div
                         onClick={handleMenu}
@@ -79,15 +90,12 @@ function Navbar({ profile, logo, handleMenu, handleProfile, showIcon, auth }) {
                             className="relative"
                             onMouseOver={() => setBookmark(!bookmark)}
                             onMouseLeave={() => setBookmark(!bookmark)}
+                            onClick={handleBookmark}
                         >
-                            <img
-                                src="/bookmark.png"
-                                alt=""
-                                className="w-8 h-8"
-                            />
+                            <img src="/add.png" alt="" className="w-8 h-8" />
                             {bookmark && (
                                 <p className="text-center text-[10px] w-32 absolute bg-white p-2 rounded-lg top-12 right-0">
-                                    Bookmark
+                                    Add Book
                                     <span className="absolute -mt-3 rotate-45 w-3 h-3 bg-white right-5"></span>
                                 </p>
                             )}
@@ -96,6 +104,7 @@ function Navbar({ profile, logo, handleMenu, handleProfile, showIcon, auth }) {
                             className="relative"
                             onMouseOver={() => setAnggota(!anggota)}
                             onMouseLeave={() => setAnggota(!anggota)}
+                            onClick={handleAnggota}
                         >
                             <img
                                 src="/invitewhite.png"
@@ -113,6 +122,7 @@ function Navbar({ profile, logo, handleMenu, handleProfile, showIcon, auth }) {
                             className="relative"
                             onMouseOver={() => setSetting(!setting)}
                             onMouseLeave={() => setSetting(!setting)}
+                            onClick={handleSetting}
                         >
                             <img
                                 src="/setting.png"

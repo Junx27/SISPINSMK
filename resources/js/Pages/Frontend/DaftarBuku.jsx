@@ -7,6 +7,8 @@ import React, { useContext, useState } from "react";
 import Riwayat from "./Riwayat";
 import { useEffect } from "react";
 import axios from "axios";
+import { url } from "@/Data/Url";
+import EditUser from "@/Layouts/EditUser";
 
 function DaftarBuku({ auth }) {
     const userRole = auth.user.role.toLowerCase();
@@ -129,60 +131,7 @@ function DaftarBuku({ auth }) {
                                     className="w-3 h-3"
                                 />
                             </div>
-                            <img
-                                src={editUser.foto_profil}
-                                alt=""
-                                className="mt-10 w-20 h-20 mx-auto rounded-full"
-                            />
-                            <form className="text-xs mx-5 mt-10 flex flex-col gap-3">
-                                <label className="font-bold">Nama</label>
-                                <input
-                                    type="text"
-                                    name=""
-                                    id=""
-                                    className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
-                                    value={nama}
-                                    onChange={(e) => setNama(e.target.value)}
-                                />
-                                <label className="font-bold">Email</label>
-                                <input
-                                    type="text"
-                                    name=""
-                                    id=""
-                                    className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
-                                    value={editUser.email}
-                                />
-                                <label className="font-bold">Kontak</label>
-                                <input
-                                    type="text"
-                                    name=""
-                                    id=""
-                                    className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
-                                    value={editUser.kontak}
-                                />
-                                <label className="font-bold">Gender</label>
-                                <input
-                                    type="text"
-                                    name=""
-                                    id=""
-                                    className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
-                                    value={editUser.gender}
-                                />
-                                <label className="font-bold">Status</label>
-                                <input
-                                    type="text"
-                                    name=""
-                                    id=""
-                                    className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
-                                    value={editUser.status}
-                                />
-                                <p className="text-blue-500 text-xs mt-3">
-                                    Lupa password?
-                                </p>
-                                <button className="bg-blue-500 text-white mt-5 rounded-md text-xs p-2">
-                                    Simpan perubahan
-                                </button>
-                            </form>
+                            <EditUser id={auth.user.id} />
                         </div>
                     </div>
                     <div
@@ -226,7 +175,7 @@ function DaftarBuku({ auth }) {
                     </div>
                     <NavbarUser
                         logo={"/logo.png"}
-                        profile={auth.user.foto_profil}
+                        profile={url + auth.user.foto_profil}
                         handleSettting={openSetting}
                         handleBookmark={openBookmark}
                         auth={auth.user.nama}

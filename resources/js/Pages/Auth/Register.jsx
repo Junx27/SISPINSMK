@@ -11,6 +11,7 @@ export default function Register({ handleClose }) {
         email: "",
         password: "",
         password_confirmation: "",
+        foto_profil: null,
     });
 
     const submit = (e) => {
@@ -34,7 +35,12 @@ export default function Register({ handleClose }) {
             <form onSubmit={submit}>
                 <div>
                     <InputLabel htmlFor="nama" value="Nama" />
-
+                    <input
+                        type="file"
+                        onChange={(e) =>
+                            setData("foto_profil", e.target.files[0])
+                        }
+                    />
                     <TextInput
                         id="name"
                         name="nama"

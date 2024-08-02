@@ -1,5 +1,7 @@
 import Navbar from "@/Components/Navbar";
 import Sidebar from "@/Components/Sidebar";
+import { url } from "@/Data/Url";
+import EditUser from "@/Layouts/EditUser";
 import TabelPinjaman from "@/Layouts/TabelPinjaman";
 import { Head } from "@inertiajs/react";
 import React, { useEffect, useState } from "react";
@@ -18,17 +20,46 @@ function DaftarPinjaman({ auth }) {
     const handleMenu = () => {
         setOpenMenu(!openMenu);
     };
+    const [openPopUpSetting, setOpenPopUpSetting] = useState(false);
+
+    const openSetting = () => {
+        setOpenPopUpSetting(!openPopUpSetting);
+    };
     return (
         <div>
             {userRole === "admin" && (
                 <div>
+                    <div
+                        className={`transition-all duration-500 h-screen absolute z-50 backdrop-blur-md bg-opacity-10 bg-white/30 ${
+                            openPopUpSetting ? "w-[300px]" : "w-0"
+                        }`}
+                    >
+                        <div
+                            className={`transition-all duration-200 p-5 ${
+                                openPopUpSetting ? "block" : "hidden"
+                            }`}
+                        >
+                            <div
+                                className="flex justify-end cursor-pointer"
+                                onClick={() => setOpenPopUpSetting(false)}
+                            >
+                                <img
+                                    src="/close.png"
+                                    alt=""
+                                    className="w-3 h-3"
+                                />
+                            </div>
+                            <EditUser id={auth.user.id} />
+                        </div>
+                    </div>
                     <Head title="Daftar Pinjaman" />
                     <Navbar
-                        profile={auth.user.foto_profil}
+                        profile={url + auth.user.foto_profil}
                         logo={logo}
                         handleMenu={handleMenu}
                         showIcon={openMenu ? false : true}
                         auth={auth.user.nama}
+                        handleSetting={openSetting}
                     />
                     <div className="absolute w-20 overflow-hidden">
                         <Sidebar />

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('gender')->nullable();
             $table->string('status')->nullable();
-            $table->string('foto_profil')->nullable();
+            $table->string('foto_profil');
             $table->string('role')->default("anggota");
             $table->rememberToken();
             $table->timestamps();
