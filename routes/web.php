@@ -32,17 +32,26 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('admin/user-update/{id}', [AdminController::class, "updateUser"]);
     Route::post("/import", [ImportDataController::class, "import"]);
     Route::get("/import", [ImportDataController::class, "view"]);
+    Route::get('admin/daftarpinjaman', [AdminController::class, "viewDaftarPinjaman"]);
+    Route::get('admin/daftarpinjaman/{id}', [AdminController::class, "viewDetailDaftarPinjaman"]);
+    Route::delete('admin/daftarpinjaman-delete/{id}', [AdminController::class, "deleteDaftarPinjaman"]);
+    Route::put('admin/daftarpinjaman-update/{id}', [AdminController::class, "updateDaftarPinjaman"]);
+
+    Route::get('daftar-buku', [UserController::class, "index"])->name("daftar-buku");
+    Route::get("daftar-buku-detail/{id}", [UserController::class, "show"]);
+    Route::post("buat-pinjaman-buku", [UserController::class, "store"]);
+    Route::put("update-pinjaman-buku/{id}", [UserController::class, "update"]);
+
+
+
 
     Route::get('admin/dashboard', function () {
         return Inertia::render('Admin/Dashboard');
     })->name('dashboard');
-    Route::get('daftar-buku', [UserController::class, "index"]);
 });
 
 
-Route::get('admin/daftarpinjaman', function () {
-    return Inertia::render('Admin/DaftarPinjaman');
-})->middleware(['auth', 'verified'])->name('daftarpinjaman');
+
 
 
 // Route::fallback([PageNotFoundController::class, "index"]);

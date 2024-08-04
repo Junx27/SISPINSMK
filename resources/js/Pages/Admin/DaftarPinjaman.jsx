@@ -6,7 +6,7 @@ import TabelPinjaman from "@/Layouts/TabelPinjaman";
 import { Head } from "@inertiajs/react";
 import React, { useEffect, useState } from "react";
 
-function DaftarPinjaman({ auth }) {
+function DaftarPinjaman({ auth, pinjamans }) {
     const userRole = auth.user.role;
     useEffect(() => {
         if (userRole === "anggota") {
@@ -90,7 +90,7 @@ function DaftarPinjaman({ auth }) {
                                 className="w-full h-screen object-cover"
                             />
                             <div className="inset-0 absolute top-20 left-0 ml-20 p-5 bg-opacity-10 bg-white/75 rounded-lg">
-                                <TabelPinjaman />
+                                <TabelPinjaman data={pinjamans} />
                             </div>
                         </div>
                     </div>

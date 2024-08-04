@@ -4,7 +4,7 @@ const MyContext = createContext();
 
 export const MyProvider = ({ children }) => {
     const [value, setValue] = useState("");
-    const [getId, setGetId] = useState(1);
+    const [getId, setGetId] = useState("");
 
     return (
         <MyContext.Provider value={{ value, setValue, getId, setGetId }}>

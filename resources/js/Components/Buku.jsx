@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import MyQRCodeComponent from "./QrCode";
 import MyContext from "./CreateContext";
+import { url } from "@/Data/Url";
 
 function Buku({ slides }) {
     const { getId, setGetId } = useContext(MyContext);
@@ -30,9 +31,14 @@ function Buku({ slides }) {
                     onMouseLeave={() => setSelectedIndex(null)}
                 >
                     <img
-                        src={slide.imageUrl}
+                        src={
+                            (slide.imageUrl === "null") |
+                            (slide.imageUrl === null)
+                                ? "/default-book.jpg"
+                                : url + slide.imageUrl
+                        }
                         alt=""
-                        className="transition-all duration-100 w-full h-[240px] object-cover rounded-md group-hover:h-[300px] group-hover:scale-115"
+                        className="w-full h-[240px] object-cover brightness-95 rounded-lg"
                     />
                     <div
                         className={`absolute inset-0 bg-gradient-to-t from-black to-transparent ${
@@ -43,12 +49,12 @@ function Buku({ slides }) {
                         {slide.caption}
                     </p>
                     <a
-                        href={`/buku/${getId}`}
-                        className={`absolute z-50 top-0 p-5 ${
+                        href={`/daftar-buku-detail/${getId}`}
+                        className={`absolute z-50 top-0 p-10 ${
                             selectedIndex === slide.id ? "block" : "hidden"
                         }`}
                     >
-                        <MyQRCodeComponent id={selectedIndex} />
+                        <img src="/bookmark.png" alt="" className="w-20 ml-2" />
                     </a>
                     <div
                         className={`absolute inset-0 p-2 pt-[200px] ${

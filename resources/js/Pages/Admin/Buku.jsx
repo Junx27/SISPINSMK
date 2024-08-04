@@ -94,17 +94,7 @@ function Buku({ auth, bukus }) {
                                 <h1 className="font-bold fixed bg-white w-72 p-2 ml-2">
                                     Daftar Peminjaman
                                 </h1>
-                                <div className=" mt-10 mx-5">
-                                    <Riwayat />
-                                </div>
-                            </div>
-                            <div className="fixed w-72 text-xs mt-10 h-96 overflow-auto">
-                                <h1 className="font-bold fixed bg-white w-72 p-2 ml-2">
-                                    Riwayat Peminjaman
-                                </h1>
-                                <div className="mt-10 mx-5">
-                                    <Riwayat />
-                                </div>
+                                <div className=" mt-10 mx-5"></div>
                             </div>
                         </div>
                     </div>

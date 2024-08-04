@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Buku;
+use App\Models\Pinjaman;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -12,7 +14,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        return Inertia::render("Frontend/DaftarBuku");
+        $bukus = Buku::all();
+        $pinjamans = Pinjaman::all();
+        return Inertia::render("Frontend/DaftarBuku", ["bukus" => $bukus, "pinjamans" => $pinjamans]);
     }
 
     /**
@@ -28,7 +32,19 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            "nama_peminjam" => "required",
+            "kontak_peminjam" => "required",
+            "nama_buku" => "required",
+            "tanggal_pinjam" => "required",
+            "tanggal_pengembalian" => "required",
+            "status_peminjaman" => "required",
+            "user_id" => "required",
+            "buku_id" => "required",
+            'foto_buku' => 'required',
+        ]);
+
+        Pinjaman::create($validatedData);
     }
 
     /**
@@ -36,7 +52,8 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $buku = Buku::findOrFail($id);
+        return Inertia::render("Frontend/DetailBuku", ["buku" => $buku]);
     }
 
     /**
@@ -52,7 +69,12 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validateData = $request->validate([
+            "status_peminjaman" => "required",
+            "keterangan" => "required",
+        ]);
+        $pinjaman = Pinjaman::findOrFail($id);
+        $pinjaman->update($validateData);
     }
 
     /**

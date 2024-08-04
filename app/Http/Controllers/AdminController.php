@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Buku;
+use App\Models\Pinjaman;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -137,6 +138,31 @@ class AdminController extends Controller
     {
         $buku = Buku::find($id);
         return response()->json($buku);
+    }
+
+    public function viewDaftarPinjaman()
+    {
+        $pinjamans = Pinjaman::all();
+        return Inertia::render("Admin/DaftarPinjaman", ["pinjamans" => $pinjamans]);
+    }
+    public function viewDetailDaftarPinjaman(String $id)
+    {
+        $pinjaman = Pinjaman::findOrFail($id);
+        return response()->json($pinjaman);
+    }
+    public function updateDaftarPinjaman(Request $request, String $id)
+    {
+        $validatedData = $request->validate([
+            "status_peminjaman" => "required",
+            "keterangan" => "required",
+        ]);
+        $pinjaman = Pinjaman::findOrFail($id);
+        $pinjaman->update($validatedData);
+    }
+    public function deleteDaftarPinjaman(String $id)
+    {
+        $pinjam = Pinjaman::findOrFail($id);
+        $pinjam->delete();
     }
     /**
      * Show the form for creating a new resource.

@@ -5,11 +5,13 @@ import DownloadPDFButton from "@/Components/DownloadPDFButton";
 import Dropdown from "@/Components/Dropdown";
 import InputText from "@/Components/InputText";
 import Pagination from "@/Components/Pagination";
-import { dataPinjaman } from "@/Data/DataPinjaman";
+import PopOver from "@/Components/PopOver";
+import { url } from "@/Data/Url";
+import DetailDaftarPinjaman from "@/Pages/Admin/DetailDaftarPinjaman";
+import axios from "axios";
 import React, { useContext, useState } from "react";
-const data = dataPinjaman;
 
-function TabelPinjaman() {
+function TabelPinjaman({ data }) {
     const { value, setValue } = useContext(MyContext);
     const uniquePeminjam = [
         ...new Set(
@@ -34,13 +36,11 @@ function TabelPinjaman() {
     const ITEMS_PER_PAGE = 10;
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedIds, setSelectedIds] = useState([]);
-    const [viewBuku, setViewBuku] = useState();
-    const [filterNama, setFilterNama] = useState("");
     const [filterPeminjam, setFilterPeminjam] = useState(null);
     const [filterMeminjam, setFilterMeminjam] = useState(null);
     const [filterPengembalian, setFilterPengembalian] = useState(null);
     const [filterStatus, setFilterStatus] = useState(null);
-    const [openPopup, setOpenPopup] = useState(false);
+    const [viewBuku, setViewBuku] = useState();
 
     const handleRefresh = () => {
         setFilterPeminjam(null);
@@ -125,49 +125,29 @@ function TabelPinjaman() {
         return selectedIds.includes(id);
     };
 
-    // const handleDelete = () => {
-    //     selectedIds.forEach(async (id) => {
-    //         try {
-    //             await axios.delete(`/pesanan/${id}`);
-    //             setOpenPopup(true);
-    //         } catch (error) {
-    //             console.error("Error deleting data:", error);
-    //         }
-    //     });
-    // };
-    // const HandleKontak = (kontak) => {
-    //     const message = encodeURIComponent(
-    //         `Hallo...\nSaya Mizan Story Id, akan konfirmasi pesanan anda. Terima Kasih.`
-    //     );
-    //     const whatsappUrl = `https://wa.me/${kontak}?text=${message}`;
-    //     window.open(whatsappUrl, "_blank");
-    // };
+    const handleDelete = () => {
+        selectedIds.forEach(async (id) => {
+            try {
+                await axios.delete(`/admin/daftarpinjaman-delete/${id}`);
+                window.location.reload();
+            } catch (error) {
+                console.error("Error deleting data:", error);
+            }
+        });
+    };
     const dataBuku = "data-buku";
     const dataBukuPDF = "data-buku-pdf";
 
     return (
         <div>
             <div className="relative">
-                <div className="absolute z-50">
-                    {data
-                        .filter((row) => row.id === viewBuku)
-                        .map((row, index) => (
-                            <div key={index}>
-                                <img
-                                    src={row.imageUrl}
-                                    alt=""
-                                    className="w-[300px] h-[400px]"
-                                />
-                            </div>
-                        ))}
-                </div>
                 <div className="flex justify-between mb-2 items-center">
                     <div className="flex text-xs items-center relative">
                         <div onClick={handleRefresh}>
                             <Button name={"Refresh All"} />
                         </div>
                         {selectedIds.length > 0 && (
-                            <div className="w-10 ml-3">
+                            <div className="w-10 ml-3" onClick={handleDelete}>
                                 <img
                                     src="/delete.png"
                                     alt=""
@@ -579,20 +559,17 @@ function TabelPinjaman() {
                                 <th className="px-2 md:px-3 py-4 font-bold text-start text-sm w-64">
                                     Tanggal Pinjam
                                 </th>
-                                <th className="border-r border-l px-2 md:px-3 py-4 font-bold text-start text-sm w-20">
-                                    Estimasi
-                                </th>
                                 <th className="border-r px-2 md:px-3 py-4 font-bold text-start text-sm w-64">
                                     Tanggal Pengembalian
                                 </th>
                                 <th className="border-r px-2 md:px-3 py-4 font-bold text-start text-sm w-64">
                                     Status
                                 </th>
-                                <th className="border-r px-2 md:px-3 py-4 font-bold text-start text-sm w-20">
-                                    Edit
+                                <th className=" border-r px-2 md:px-3 py-4 font-bold text-start text-sm w-96">
+                                    Keterangan
                                 </th>
-                                <th className="px-2 md:px-3 py-4 font-bold text-start text-sm w-10">
-                                    Detail
+                                <th className="px-2 md:px-3 py-4 font-bold text-start text-sm w-20">
+                                    Aksi
                                 </th>
                             </tr>
                         </thead>
@@ -624,47 +601,36 @@ function TabelPinjaman() {
                                     <td className="py-1 leading-6 px-3 capitalize">
                                         {data.tanggal_pinjam}
                                     </td>
-                                    <td className="border-r border-l py-1 px-3 capitalize leading-6">
-                                        {data.estimasi} Hari
-                                    </td>
                                     <td className="border-r py-1 px-3 capitalize leading-6">
                                         {data.tanggal_pengembalian}
                                     </td>
+
                                     <td
                                         className={`border-r py-1 px-3 capitalize leading-6 ${
                                             data.status_peminjaman.toLowerCase() ===
                                             "dikembalikan"
-                                                ? "bg-green-100"
-                                                : "bg-red-100"
+                                                ? "text-green-500"
+                                                : "text-red-500"
                                         }`}
                                     >
                                         {data.status_peminjaman}
                                     </td>
-                                    <td className="border-r py-1 px-3 capitalize">
-                                        <button
-                                            className="bg-blue-50 p-2 rounded-md"
-                                            onClick={() =>
-                                                handleViewDetail(data.id)
-                                            }
-                                        >
+                                    <td className="border-r border-l py-1 px-3 leading-6 truncate">
+                                        {data.keterangan === null
+                                            ? "Belum ada keterangan"
+                                            : data.keterangan}
+                                    </td>
+                                    <td
+                                        className="relative group border-r py-1 px-3 capitalize text-center hover:bg-blue-50 cursor-pointer"
+                                        onClick={() =>
+                                            handleViewDetail(data.id)
+                                        }
+                                    >
+                                        <button>
                                             <img
                                                 src="/edit.png"
                                                 alt=""
-                                                className="w-5 h-5"
-                                            />
-                                        </button>
-                                    </td>
-                                    <td className="py-1 px-3 capitalize">
-                                        <button
-                                            className="bg-blue-50 p-2 rounded-md"
-                                            onClick={() =>
-                                                handleViewDetail(data.id)
-                                            }
-                                        >
-                                            <img
-                                                src="/eye.png"
-                                                alt=""
-                                                className="w-5 h-5"
+                                                className="w-3 h-3"
                                             />
                                         </button>
                                     </td>
@@ -673,6 +639,15 @@ function TabelPinjaman() {
                         </tbody>
                     </table>
                 </div>
+                {viewBuku && (
+                    <PopOver>
+                        <DetailDaftarPinjaman
+                            id={viewBuku}
+                            handleClose={() => setViewBuku(null)}
+                        />
+                    </PopOver>
+                )}
+
                 <div className="mb-20">
                     <Pagination
                         currentPage={currentPage}

@@ -7,19 +7,13 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class QrCodeController extends Controller
 {
-    public function generate(Request $request)
+    public function generate(string $id)
     {
-        $id = $request->query('id');
-
         return response()->streamDownload(
-            function () use ($id) { // Menggunakan use untuk membawa $id ke dalam fungsi anonim
+            function () use ($id) {
                 echo QrCode::size(200)
-                    ->style('dot')
-                    ->eye('circle')
-                    ->color(0, 0, 255)
-                    ->margin(1)
                     ->format('png')
-                    ->generate("data buku ke {$id}"); // Memperbaiki format string
+                    ->generate("http://127.0.0.1:8000/daftar-buku-detail/{$id}"); // Use double quotes for string interpolation
             },
             'qr-code.png',
             [

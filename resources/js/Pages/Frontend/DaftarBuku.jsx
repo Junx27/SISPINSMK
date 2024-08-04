@@ -2,15 +2,25 @@ import Buku from "@/Components/Buku";
 import Button from "@/Components/Button";
 import MyContext from "@/Components/CreateContext";
 import NavbarUser from "@/Components/NavbarUser";
-import { data } from "@/Data/DataBuku";
 import React, { useContext, useState } from "react";
 import Riwayat from "./Riwayat";
 import { useEffect } from "react";
 import axios from "axios";
 import { url } from "@/Data/Url";
 import EditUser from "@/Layouts/EditUser";
+import QrCodeGenerator from "@/Components/QrCode";
 
-function DaftarBuku({ auth }) {
+function DaftarBuku({ auth, bukus, pinjamans }) {
+    const pinjamanSelesai = pinjamans.filter(
+        (row) =>
+            row.status_peminjaman === "dikembalikan" &&
+            row.user_id === auth.user.id
+    );
+    const pinjamanBelumSelesai = pinjamans.filter(
+        (row) =>
+            row.status_peminjaman === "meminjam" && row.user_id === auth.user.id
+    );
+    const data = bukus;
     const userRole = auth.user.role.toLowerCase();
     useEffect(() => {
         if (userRole === "admin") {
@@ -160,7 +170,7 @@ function DaftarBuku({ auth }) {
                                     Daftar Peminjaman
                                 </h1>
                                 <div className=" mt-10 mx-5">
-                                    <Riwayat />
+                                    <Riwayat pinjaman={pinjamanBelumSelesai} />
                                 </div>
                             </div>
                             <div className="fixed w-72 text-xs mt-10 h-96 overflow-auto">
@@ -168,7 +178,7 @@ function DaftarBuku({ auth }) {
                                     Riwayat Peminjaman
                                 </h1>
                                 <div className="mt-10 mx-5">
-                                    <Riwayat />
+                                    <Riwayat pinjaman={pinjamanSelesai} />
                                 </div>
                             </div>
                         </div>
@@ -256,7 +266,7 @@ function DaftarBuku({ auth }) {
                                 <div className="mt-5">
                                     <h1 className="font-bold pb-1">Edisi</h1>
                                     <div className="flex flex-col mt-3 cursor-pointer">
-                                        {edisi.slice(0, 6).map((row) => (
+                                        {edisi.slice(0, 2).map((row) => (
                                             <div
                                                 key={row.id}
                                                 onClick={() =>
@@ -317,7 +327,7 @@ function DaftarBuku({ auth }) {
                                         Tahun Terbit
                                     </h1>
                                     <div className="flex flex-wrap gap-2 mt-3 cursor-pointer">
-                                        {tahun.slice(0, 10).map((row) => (
+                                        {tahun.slice(0, 5).map((row) => (
                                             <div
                                                 key={row.id}
                                                 onClick={() =>
@@ -400,8 +410,6 @@ function DaftarBuku({ auth }) {
                                     </div>
                                 ) : (
                                     <div>
-                                        <Buku slides={getCurrentPageData()} />
-                                        <Buku slides={getCurrentPageData()} />
                                         <Buku slides={getCurrentPageData()} />
                                     </div>
                                 )}
