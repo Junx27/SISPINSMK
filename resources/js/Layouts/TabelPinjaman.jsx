@@ -10,8 +10,15 @@ import { url } from "@/Data/Url";
 import DetailDaftarPinjaman from "@/Pages/Admin/DetailDaftarPinjaman";
 import axios from "axios";
 import React, { useContext, useState } from "react";
+import { useRef } from "react";
 
 function TabelPinjaman({ data }) {
+    const pdfRef = useRef();
+    const tanggal = new Date().toLocaleDateString("id-ID", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+    });
     const { value, setValue } = useContext(MyContext);
     const uniquePeminjam = [
         ...new Set(
@@ -41,6 +48,7 @@ function TabelPinjaman({ data }) {
     const [filterPengembalian, setFilterPengembalian] = useState(null);
     const [filterStatus, setFilterStatus] = useState(null);
     const [viewBuku, setViewBuku] = useState();
+    const [printInvoice, setPrintInvoice] = useState(false);
 
     const handleRefresh = () => {
         setFilterPeminjam(null);
@@ -141,6 +149,207 @@ function TabelPinjaman({ data }) {
     return (
         <div>
             <div className="relative">
+                {printInvoice && (
+                    <PopOver>
+                        <div className="bg-white p-5 rounded-lg text-xs w-[842px]">
+                            <div
+                                className="flex justify-end cursor-pointer"
+                                onClick={() => setPrintInvoice(false)}
+                            >
+                                <img
+                                    src="/close.png"
+                                    alt=""
+                                    className="w-4 h-4"
+                                />
+                            </div>
+                            <div
+                                className="px-5"
+                                id="downloadInvoice"
+                                ref={pdfRef}
+                            >
+                                <div className="flex flex-row gap-5 mt-5 border-b-2 pb-2 border-black border-double mb-5">
+                                    <div className="">
+                                        <img
+                                            src="/logo.png"
+                                            alt=""
+                                            className="w-[60px]"
+                                        />
+                                    </div>
+                                    <div className="text-center w-full">
+                                        <h1 className="font-bold uppercase">
+                                            surat keterangan peminjam buku
+                                        </h1>
+                                        <h1 className="font-bold uppercase">
+                                            perpustakaan smk muhammadiyah
+                                            bobotsari
+                                        </h1>
+                                        <p className="text-[10px]">
+                                            Jl. RS. Yosomiharjo No.8, Bobotsari,
+                                            Purbalingga
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="flex gap-3 mt-2">
+                                    <div>
+                                        <h1 className="font-bold w-32">
+                                            Nama Peminjam
+                                        </h1>
+                                    </div>
+                                    <div>
+                                        {(() => {
+                                            const uniqueBooks = {};
+                                            return getCurrentPageData()
+                                                .filter((row) => {
+                                                    if (
+                                                        !uniqueBooks[
+                                                            row.nama_peminjam
+                                                        ]
+                                                    ) {
+                                                        uniqueBooks[
+                                                            row.nama_peminjam
+                                                        ] = true;
+                                                        return true;
+                                                    }
+                                                    return false;
+                                                })
+                                                .map((row) => (
+                                                    <div key={row.id}>
+                                                        <p className="uppercase font-bold">
+                                                            :{" "}
+                                                            {row.nama_peminjam}
+                                                        </p>
+                                                    </div>
+                                                ));
+                                        })()}
+                                    </div>
+                                </div>
+                                <div className="flex gap-3 mt-2">
+                                    <div>
+                                        <h1 className="font-bold w-32">
+                                            Nama Buku
+                                        </h1>
+                                    </div>
+                                    <div>
+                                        {getCurrentPageData().map(
+                                            (row, index) => (
+                                                <div key={row.id}>
+                                                    <p>
+                                                        : {index + 1}.{" "}
+                                                        <span className="ml-2">
+                                                            {row.nama_buku}
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                            )
+                                        )}
+                                    </div>
+                                </div>
+                                <div className="flex gap-3 mt-2">
+                                    <div>
+                                        <h1 className="font-bold w-32">
+                                            Tanggal Pinjam
+                                        </h1>
+                                    </div>
+                                    <div>
+                                        {(() => {
+                                            const uniqueBooks = {};
+                                            return getCurrentPageData()
+                                                .filter((row) => {
+                                                    if (
+                                                        !uniqueBooks[
+                                                            row.tanggal_pinjam
+                                                        ]
+                                                    ) {
+                                                        uniqueBooks[
+                                                            row.tanggal_pinjam
+                                                        ] = true;
+                                                        return true;
+                                                    }
+                                                    return false;
+                                                })
+                                                .map((row) => (
+                                                    <div key={row.id}>
+                                                        <p>
+                                                            :{" "}
+                                                            {row.tanggal_pinjam}
+                                                        </p>
+                                                    </div>
+                                                ));
+                                        })()}
+                                    </div>
+                                </div>
+                                <div className="flex gap-3 mt-2">
+                                    <div>
+                                        <h1 className="font-bold w-32">
+                                            Tanggal Kembalikan
+                                        </h1>
+                                    </div>
+                                    <div>
+                                        {(() => {
+                                            const uniqueBooks = {};
+                                            return getCurrentPageData()
+                                                .filter((row) => {
+                                                    if (
+                                                        !uniqueBooks[
+                                                            row
+                                                                .tanggal_pengembalian
+                                                        ]
+                                                    ) {
+                                                        uniqueBooks[
+                                                            row.tanggal_pengembalian
+                                                        ] = true;
+                                                        return true;
+                                                    }
+                                                    return false;
+                                                })
+                                                .map((row) => (
+                                                    <div key={row.id}>
+                                                        <p>
+                                                            :{" "}
+                                                            {
+                                                                row.tanggal_pengembalian
+                                                            }
+                                                        </p>
+                                                    </div>
+                                                ));
+                                        })()}
+                                    </div>
+                                </div>
+                                <div>
+                                    <p className="indent-8 mt-3 leading-6 text-justify">
+                                        Surat keterangan peminjaman buku ini
+                                        digunakan sebagai bukti peminjaman buku
+                                        di perpustakaan SMK Muhammadiyah
+                                        Bobotsari,{" "}
+                                        <span className="font-bold">
+                                            harap dikembalikan sebagai bukti
+                                            pengemebalian peminjaman buku.
+                                        </span>
+                                    </p>
+                                </div>
+                                <div className="flex justify-end mt-5">
+                                    <div className="flex flex-col gap-1">
+                                        <p>Purbalingga, {tanggal}</p>
+                                        <p>Pengurus,</p>
+                                        <img
+                                            src="/ttd.png"
+                                            alt=""
+                                            className="w-32 mx-auto"
+                                        />
+                                        <p className="font-bold text-center">
+                                            Sulistyo S.T., M.Pd.,
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <DownloadPDFButton
+                                pdfRef={pdfRef}
+                                fileName={"Invoice.pdf"}
+                            />
+                        </div>
+                    </PopOver>
+                )}
+
                 <div className="flex justify-between mb-2 items-center">
                     <div className="flex text-xs items-center relative">
                         <div onClick={handleRefresh}>
@@ -347,8 +556,18 @@ function TabelPinjaman({ data }) {
                                             elementId={dataBuku}
                                         />
                                         <DownloadPDFButton
-                                            elementId={dataBukuPDF}
+                                            pdfRef={pdfRef}
+                                            fileName={"Data peminjam"}
                                         />
+                                        <div className="bg-black text-white w-32 p-1 rounded-sm cursor-pointer text-center">
+                                            <button
+                                                onClick={() =>
+                                                    setPrintInvoice(true)
+                                                }
+                                            >
+                                                Print Invoice
+                                            </button>
+                                        </div>
                                     </div>
                                 </Dropdown.Content>
                             </Dropdown>
@@ -364,10 +583,11 @@ function TabelPinjaman({ data }) {
                 <div className="flex flex-col md:flex-row">
                     <table
                         id={dataBukuPDF}
+                        ref={pdfRef}
                         className="absolute mt-0 table-auto w-full shadow-lg rounded-lg p-5"
                     >
                         <thead>
-                            <tr className="">
+                            <tr className="border-t">
                                 <th className="border-r px-2 md:px-3 py-2 font-bold rounded-tl text-sm">
                                     No
                                 </th>
@@ -380,33 +600,35 @@ function TabelPinjaman({ data }) {
                                 <th className="px-2 md:px-3 py-4 font-bold text-start text-sm w-64">
                                     Tanggal Pinjam
                                 </th>
-                                <th className="border-r border-l px-2 md:px-3 py-4 font-bold text-start text-sm w-20">
-                                    Estimasi
-                                </th>
                                 <th className="border-r px-2 md:px-3 py-4 font-bold text-start text-sm w-64">
                                     Tanggal Pengembalian
                                 </th>
                                 <th className="border-r px-2 md:px-3 py-4 font-bold text-start text-sm w-64">
                                     Status
                                 </th>
-                                <th className="border-r px-2 md:px-3 py-4 font-bold text-start text-sm w-20">
-                                    Edit
-                                </th>
-                                <th className="px-2 md:px-3 py-4 font-bold text-start text-sm w-10">
-                                    Detail
+                                <th className=" border-r px-2 md:px-3 py-4 font-bold text-start text-sm w-96">
+                                    Keterangan
                                 </th>
                             </tr>
                         </thead>
-                        <tbody className="relative text-sm">
+                        <tbody className="relative text-sm border-b">
                             {getCurrentPageData().map((data, index) => (
                                 <tr
                                     key={index}
-                                    className={`border-t ${
+                                    className={`h-10 border-t ${
                                         isSelected(data.id) ? "bg-blue-100" : ""
                                     }`}
                                 >
                                     <td className="border-r px-3 py-2">
-                                        {index + 1}
+                                        <input
+                                            type="checkbox"
+                                            id={`select-${data.id}`}
+                                            className="rounded outline-0"
+                                            checked={isSelected(data.id)}
+                                            onChange={(e) =>
+                                                handleCheckboxChange(e, data.id)
+                                            }
+                                        />
                                     </td>
                                     <td className="py-1 leading-6 px-3 capitalize">
                                         {data.nama_peminjam}
@@ -417,49 +639,24 @@ function TabelPinjaman({ data }) {
                                     <td className="py-1 leading-6 px-3 capitalize">
                                         {data.tanggal_pinjam}
                                     </td>
-                                    <td className="border-r border-l py-1 px-3 capitalize leading-6">
-                                        {data.estimasi} Hari
-                                    </td>
                                     <td className="border-r py-1 px-3 capitalize leading-6">
                                         {data.tanggal_pengembalian}
                                     </td>
+
                                     <td
                                         className={`border-r py-1 px-3 capitalize leading-6 ${
                                             data.status_peminjaman.toLowerCase() ===
                                             "dikembalikan"
-                                                ? "bg-green-100"
-                                                : "bg-red-100"
+                                                ? "text-green-500"
+                                                : "text-red-500"
                                         }`}
                                     >
                                         {data.status_peminjaman}
                                     </td>
-                                    <td className="border-r py-1 px-3 capitalize">
-                                        <button
-                                            className="bg-blue-50 p-2 rounded-md"
-                                            onClick={() =>
-                                                handleViewDetail(data.id)
-                                            }
-                                        >
-                                            <img
-                                                src="/edit.png"
-                                                alt=""
-                                                className="w-5 h-5"
-                                            />
-                                        </button>
-                                    </td>
-                                    <td className="py-1 px-3 capitalize">
-                                        <button
-                                            className="bg-blue-50 p-2 rounded-md"
-                                            onClick={() =>
-                                                handleViewDetail(data.id)
-                                            }
-                                        >
-                                            <img
-                                                src="/eye.png"
-                                                alt=""
-                                                className="w-5 h-5"
-                                            />
-                                        </button>
+                                    <td className="border-r border-l py-1 px-3 leading-6 truncate">
+                                        {data.keterangan === null
+                                            ? "Belum ada keterangan"
+                                            : data.keterangan}
                                     </td>
                                 </tr>
                             ))}

@@ -1,22 +1,29 @@
-const DownloadPDFButton = ({ elementId }) => {
-    const downloadPDF = () => {
-        const element = document.getElementById(elementId);
-        if (element && window.html2canvas && window.jspdf) {
-            window.html2canvas(element).then((canvas) => {
-                const pdf = new window.jspdf.jsPDF("l", "mm", "a4");
-                const imgData = canvas.toDataURL("image/png");
-                const imgWidth = 297;
-                const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                const pageHeight = 210;
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
-                pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
-                pdf.save("tabel.pdf");
-            });
-        } else {
-            console.error(
-                `Element with ID "${elementId}" not found or libraries not loaded.`
+const DownloadPDF = ({ pdfRef, fileName }) => {
+    const downloadPDF = () => {
+        const input = pdfRef.current;
+        html2canvas(input).then((canvas) => {
+            const imgData = canvas.toDataURL("image/png");
+            const pdf = new jsPDF("l", "mm", "a4", true);
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+            const imgWidth = canvas.width;
+            const imgHeight = canvas.height;
+            const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+            const imgX = (pdfWidth - imgWidth * ratio) / 2;
+            const imgY = 30;
+            pdf.addImage(
+                imgData,
+                "PNG",
+                imgX,
+                imgY,
+                imgWidth * ratio,
+                imgHeight * ratio
             );
-        }
+            pdf.save(fileName || "document.pdf");
+        });
     };
 
     return (
@@ -29,4 +36,4 @@ const DownloadPDFButton = ({ elementId }) => {
     );
 };
 
-export default DownloadPDFButton;
+export default DownloadPDF;
