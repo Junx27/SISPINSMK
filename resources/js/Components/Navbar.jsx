@@ -12,14 +12,12 @@ function Navbar({
     showIcon,
     auth,
     handleSetting,
-    handleAnggota,
     handleBookmark,
 }) {
     const { value, setValue } = useContext(MyContext);
     const [popUp, setPopUp] = useState(false);
     const [cs, setCs] = useState(false);
     const [bookmark, setBookmark] = useState(false);
-    const [anggota, setAnggota] = useState(false);
     const [setting, setSetting] = useState(false);
     const [valueNama, setValueNama] = useState();
     const handleCariBuku = () => {
@@ -102,24 +100,6 @@ function Navbar({
                         </div>
                         <div
                             className="relative"
-                            onMouseOver={() => setAnggota(!anggota)}
-                            onMouseLeave={() => setAnggota(!anggota)}
-                            onClick={handleAnggota}
-                        >
-                            <img
-                                src="/invitewhite.png"
-                                alt=""
-                                className="w-8 h-8"
-                            />
-                            {anggota && (
-                                <p className="text-center text-[10px] w-32 absolute bg-white p-2 rounded-lg top-12 right-0">
-                                    Anggota
-                                    <span className="absolute -mt-3 rotate-45 w-3 h-3 bg-white right-5"></span>
-                                </p>
-                            )}
-                        </div>
-                        <div
-                            className="relative"
                             onMouseOver={() => setSetting(!setting)}
                             onMouseLeave={() => setSetting(!setting)}
                             onClick={handleSetting}
@@ -139,7 +119,7 @@ function Navbar({
                     </div>
                     <div onClick={() => setPopUp(!popUp)} className="relative">
                         <div className="flex gap-2 items-center">
-                            <p className="text-white text-xs w-20 truncate capitalize">
+                            <p className="text-white text-sm font-bold w-12 truncate capitalize">
                                 {auth}
                             </p>
                             <img

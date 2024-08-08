@@ -2,149 +2,16 @@ import DownloadPDFButton from "@/Components/DownloadPDFButton";
 import Navbar from "@/Components/Navbar";
 import Sidebar from "@/Components/Sidebar";
 import { url } from "@/Data/Url";
+import CreateBook from "@/Layouts/CreateBook";
 import DataAnggota from "@/Layouts/DataAnggota";
 import DataPengunjung from "@/Layouts/DataPengunjung";
 import EditUser from "@/Layouts/EditUser";
 import { Head } from "@inertiajs/react";
 import React, { useEffect, useState } from "react";
-const slides = [
-    {
-        id: 1,
-        imageUrl:
-            "https://w0.peakpx.com/wallpaper/364/693/HD-wallpaper-portrait-display-vertical-yin-and-yang-artwork-minimalism-digital-art-chinese-characters.jpg",
-        caption: "Ketenangan dalam mencari jati diri",
-        kategori: "Ilmu terapan",
-        penerbit: "Jurnal Bisnis dan Manajemen (JURBISMAN)",
-        tahun: "2018",
-        edisi: "kelas XII Semester 1",
-        desc: "Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali  melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,",
-    },
-    {
-        id: 2,
-        imageUrl:
-            "https://i.pinimg.com/736x/c9/7e/e1/c97ee10c43feb76184d200736b71b8b8.jpg",
-        caption:
-            "Bermuka dua untuk mencari ketenangan jiwa seorang diri dalam kehidupan",
-        kategori: "Ilmu terapan",
-        penerbit: "Jurnal Bisnis dan Manajemen (JURBISMAN)",
-        tahun: "2021",
-        edisi: "kelas XII Semester 1",
-        desc: "Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak  yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,",
-    },
-    {
-        id: 3,
-        imageUrl:
-            "https://i.pinimg.com/736x/3d/34/2c/3d342cec18cac749f92c7fa0337c13c3.jpg",
-        caption: "Kaneki episode 13 subtitle indonesia volume 23 terupdate",
-        kategori: "Ilmu terapan",
-        penerbit: "Jurnal Bisnis dan Manajemen (JURBISMAN)",
-        tahun: "2024",
-        edisi: "kelas XII Semester 1",
-        desc: "Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda  tidak punya bakat, Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,",
-    },
-    {
-        id: 4,
-        imageUrl:
-            "https://w0.peakpx.com/wallpaper/492/528/HD-wallpaper-dark-vertical-portrait-display-thumbnail.jpg",
-        caption: "Kesenian kehidupan",
-        kategori: "Ilmu terapan",
-        penerbit: "Jurnal Bisnis dan Manajemen (JURBISMAN)",
-        tahun: "2022",
-        edisi: "kelas XII Semester 1",
-        desc: "Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat, Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat, Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang  ia sama sekali tidak punya bakat, Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,",
-    },
-    {
-        id: 5,
-        imageUrl:
-            "https://i.pinimg.com/736x/aa/a9/42/aaa9428e3fc7f85a9472ce4fcde6673d.jpg",
-        caption: "fantasi dunia menerkam segalanya",
-        kategori: "Ilmu terapan",
-        penerbit: "Jurnal Bisnis dan Manajemen (JURBISMAN)",
-        tahun: "2020",
-        edisi: "kelas XII Semester 1",
-        desc: "Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat, Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat, Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang  ia sama sekali tidak punya bakat, Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,",
-    },
-    {
-        id: 6,
-        imageUrl:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdYs_XkSh6TWe-G6K3LCPPFGsDkGOk6LGt_g&s",
-        caption: "Kesenjangan sosial bagi kehidupan",
-        kategori: "Ilmu terapan",
-        penerbit: "Jurnal Bisnis dan Manajemen (JURBISMAN)",
-        tahun: "2017",
-        edisi: "kelas XII Semester 1",
-        desc: "Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat, Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat, Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang  ia sama sekali tidak punya bakat, Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,",
-    },
-    {
-        id: 7,
-        imageUrl:
-            "https://e0.pxfuel.com/wallpapers/775/753/desktop-wallpaper-walpaper-dengan-gambar-pretty-girl-aesthetic.jpg",
-        caption: "Ketenangan dalam mencari jati diri",
-        kategori: "Ilmu terapan",
-        penerbit: "Jurnal Bisnis dan Manajemen (JURBISMAN)",
-        tahun: "2018",
-        edisi: "kelas XII Semester 1",
-        desc: "Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali  melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,",
-    },
-    {
-        id: 8,
-        imageUrl:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUOUyrrYheQ0QQrDxmgJUXNeFjQck9GPYAYA&s",
-        caption:
-            "Bermuka dua untuk mencari ketenangan jiwa seorang diri dalam kehidupan",
-        kategori: "Ilmu terapan",
-        penerbit: "Jurnal Bisnis dan Manajemen (JURBISMAN)",
-        tahun: "2021",
-        edisi: "kelas XII Semester 1",
-        desc: "Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak  yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,",
-    },
-    {
-        id: 9,
-        imageUrl:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ53qRLU8GhTdPMqHc0WJgJBzDjKzBYvGErSA&s",
-        caption: "Kaneki episode 13 subtitle indonesia volume 23 terupdate",
-        kategori: "Ilmu terapan",
-        penerbit: "Jurnal Bisnis dan Manajemen (JURBISMAN)",
-        tahun: "2024",
-        edisi: "kelas XII Semester 1",
-        desc: "Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda  tidak punya bakat, Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,",
-    },
-    {
-        id: 10,
-        imageUrl:
-            "https://i.pinimg.com/236x/65/cc/a1/65cca1866650e63a45feacd0297b6d7b.jpg",
-        caption: "Kesenian kehidupan",
-        kategori: "Ilmu terapan",
-        penerbit: "Jurnal Bisnis dan Manajemen (JURBISMAN)",
-        tahun: "2022",
-        edisi: "kelas XII Semester 1",
-        desc: "Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat, Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat, Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang  ia sama sekali tidak punya bakat, Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,",
-    },
-    {
-        id: 11,
-        imageUrl:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQb2M4qofJIby3EtTx7At3I8PI8k0FEK06yrA&s",
-        caption: "fantasi dunia menerkam segalanya",
-        kategori: "Ilmu terapan",
-        penerbit: "Jurnal Bisnis dan Manajemen (JURBISMAN)",
-        tahun: "2020",
-        edisi: "kelas XII Semester 1",
-        desc: "Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat, Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat, Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang  ia sama sekali tidak punya bakat, Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,",
-    },
-    {
-        id: 12,
-        imageUrl:
-            "https://c4.wallpaperflare.com/wallpaper/227/583/604/anime-anime-girls-digital-art-artwork-2d-hd-wallpaper-preview.jpg",
-        caption: "Kesenjangan sosial bagi kehidupan",
-        kategori: "Ilmu terapan",
-        penerbit: "Jurnal Bisnis dan Manajemen (JURBISMAN)",
-        tahun: "2017",
-        edisi: "kelas XII Semester 1",
-        desc: "Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat, Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat, Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang  ia sama sekali tidak punya bakat, Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,",
-    },
-];
+import { useRef } from "react";
 
-function Dashboard({ auth }) {
+function Dashboard({ auth, bukus, users, pinjamans, analisis }) {
+    const pdfRef = useRef();
     const userRole = auth.user.role;
     useEffect(() => {
         if (userRole === "anggota") {
@@ -158,17 +25,44 @@ function Dashboard({ auth }) {
     const handleMenu = () => {
         setOpenMenu(!openMenu);
     };
-    const totalBuku = 6547;
-    const jumlahAnggota = 234;
-    const jumlahPeminjaman = 234;
+    const bukuDipinjam = pinjamans.filter(
+        (row) => row.status_peminjaman === "meminjam"
+    );
+    const bukuDikembalikan = pinjamans.filter(
+        (row) => row.status_peminjaman === "dikembalikan"
+    );
+    const totalBuku = bukus.length;
+    const jumlahAnggota = users.length;
+    const jumlahPeminjaman = pinjamans.length;
     const hasilPembagian = totalBuku / jumlahAnggota;
     const ratio = Math.round(hasilPembagian);
-    const probabilitas = Math.round(jumlahAnggota / jumlahPeminjaman);
+    const probabilitas = Math.round(jumlahPeminjaman / jumlahAnggota);
+    const now = new Date();
+    const peminjamanTerakhir = pinjamans.filter((row) => {
+        const tanggalPinjam = new Date(row.created_at).toLocaleDateString(
+            "id-ID",
+            {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+            }
+        );
+        const tanggalSekarang = now.toLocaleDateString("id-ID", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+        });
+        return tanggalPinjam === tanggalSekarang;
+    }).length;
 
     const [openPopUpSetting, setOpenPopUpSetting] = useState(false);
+    const [openPopUpBookmark, setOpenPopUpBookmark] = useState(false);
 
     const openSetting = () => {
         setOpenPopUpSetting(!openPopUpSetting);
+    };
+    const openBookmark = () => {
+        setOpenPopUpBookmark(!openPopUpBookmark);
     };
     return (
         <div>
@@ -197,6 +91,29 @@ function Dashboard({ auth }) {
                             <EditUser id={auth.user.id} />
                         </div>
                     </div>
+                    <div
+                        className={`transition-all duration-500 h-screen absolute z-50 bg-white ${
+                            openPopUpBookmark ? "w-[300px]" : "w-0"
+                        }`}
+                    >
+                        <div
+                            className={`transition-all duration-200 p-5 ${
+                                openPopUpBookmark ? "block" : "hidden"
+                            }`}
+                        >
+                            <div
+                                className="flex justify-end cursor-pointer"
+                                onClick={() => setOpenPopUpBookmark(false)}
+                            >
+                                <img
+                                    src="/close.png"
+                                    alt=""
+                                    className="w-3 h-3"
+                                />
+                            </div>
+                            <CreateBook id={auth.user.id} />
+                        </div>
+                    </div>
                     <Head title="Dashboard" />
                     <Navbar
                         profile={url + auth.user.foto_profil}
@@ -205,6 +122,7 @@ function Dashboard({ auth }) {
                         showIcon={openMenu ? false : true}
                         auth={auth.user.nama}
                         handleSetting={openSetting}
+                        handleBookmark={openBookmark}
                     />
                     <div className="absolute w-20 overflow-hidden">
                         <Sidebar />
@@ -224,7 +142,16 @@ function Dashboard({ auth }) {
                             />
                         </button>
                         <div className="-mt-7">
-                            <Sidebar viewicon={true} />
+                            <Sidebar
+                                viewicon={true}
+                                bukus={bukus.length}
+                                pinjamans={pinjamans.length}
+                                bukuDikembalikan={bukuDikembalikan.length}
+                                bukuDipinjam={bukuDipinjam.length}
+                                users={users.length}
+                                ratio={ratio}
+                                probabilitas={probabilitas}
+                            />
                         </div>
                     </div>
                     <div className="w-full h-screen">
@@ -234,7 +161,7 @@ function Dashboard({ auth }) {
                             className="w-full h-screen object-cover"
                         />
                         <div
-                            id="dashboard"
+                            ref={pdfRef}
                             className="inset-0 absolute top-20 left-0 ml-20 p-5 bg-opacity-10 bg-white/75 rounded-lg rounded-t-none"
                         >
                             <div className="bg-white h-full rounded-lg">
@@ -243,10 +170,10 @@ function Dashboard({ auth }) {
                                 </h1>
                                 <div className="pt-32 flex gap-20 p-5">
                                     <div className="w-[800px]">
-                                        <DataPengunjung />
+                                        <DataPengunjung analisis={analisis} />
                                     </div>
                                     <div className="w-[200px]">
-                                        <DataAnggota />
+                                        <DataAnggota users={users} />
                                         <div className="mt-8 text-xs flex flex-col gap-3">
                                             <h1 className="font-bold">
                                                 Ratio Buku
@@ -259,7 +186,7 @@ function Dashboard({ auth }) {
                                             <h1 className="font-bold">
                                                 Peminjaman Hari Terakhir
                                             </h1>
-                                            <p>16 Buku</p>
+                                            <p>{peminjamanTerakhir} Buku</p>
                                         </div>
                                     </div>
                                     <div>
@@ -268,7 +195,7 @@ function Dashboard({ auth }) {
                                                 Data Buku
                                             </h1>
                                             <p className="my-5 font-bold text-blue-500">
-                                                6574
+                                                {bukus.length}
                                             </p>
                                         </div>
                                         <div>
@@ -276,7 +203,7 @@ function Dashboard({ auth }) {
                                                 Data Anggota
                                             </h1>
                                             <p className="my-5 font-bold text-orange-500">
-                                                234
+                                                {users.length}
                                             </p>
                                         </div>
                                         <div>
@@ -284,7 +211,7 @@ function Dashboard({ auth }) {
                                                 Data Peminjaman
                                             </h1>
                                             <p className="my-5 font-bold text-purple-500">
-                                                234
+                                                {pinjamans.length}
                                             </p>
                                         </div>
                                         <div>
@@ -292,7 +219,7 @@ function Dashboard({ auth }) {
                                                 Buku Kembali
                                             </h1>
                                             <p className="my-5 font-bold text-green-500">
-                                                76
+                                                {bukuDikembalikan.length}
                                             </p>
                                         </div>
                                         <div>
@@ -300,7 +227,7 @@ function Dashboard({ auth }) {
                                                 Buku Dipinjam
                                             </h1>
                                             <p className="mt-5 font-bold text-red-500">
-                                                34
+                                                {bukuDipinjam.length}
                                             </p>
                                         </div>
                                     </div>
@@ -308,7 +235,10 @@ function Dashboard({ auth }) {
                             </div>
                         </div>
                         <div className="text-xs absolute bottom-10 right-10">
-                            <DownloadPDFButton elementId={"dashboard"} />
+                            <DownloadPDFButton
+                                pdfRef={pdfRef}
+                                fileName={"Dashboard"}
+                            />
                         </div>
                     </div>
                 </div>

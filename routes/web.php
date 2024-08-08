@@ -14,18 +14,21 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome');
-});
+Route::get('/', [UserController::class, "landingPage"]);
 
 Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('admin/dashboard', [AdminController::class, "dashboard"])->name('dashboard');
     Route::post('admin/buku-create', [AdminController::class, "createBook"]);
     Route::put('admin/buku-update/{id}', [AdminController::class, "updateBook"]);
     Route::get('admin/buku', [AdminController::class, "viewBuku"])->name("buku");
     Route::get('admin/buku/{id}', [AdminController::class, "viewBukuDetail"]);
     Route::get('admin/buku-foto/{id}', [ImageController::class, "viewFotoBuku"]);
     Route::put('admin/buku-foto/{id}', [ImageController::class, "updateFotoBuku"]);
+    Route::get('admin/user-foto/{id}', [ImageController::class, "viewFotoUser"]);
+    Route::put('admin/user-foto/{id}', [ImageController::class, "updateFotoUser"]);
     Route::delete('admin/buku/{id}', [AdminController::class, "deleteBook"]);
+    Route::put('admin/buku-stok-pinjam/{id}', [AdminController::class, "updateStokBukuPinjam"]);
+    Route::put('admin/buku-stok-kembali/{id}', [AdminController::class, "updateStokBukuKembali"]);
     Route::get('admin/user', [AdminController::class, "viewUser"]);
     Route::get('admin/user/{id}', [AdminController::class, "viewUserDetail"]);
     Route::delete('admin/user/{id}', [AdminController::class, "deleteUser"]);
@@ -41,13 +44,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get("daftar-buku-detail/{id}", [UserController::class, "show"]);
     Route::post("buat-pinjaman-buku", [UserController::class, "store"]);
     Route::put("update-pinjaman-buku/{id}", [UserController::class, "update"]);
-
-
-
-
-    Route::get('admin/dashboard', function () {
-        return Inertia::render('Admin/Dashboard');
-    })->name('dashboard');
 });
 
 

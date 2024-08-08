@@ -9,8 +9,10 @@ import { useForm } from "@inertiajs/inertia-react";
 import axios from "axios";
 import React, { useContext, useState } from "react";
 import EditUser from "./EditUser";
+import { useRef } from "react";
 
 function TabelUser({ data }) {
+    const pdfRef = useRef();
     const { value, setValue } = useContext(MyContext);
     const uniqueGender = [...new Set(data.map((slide) => slide.gender))];
     const uniqueStatus = [...new Set(data.map((slide) => slide.status))];
@@ -227,7 +229,8 @@ function TabelUser({ data }) {
                                             elementId={dataBuku}
                                         />
                                         <DownloadPDFButton
-                                            elementId={dataBukuPDF}
+                                            pdfRef={pdfRef}
+                                            fileName={"Daftar User"}
                                         />
                                     </div>
                                 </Dropdown.Content>
@@ -243,7 +246,7 @@ function TabelUser({ data }) {
                 )}
                 <div className="flex flex-col md:flex-row">
                     <table
-                        id={dataBukuPDF}
+                        ref={pdfRef}
                         className="absolute mt-0 table-auto w-full shadow-lg rounded-lg p-5"
                     >
                         <thead>
@@ -268,9 +271,6 @@ function TabelUser({ data }) {
                                 </th>
                                 <th className="border-r px-2 md:px-3 py-4 font-bold text-start text-sm w-20">
                                     Edit
-                                </th>
-                                <th className="px-2 md:px-3 py-4 font-bold text-start text-sm w-10">
-                                    Detail
                                 </th>
                             </tr>
                         </thead>
@@ -300,9 +300,9 @@ function TabelUser({ data }) {
                                     <td className="border-r py-1 px-3 capitalize leading-6">
                                         {data.status}
                                     </td>
-                                    <td className="border-r py-1 px-3 capitalize">
+                                    <td className="border-r py-1 px-3 capitalize text-center">
                                         <button
-                                            className="bg-blue-50 p-2 rounded-md"
+                                            className="p-2 rounded-md"
                                             onClick={() =>
                                                 handleViewDetail(data.id)
                                             }
@@ -310,21 +310,7 @@ function TabelUser({ data }) {
                                             <img
                                                 src="/edit.png"
                                                 alt=""
-                                                className="w-5 h-5"
-                                            />
-                                        </button>
-                                    </td>
-                                    <td className="py-1 px-3 capitalize">
-                                        <button
-                                            className="bg-blue-50 p-2 rounded-md"
-                                            onClick={() =>
-                                                handleViewDetail(data.id)
-                                            }
-                                        >
-                                            <img
-                                                src="/eye.png"
-                                                alt=""
-                                                className="w-5 h-5"
+                                                className="w-3 h-3"
                                             />
                                         </button>
                                     </td>
@@ -469,7 +455,7 @@ function TabelUser({ data }) {
                                     </td>
                                     <td className="border-r py-1 px-3 capitalize text-center">
                                         <button
-                                            className="bg-blue-50 p-2 rounded-md"
+                                            className="p-2 rounded-md"
                                             onClick={() =>
                                                 handleViewDetail(data.id)
                                             }

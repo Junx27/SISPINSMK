@@ -10,8 +10,10 @@ import { url } from "@/Data/Url";
 import React, { useContext, useState } from "react";
 import EditBuku from "./EditBuku";
 import axios from "axios";
+import { useRef } from "react";
 
 function TabelBuku({ data }) {
+    const pdfRef = useRef();
     const { value, setValue } = useContext(MyContext);
     const uniqueCategories = [
         ...new Set(data.map((slide) => slide.kategori.toLocaleLowerCase())),
@@ -73,10 +75,6 @@ function TabelBuku({ data }) {
             setSelectedIds([]);
         }
     };
-    const handleViewDetail = (id) => {
-        setViewBuku(id);
-    };
-
     const getCurrentPageData = () => {
         const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
         const endIndex = startIndex + ITEMS_PER_PAGE;
@@ -132,56 +130,29 @@ function TabelBuku({ data }) {
     };
     const dataBuku = "data-buku";
     const dataBukuPDF = "data-buku-pdf";
+    console.log(viewBuku);
 
     return (
         <div>
             <div className="relative">
-                {viewBuku !== null && (
-                    <div className="absolute z-30 bg-black right-20 top-10 w-[400px] h-[600px] rounded-lg overflow-hidden shadow-lg">
-                        {data
-                            .filter((row) => row.id === viewBuku)
-                            .map((row, index) => (
-                                <div key={index} className="relative">
-                                    <img
-                                        src={
-                                            (row.imageUrl === "null") |
-                                            (row.imageUrl === null)
-                                                ? "/default-book.jpg"
-                                                : url + row.imageUrl
-                                        }
-                                        alt=""
-                                        className="w-full h-full object-cover brightness-95 rounded-lg"
-                                    />
-                                    <div className="absolute text-white top-0 p-5 bg-gradient-to-b from-transparent to-black w-full h-full">
-                                        <div className="flex flex-col justify-between gap-32">
-                                            <div className="h-64">
-                                                <h1 className="font-bold text-xl capitalize">
-                                                    {row.caption}
-                                                </h1>
-                                                <p className="capitalize">
-                                                    {row.penerbit}
-                                                </p>
-                                                <p className="capitalize">
-                                                    {row.edisi}
-                                                </p>
-                                                <p className="capitalize">
-                                                    {row.tahun}
-                                                </p>
-                                            </div>
-                                            <div className="mt-10">
-                                                <p className="capitalize mb-2">
-                                                    {row.kategori}
-                                                </p>
-                                                <p className="text-xs line-clamp-6">
-                                                    {row.desc}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                    </div>
-                )}
+                <div className="absolute z-50 top-8 right-20">
+                    {data
+                        .filter((row) => row.id === viewBuku)
+                        .map((item, index) => (
+                            <div key={index} className="w-[300px] h-[460px]">
+                                <img
+                                    src={
+                                        (item.imageUrl === "null") |
+                                        (item.imageUrl === null)
+                                            ? "/default-book.jpg"
+                                            : url + item.imageUrl
+                                    }
+                                    alt=""
+                                    className="w-full h-full object-cover brightness-95 rounded-lg"
+                                />
+                            </div>
+                        ))}
+                </div>
                 <div className="flex justify-between mb-2 items-center">
                     <div className="flex items-center relative">
                         <div className="flex text-xs items-center relative">
@@ -397,7 +368,8 @@ function TabelBuku({ data }) {
                                             elementId={dataBuku}
                                         />
                                         <DownloadPDFButton
-                                            elementId={dataBukuPDF}
+                                            pdfRef={pdfRef}
+                                            fileName={"Daftar Buku"}
                                         />
                                     </div>
                                 </Dropdown.Content>
@@ -413,7 +385,7 @@ function TabelBuku({ data }) {
                 )}
                 <div className="flex flex-col md:flex-row">
                     <table
-                        id={dataBukuPDF}
+                        ref={pdfRef}
                         className="absolute mt-0 table-auto w-full shadow-lg rounded-lg p-5"
                     >
                         <thead>
@@ -438,9 +410,6 @@ function TabelBuku({ data }) {
                                 </th>
                                 <th className="border-r px-2 md:px-3 py-4 font-bold text-start text-sm w-20">
                                     Edit
-                                </th>
-                                <th className="px-2 md:px-3 py-4 font-bold text-start text-sm w-10">
-                                    Detail
                                 </th>
                             </tr>
                         </thead>
@@ -470,31 +439,15 @@ function TabelBuku({ data }) {
                                     <td className="border-r py-1 px-3 capitalize leading-6">
                                         {data.edisi}
                                     </td>
-                                    <td className="border-r py-1 px-3 capitalize">
-                                        <button
-                                            className="bg-blue-50 p-2 rounded-md"
-                                            onClick={() =>
-                                                handleViewDetail(data.id)
-                                            }
-                                        >
+                                    <td
+                                        className="relative group border-r py-1 px-3 capitalize text-center hover:bg-blue-50 cursor-pointer"
+                                        onClick={() => handleEditBuku(data.id)}
+                                    >
+                                        <button>
                                             <img
                                                 src="/edit.png"
                                                 alt=""
-                                                className="w-5 h-5"
-                                            />
-                                        </button>
-                                    </td>
-                                    <td className="py-1 px-3 capitalize">
-                                        <button
-                                            className="bg-blue-50 p-2 rounded-md"
-                                            onClick={() =>
-                                                handleViewDetail(data.id)
-                                            }
-                                        >
-                                            <img
-                                                src="/eye.png"
-                                                alt=""
-                                                className="w-5 h-5"
+                                                className="w-3 h-3"
                                             />
                                         </button>
                                     </td>
@@ -598,9 +551,6 @@ function TabelBuku({ data }) {
                                 <th className="border-r px-2 md:px-3 py-4 font-bold text-start text-sm w-20">
                                     Edit
                                 </th>
-                                <th className="px-2 md:px-3 py-4 font-bold text-start text-sm w-10">
-                                    Detail
-                                </th>
                             </tr>
                         </thead>
                         <tbody className="relative text-sm">
@@ -608,7 +558,10 @@ function TabelBuku({ data }) {
                                 <tr
                                     key={index}
                                     className={`h-10 border-t ${
-                                        isSelected(data.id) ? "bg-blue-100" : ""
+                                        isSelected(data.id) |
+                                        (viewBuku === data.id)
+                                            ? "bg-blue-100"
+                                            : ""
                                     }`}
                                 >
                                     <td className="border-r px-3 py-2">
@@ -637,34 +590,17 @@ function TabelBuku({ data }) {
                                     <td className="border-r py-1 px-3 capitalize leading-6">
                                         {data.edisi}
                                     </td>
-                                    <td className="border-r py-1 px-3 capitalize">
-                                        <button
-                                            className="bg-blue-50 p-2 rounded-md"
-                                            onClick={() =>
-                                                handleEditBuku(data.id)
-                                            }
-                                        >
+                                    <td
+                                        className="relative group border-r py-1 px-3 capitalize text-center hover:bg-blue-50 cursor-pointer"
+                                        onClick={() => handleEditBuku(data.id)}
+                                        onMouseOver={() => setViewBuku(data.id)}
+                                        onMouseOut={() => setViewBuku(null)}
+                                    >
+                                        <button>
                                             <img
                                                 src="/edit.png"
                                                 alt=""
-                                                className="w-5 h-5"
-                                            />
-                                        </button>
-                                    </td>
-                                    <td className="py-1 px-3 capitalize">
-                                        <button
-                                            className="bg-blue-50 p-2 rounded-md"
-                                            onMouseOver={() =>
-                                                handleViewDetail(data.id)
-                                            }
-                                            onMouseOut={() =>
-                                                handleViewDetail(null)
-                                            }
-                                        >
-                                            <img
-                                                src="/eye.png"
-                                                alt=""
-                                                className="w-5 h-5"
+                                                className="w-3 h-3"
                                             />
                                         </button>
                                     </td>

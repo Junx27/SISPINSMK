@@ -21,4 +21,8 @@ class Buku extends Model
         'desc',
         'user_id',
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

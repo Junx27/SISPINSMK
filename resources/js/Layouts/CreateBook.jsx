@@ -4,6 +4,7 @@ import { Inertia } from "@inertiajs/inertia";
 import React, { useState } from "react";
 
 function CreateBook() {
+    const [konfirmasi, setKonfirmasi] = useState(false);
     const [formData, setFormData] = useState({
         imageUrl: null,
         caption: "",
@@ -52,7 +53,7 @@ function CreateBook() {
                     setProcessing(false);
                 },
             });
-            window.location.reload();
+            setKonfirmasi(true);
         } catch (error) {
             console.error("Error creating book:", error);
             setProcessing(false);
@@ -61,6 +62,25 @@ function CreateBook() {
 
     return (
         <div>
+            {konfirmasi && (
+                <PopOver>
+                    <div className="bg-white p-5 rounded-md w-64 h-32">
+                        <p className="text-center text-xs">
+                            Buku berhasil dimasukan
+                        </p>
+                        <div
+                            className="flex justify-center mt-5 cursor-pointer"
+                            onClick={() =>
+                                (window.location.href = "/admin/buku")
+                            }
+                        >
+                            <button className="bg-blue-500 text-white rounded-md w-32 p-2">
+                                ok
+                            </button>
+                        </div>
+                    </div>
+                </PopOver>
+            )}
             <form
                 className="text-xs mx-5 flex flex-col gap-3"
                 onSubmit={handleSubmit}
@@ -78,6 +98,7 @@ function CreateBook() {
                                    file:text-xs file:font-semibold
                                    file:bg-blue-50 file:text-blue-700
                                    hover:file:bg-blue-100"
+                        required
                     />
                 </label>
                 {errors.imageUrl && (
@@ -91,6 +112,7 @@ function CreateBook() {
                     className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
                     value={formData.caption}
                     onChange={handleChange}
+                    required
                 />
                 {errors.caption && (
                     <div className="text-red-500">{errors.caption}</div>
@@ -103,6 +125,7 @@ function CreateBook() {
                     className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
                     value={formData.kategori}
                     onChange={handleChange}
+                    required
                 />
                 {errors.kategori && (
                     <div className="text-red-500">{errors.kategori}</div>
@@ -114,6 +137,7 @@ function CreateBook() {
                     className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
                     value={formData.stok}
                     onChange={handleChange}
+                    required
                 />
                 {errors.stok && (
                     <div className="text-red-500">{errors.stok}</div>
@@ -126,6 +150,7 @@ function CreateBook() {
                     className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
                     value={formData.penerbit}
                     onChange={handleChange}
+                    required
                 />
                 {errors.penerbit && (
                     <div className="text-red-500">{errors.penerbit}</div>
@@ -138,6 +163,7 @@ function CreateBook() {
                     className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
                     value={formData.tahun}
                     onChange={handleChange}
+                    required
                 />
                 {errors.tahun && (
                     <div className="text-red-500">{errors.tahun}</div>
@@ -150,6 +176,7 @@ function CreateBook() {
                     className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
                     value={formData.edisi}
                     onChange={handleChange}
+                    required
                 />
                 {errors.edisi && (
                     <div className="text-red-500">{errors.edisi}</div>
@@ -161,6 +188,7 @@ function CreateBook() {
                     className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
                     value={formData.desc}
                     onChange={handleChange}
+                    required
                 />
                 {errors.desc && (
                     <div className="text-red-500">{errors.desc}</div>

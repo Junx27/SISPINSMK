@@ -3,7 +3,8 @@ import MyQRCodeComponent from "./QrCode";
 import MyContext from "./CreateContext";
 import { url } from "@/Data/Url";
 
-function Buku({ slides }) {
+function Buku({ slides, handleView }) {
+    const [view, setview] = useState(handleView);
     const { getId, setGetId } = useContext(MyContext);
     const [selectedIndex, setSelectedIndex] = useState(null);
     const [selectedQR, setSelectedQR] = useState(null);
@@ -38,7 +39,9 @@ function Buku({ slides }) {
                                 : url + slide.imageUrl
                         }
                         alt=""
-                        className="w-full h-[240px] object-cover brightness-95 rounded-lg"
+                        className={`w-full object-cover brightness-95 rounded-lg ${
+                            selectedIndex === slide.id ? "h-full" : "h-[240px]"
+                        }`}
                     />
                     <div
                         className={`absolute inset-0 bg-gradient-to-t from-black to-transparent ${
@@ -48,14 +51,20 @@ function Buku({ slides }) {
                     <p className="text-[13px] group-hover:hidden mt-2 z-50 font-bold w-full h-[40px] line-clamp-2 capitalize">
                         {slide.caption}
                     </p>
-                    <a
-                        href={`/daftar-buku-detail/${getId}`}
-                        className={`absolute z-50 top-0 p-10 ${
-                            selectedIndex === slide.id ? "block" : "hidden"
-                        }`}
-                    >
-                        <img src="/bookmark.png" alt="" className="w-20 ml-2" />
-                    </a>
+                    {view && (
+                        <a
+                            href={`/daftar-buku-detail/${getId}`}
+                            className={`absolute z-50 top-0 p-10 ${
+                                selectedIndex === slide.id ? "block" : "hidden"
+                            }`}
+                        >
+                            <img
+                                src="/bookmark.png"
+                                alt=""
+                                className="w-20 ml-2"
+                            />
+                        </a>
+                    )}
                     <div
                         className={`absolute inset-0 p-2 pt-[200px] ${
                             selectedIndex === slide.id ? "block" : "hidden"

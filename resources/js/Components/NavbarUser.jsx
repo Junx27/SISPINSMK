@@ -2,9 +2,15 @@ import { Link } from "@inertiajs/react";
 import React, { useContext } from "react";
 import { useState } from "react";
 import MyContext from "./CreateContext";
-import { data } from "@/Data/DataBuku";
 
-function NavbarUser({ profile, logo, handleBookmark, handleSettting, auth }) {
+function NavbarUser({
+    profile,
+    logo,
+    handleBookmark,
+    handleSettting,
+    auth,
+    data,
+}) {
     const { value, setValue } = useContext(MyContext);
     const [popUp, setPopUp] = useState(false);
     const [cs, setCs] = useState(false);
@@ -154,7 +160,7 @@ function NavbarUser({ profile, logo, handleBookmark, handleSettting, auth }) {
                         className="relative cursor-pointer"
                     >
                         <div className="flex gap-2 items-center">
-                            <p className="text-white text-xs w-20 truncate capitalize">
+                            <p className="text-white text-sm font-bold w-12 truncate capitalize">
                                 {auth}
                             </p>
                             <img

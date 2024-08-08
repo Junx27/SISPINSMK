@@ -1,59 +1,31 @@
+import { url } from "@/Data/Url";
 import React, { useState, useRef, useEffect } from "react";
 
-function Carosel() {
-    const slides = [
-        {
-            id: 1,
-            imageUrl: "/cover1.jpg",
-            caption: "Teknologi untuk kehidupan",
-            kategori: "Sains dan Teknik",
-            penerbit: "Enlslikopedia Techology",
-            tahun: "2019",
-            edisi: "kelas XI Semester 1",
-            desc: "Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali  melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,",
-        },
-        {
-            id: 2,
-            imageUrl: "/cover.jpg",
-            caption: "Senja di pagi hari",
-            kategori: "Karya Ilmiah",
-            penerbit: "Cahaya Lentera",
-            tahun: "2019",
-            edisi: "kelas XII Semester 4",
-            desc: "Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak  yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,",
-        },
-        {
-            id: 3,
-            imageUrl: "/cover2.jpg",
-            caption: "manajemen waktu berbisnis",
-            kategori: "Ekonomi dan Bisnis",
-            penerbit: "Jurnal Bisnis dan Manajemen",
-            tahun: "2019",
-            edisi: "kelas XII Semester 1",
-            desc: "Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda  tidak punya bakat, Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,",
-        },
-        {
-            id: 4,
-            imageUrl: "/cover3.jpg",
-            caption: "Mengenal Jauh lebih dalam kehidupan",
-            kategori: "Karya Non-Ilmiah",
-            penerbit: "Edukasi Mandiri",
-            tahun: "2019",
-            edisi: "kelas XII Semester 1",
-            desc: "Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat, Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat, Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang  ia sama sekali tidak punya bakat, Berkeliling dunia, menghadapi monster, melindungi orang-orang. Noor, pemuda yang ingin menjadi petualang, diberi tahu kalau ia sama sekali tidak punya bakat,",
-        },
-    ];
+function Carosel({ data }) {
+    const slides = (data || []).map((item, index) => ({
+        id: index + 1,
+        imageUrl: item.imageUrl || "",
+        caption: item.caption || "No Caption",
+        kategori: item.kategori || "Unknown Category",
+        penerbit: item.penerbit || "Unknown Publisher",
+        tahun: item.tahun || "Unknown Year",
+        edisi: item.edisi || "Unknown Edition",
+        desc: item.desc || "No Description",
+    }));
 
-    const [selectedIndex, setSelectedIndex] = useState(slides[0].id); // Start with first slide
-    const [loading, setLoading] = useState(true); // Initially set loading to true
-    const [dominantColor, setDominantColor] = useState(""); // State to hold dominant color
+    const [selectedIndex, setSelectedIndex] = useState(slides[0]?.id || 1);
+    const [loading, setLoading] = useState(true);
+    const [dominantColor, setDominantColor] = useState("#179BAE");
     const canvasRef = useRef(null);
 
     useEffect(() => {
         const loadImage = () => {
             const image = new Image();
             image.crossOrigin = "Anonymous";
-            image.src = slides[selectedIndex - 1].imageUrl; // Adjusted to use selectedIndex properly
+            image.src = slides[selectedIndex - 1].imageUrl
+                ? url + slides[selectedIndex - 1].imageUrl
+                : "";
+
             image.onload = () => {
                 const canvas = canvasRef.current;
                 const ctx = canvas.getContext("2d");
@@ -69,9 +41,20 @@ function Carosel() {
                 const pixelData = imageData.data;
                 analyzeColors(pixelData);
             };
+
+            image.onerror = () => {
+                // Jika gambar gagal dimuat, atur warna dominan menjadi hitam
+                setDominantColor("#179BAE");
+                setLoading(false);
+            };
         };
 
-        loadImage();
+        if (slides.length > 0 && slides[selectedIndex - 1].imageUrl) {
+            loadImage();
+        } else {
+            setDominantColor("#179BAE"); // Jika tidak ada gambar, setel hitam
+            setLoading(false);
+        }
     }, [selectedIndex, slides]);
 
     const analyzeColors = (pixelData) => {
@@ -79,17 +62,13 @@ function Carosel() {
         for (let i = 0; i < pixelData.length; i += 4) {
             const [r, g, b] = pixelData.slice(i, i + 3);
             const hexColor = rgbToHex(r, g, b);
-            if (colorMap[hexColor]) {
-                colorMap[hexColor]++;
-            } else {
-                colorMap[hexColor] = 1;
-            }
+            colorMap[hexColor] = (colorMap[hexColor] || 0) + 1;
         }
         const sortedColors = Object.keys(colorMap).sort(
             (a, b) => colorMap[b] - colorMap[a]
         );
-        setDominantColor(sortedColors[0]);
-        setLoading(false); // Set loading to false once image is loaded
+        setDominantColor(sortedColors[0] || "#179BAE"); // Jika tidak ada warna yang dianalisis, setel hitam
+        setLoading(false);
     };
 
     const rgbToHex = (r, g, b) => {
@@ -103,7 +82,7 @@ function Carosel() {
             setSelectedIndex((prevIndex) =>
                 prevIndex === slides.length ? 1 : prevIndex + 1
             );
-            setLoading(true); // Set loading to true when changing slide
+            setLoading(true);
         }, 3000);
 
         return () => clearTimeout(autoPlay);
@@ -121,7 +100,12 @@ function Carosel() {
                 >
                     <div className="relative">
                         <img
-                            src={slide.imageUrl}
+                            src={
+                                (slide.imageUrl === "null") |
+                                (slide.imageUrl === null)
+                                    ? "/default-book.jpg"
+                                    : url + slide.imageUrl
+                            }
                             alt=""
                             className={`transition-all duration-1000 w-full h-screen object-cover ${
                                 loading ? "opacity-0" : "opacity-1"
@@ -146,28 +130,6 @@ function Carosel() {
                                 <p className="text-xs text-white line-clamp-5">
                                     {slide.desc}
                                 </p>
-                            </div>
-                            <div className="mt-10 flex gap-5">
-                                <a href="/admin/buku">
-                                    <button className="font-bold flex items-center bg-white text-3xl p-4 rounded-lg">
-                                        <img
-                                            src="/bookmarkblack.png"
-                                            alt=""
-                                            className="w-10 h-10 mx-3"
-                                        />
-                                        Pinjam sekarang
-                                    </button>
-                                </a>
-                                <a href="/register">
-                                    <button className="text-white flex items-center font-bold backdrop-opacity-10 bg-white/20 text-3xl p-4 rounded-lg">
-                                        <img
-                                            src="/invitewhite.png"
-                                            alt=""
-                                            className="w-10 h-10 mx-3"
-                                        />
-                                        Daftar anggota
-                                    </button>
-                                </a>
                             </div>
                         </div>
                         <div className="absolute z-20 inset-0 bg-gradient-to-t from-white from-10% via-white/50 via-30% to-transparent to-90% w-full h-full"></div>

@@ -1,7 +1,16 @@
 import { usePage } from "@inertiajs/react";
 import React from "react";
 
-function Sidebar({ viewicon }) {
+function Sidebar({
+    viewicon,
+    bukus,
+    users,
+    pinjamans,
+    bukuDikembalikan,
+    bukuDipinjam,
+    ratio,
+    probabilitas,
+}) {
     const { url } = usePage();
     const sidebar = [
         {
@@ -58,31 +67,43 @@ function Sidebar({ viewicon }) {
                 <div className="mx-auto mt-10 bg-white p-5 px-12 rounded-lg shadow-md">
                     <div>
                         <h1 className="text-xs">Data Buku</h1>
-                        <p className="my-3 font-bold text-blue-500">6574</p>
+                        <p className="my-3 font-bold text-blue-500">{bukus}</p>
                     </div>
                     <div>
                         <h1 className="text-xs">Data Anggota</h1>
-                        <p className="my-3 font-bold text-orange-500">234</p>
+                        <p className="my-3 font-bold text-orange-500">
+                            {users}
+                        </p>
                     </div>
                     <div>
                         <h1 className="text-xs">Data Peminjaman</h1>
-                        <p className="my-3 font-bold text-purple-500">234</p>
+                        <p className="my-3 font-bold text-purple-500">
+                            {pinjamans}
+                        </p>
                     </div>
                     <div>
                         <h1 className="text-xs">Buku Kembali</h1>
-                        <p className="my-3 font-bold text-green-500">76</p>
+                        <p className="my-3 font-bold text-green-500">
+                            {bukuDikembalikan}
+                        </p>
                     </div>
                     <div>
                         <h1 className="text-xs">Buku Dipinjam</h1>
-                        <p className="my-3 font-bold text-red-500">34</p>
+                        <p className="my-3 font-bold text-red-500">
+                            {bukuDipinjam}
+                        </p>
                     </div>
                     <div>
                         <h1 className="text-xs">Ratio Pinjaman</h1>
-                        <p className="my-3 font-bold text-teal-500">28 %</p>
+                        <p className="my-3 font-bold text-teal-500">
+                            {ratio} %
+                        </p>
                     </div>
                     <div>
                         <h1 className="text-xs">Probabilitas Peminjaman</h1>
-                        <p className="mt-3 mb-5 font-bold text-black">1 %</p>
+                        <p className="mt-3 mb-5 font-bold text-black">
+                            {probabilitas} %
+                        </p>
                     </div>
                 </div>
             ) : (

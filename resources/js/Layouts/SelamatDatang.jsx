@@ -2,13 +2,22 @@ import Buku from "@/Components/Buku";
 import Carosel from "@/Components/Carosel";
 import PopOver from "@/Components/PopOver";
 import Slider from "@/Components/Slider";
-import { data } from "@/Data/DataBuku";
 import Login from "@/Pages/Auth/Login";
 import Register from "@/Pages/Auth/Register";
 import React from "react";
 import { useState } from "react";
 
-function SelamatDatang() {
+function SelamatDatang({
+    data,
+    bukuBanyakDipijnam,
+    karyaIlmiah,
+    karyaNonIlmiah,
+    ekonomi,
+    karyaIlmiahSlider,
+    karyaNonIlmiahSlider,
+    ekonomiSlider,
+    slider,
+}) {
     const [login, setLogin] = useState(false);
     const [register, setRegister] = useState(false);
 
@@ -43,19 +52,26 @@ function SelamatDatang() {
                             className="w-[600px] text-xs rounded-lg outline-0 border-0"
                             placeholder="cari buku..."
                         />
-                        <button className="ml-5 text-white w-20 text-xs py-2 rounded-lg text-center bg-blue-500">
+                        <button
+                            className="ml-5 text-white w-20 text-xs py-2 rounded-lg text-center bg-blue-500"
+                            onClick={() => setLogin(true)}
+                        >
                             cari
                         </button>
                     </div>
                     <div className="flex flex-row gap-10 items-center">
-                        <img src="/cs.png" alt="" className="w-10 h-10" />
-                        <a href="/daftar-buku">
-                            <img
-                                src="/bookmark.png"
-                                alt=""
-                                className="w-8 h-8"
-                            />
-                        </a>
+                        <img
+                            src="/cs.png"
+                            alt=""
+                            className="w-10 h-10"
+                            onClick={() => setLogin(true)}
+                        />
+                        <img
+                            src="/bookmark.png"
+                            alt=""
+                            className="w-8 h-8"
+                            onClick={() => setLogin(true)}
+                        />
                     </div>
                     <div className="flex gap-10">
                         <button
@@ -74,97 +90,23 @@ function SelamatDatang() {
                 </div>
             </div>
             <div>
-                <Carosel />
+                <Carosel data={slider} />
             </div>
             <div className="mb-10">
                 <h1 className="font-bold mx-20 text-2xl">Banyak Dipinjam</h1>
-                <Slider />
+                <Slider data={bukuBanyakDipijnam} />
             </div>
-            <div className="z-30 relative">
-                <h1 className="font-bold mx-20 text-2xl">Rekomendasi</h1>
-                <Buku slides={data} />
-            </div>
-            <div className="mb-10 bg-teal-200 pt-12 pb-10">
-                <div className="flex justify-between">
-                    <h1 className="font-bold mx-20 text-2xl">
-                        Berdasarkan Kategori
-                    </h1>
-                    <p className="mr-20 flex items-center">
-                        Lebih banyak
-                        <span className="ml-3">
-                            <img
-                                src="/arrow.png"
-                                alt=""
-                                className="w-5 h-5 rotate-90"
-                            />
-                        </span>
-                    </p>
-                </div>
-                <Slider />
-            </div>
-            <div className="mt-20 z-30 relative">
-                <div className="flex justify-between">
-                    <h1 className="font-bold mx-20 text-2xl">
-                        Karya Fiksi Ilmiah
-                    </h1>
-                    <p className="mr-20 flex items-center">
-                        Lebih banyak
-                        <span className="ml-3">
-                            <img
-                                src="/arrow.png"
-                                alt=""
-                                className="w-5 h-5 rotate-90"
-                            />
-                        </span>
-                    </p>
-                </div>
-                <Buku slides={data} />
-            </div>
-            <div className="mt-20 z-30 relative">
-                <div className="flex justify-between">
-                    <h1 className="font-bold mx-20 text-2xl">
-                        Karya Non-Fiksi Ilmiah
-                    </h1>
-                    <p className="mr-20 flex items-center">
-                        Lebih banyak
-                        <span className="ml-3">
-                            <img
-                                src="/arrow.png"
-                                alt=""
-                                className="w-5 h-5 rotate-90"
-                            />
-                        </span>
-                    </p>
-                </div>
-                <Buku slides={data} />
-            </div>
-            <div className="mb-10 bg-orange-200 pt-12 pb-10">
-                <div className="flex justify-between">
-                    <h1 className="font-bold mx-20 text-2xl">
-                        Teknik dan Sains
-                    </h1>
-                    <p className="mr-20 flex items-center">
-                        Lebih banyak
-                        <span className="ml-3">
-                            <img
-                                src="/arrow.png"
-                                alt=""
-                                className="w-5 h-5 rotate-90"
-                            />
-                        </span>
-                    </p>
-                </div>
-                <Slider />
-            </div>
-            <div className="mt-5 z-30 relative">
+            <div className="mx-20 z-30 relative">
+                <h1 className="font-bold text-2xl">Rekomendasi</h1>
                 <Buku slides={data} />
             </div>
             <div className="mb-10 bg-blue-200 pt-12 pb-10">
                 <div className="flex justify-between">
-                    <h1 className="font-bold mx-20 text-2xl">
-                        Sosial dan Humaniora
-                    </h1>
-                    <p className="mr-20 flex items-center">
+                    <h1 className="font-bold mx-20 text-2xl">Karya Ilmiah</h1>
+                    <div
+                        className="mr-20 flex items-center cursor-pointer"
+                        onClick={() => setLogin(true)}
+                    >
                         Lebih banyak
                         <span className="ml-3">
                             <img
@@ -173,12 +115,60 @@ function SelamatDatang() {
                                 className="w-5 h-5 rotate-90"
                             />
                         </span>
-                    </p>
+                    </div>
                 </div>
-                <Slider />
+                <Slider data={karyaIlmiahSlider} />
             </div>
-            <div className="mt-5 z-30 relative">
-                <Buku slides={data} />
+            <div className="mx-20 z-30 relative">
+                <Buku slides={karyaIlmiah} />
+            </div>
+            <div className="mb-10 bg-orange-200 pt-12 pb-10">
+                <div className="flex justify-between">
+                    <h1 className="font-bold mx-20 text-2xl">
+                        Karya Non-Ilmiah
+                    </h1>
+                    <div
+                        className="mr-20 flex items-center cursor-pointer"
+                        onClick={() => setLogin(true)}
+                    >
+                        Lebih banyak
+                        <span className="ml-3">
+                            <img
+                                src="/arrow.png"
+                                alt=""
+                                className="w-5 h-5 rotate-90"
+                            />
+                        </span>
+                    </div>
+                </div>
+                <Slider data={karyaNonIlmiahSlider} />
+            </div>
+            <div className="mx-20 z-30 relative">
+                <Buku slides={karyaNonIlmiah} />
+            </div>
+            <div className="mb-10 bg-teal-200 pt-12 pb-10">
+                <div className="flex justify-between">
+                    <h1 className="font-bold mx-20 text-2xl">
+                        Ekonomi dan Bisnis
+                    </h1>
+                    <div
+                        className="mr-20 flex items-center cursor-pointer"
+                        onClick={() => setLogin(true)}
+                    >
+                        Lebih banyak
+                        <span className="ml-3">
+                            <img
+                                src="/arrow.png"
+                                alt=""
+                                className="w-5 h-5 rotate-90"
+                            />
+                        </span>
+                    </div>
+                </div>
+                <Slider data={ekonomiSlider} />
+            </div>
+            <div className="mx-20 z-30 relative">
+                <Buku slides={ekonomi} />
             </div>
             <div className="relative w-full">
                 <img
@@ -190,16 +180,17 @@ function SelamatDatang() {
                     <h1 className="font-bold text-2xl mb-5">
                         Tampilkan lebih banyak
                     </h1>
-                    <a href="/register">
-                        <button className="-ml-12 text-white flex items-center font-bold bg-black text-2xl p-4 rounded-lg">
-                            <img
-                                src="/invitewhite.png"
-                                alt=""
-                                className="w-10 h-10 mx-3"
-                            />
-                            Daftar anggota sekarang
-                        </button>
-                    </a>
+                    <button
+                        className="-ml-12 text-white flex items-center font-bold bg-black text-2xl p-4 rounded-lg"
+                        onClick={() => setRegister(true)}
+                    >
+                        <img
+                            src="/invitewhite.png"
+                            alt=""
+                            className="w-10 h-10 mx-3"
+                        />
+                        Daftar anggota sekarang
+                    </button>
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-b from-white to-transparent"></div>
                 <div className="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>

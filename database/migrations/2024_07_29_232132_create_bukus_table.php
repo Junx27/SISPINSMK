@@ -17,12 +17,12 @@ return new class extends Migration
             $table->string("imageUrl");
             $table->string("caption");
             $table->string("kategori");
-            $table->string("stok");
+            $table->integer("stok");
             $table->string("penerbit");
             $table->string("tahun");
             $table->string("edisi");
             $table->string("desc")->nullable();
-            $table->string("jumlah_dipinjam")->default(0);
+            $table->integer("jumlah_dipinjam")->default(0);
             $table->foreignId('user_id')->default(1);
             $table->timestamps();
         });

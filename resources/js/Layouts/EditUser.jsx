@@ -41,11 +41,13 @@ function EditUser({ id }) {
     };
     return (
         <div>
-            <img
-                src={url + data.foto_profil} // Provide a default image URL if imagePreview is null
-                alt="Profile"
-                className="w-32 h-32 mx-auto rounded-full"
-            />
+            <a href={`/admin/user-foto/${id}`}>
+                <img
+                    src={url + data.foto_profil}
+                    alt="Profile"
+                    className="w-32 h-32 mx-auto rounded-full"
+                />
+            </a>
             <form
                 className="mt-5 text-xs mx-5 flex flex-col gap-3 pb-10"
                 onSubmit={handleSubmit}

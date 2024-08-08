@@ -1,12 +1,26 @@
 import Navbar from "@/Components/Navbar";
 import Sidebar from "@/Components/Sidebar";
 import { url } from "@/Data/Url";
+import CreateBook from "@/Layouts/CreateBook";
 import EditUser from "@/Layouts/EditUser";
 import TabelPinjaman from "@/Layouts/TabelPinjaman";
 import { Head } from "@inertiajs/react";
 import React, { useEffect, useState } from "react";
 
-function DaftarPinjaman({ auth, pinjamans }) {
+function DaftarPinjaman({ auth, bukus, users, pinjamans }) {
+    const bukuDipinjam = pinjamans.filter(
+        (row) => row.status_peminjaman === "meminjam"
+    );
+    const bukuDikembalikan = pinjamans.filter(
+        (row) => row.status_peminjaman === "dikembalikan"
+    );
+    const totalBuku = bukus.length;
+    const jumlahAnggota = users.length;
+    const jumlahPeminjaman = pinjamans.length;
+    const hasilPembagian = totalBuku / jumlahAnggota;
+    const ratio = Math.round(hasilPembagian);
+    const probabilitas = Math.round(jumlahPeminjaman / jumlahAnggota);
+
     const userRole = auth.user.role;
     useEffect(() => {
         if (userRole === "anggota") {
@@ -21,9 +35,13 @@ function DaftarPinjaman({ auth, pinjamans }) {
         setOpenMenu(!openMenu);
     };
     const [openPopUpSetting, setOpenPopUpSetting] = useState(false);
+    const [openPopUpBookmark, setOpenPopUpBookmark] = useState(false);
 
     const openSetting = () => {
         setOpenPopUpSetting(!openPopUpSetting);
+    };
+    const openBookmark = () => {
+        setOpenPopUpBookmark(!openPopUpBookmark);
     };
     return (
         <div>
@@ -52,6 +70,29 @@ function DaftarPinjaman({ auth, pinjamans }) {
                             <EditUser id={auth.user.id} />
                         </div>
                     </div>
+                    <div
+                        className={`transition-all duration-500 h-screen absolute z-50 bg-white ${
+                            openPopUpBookmark ? "w-[300px]" : "w-0"
+                        }`}
+                    >
+                        <div
+                            className={`transition-all duration-200 p-5 ${
+                                openPopUpBookmark ? "block" : "hidden"
+                            }`}
+                        >
+                            <div
+                                className="flex justify-end cursor-pointer"
+                                onClick={() => setOpenPopUpBookmark(false)}
+                            >
+                                <img
+                                    src="/close.png"
+                                    alt=""
+                                    className="w-3 h-3"
+                                />
+                            </div>
+                            <CreateBook id={auth.user.id} />
+                        </div>
+                    </div>
                     <Head title="Daftar Pinjaman" />
                     <Navbar
                         profile={url + auth.user.foto_profil}
@@ -60,6 +101,7 @@ function DaftarPinjaman({ auth, pinjamans }) {
                         showIcon={openMenu ? false : true}
                         auth={auth.user.nama}
                         handleSetting={openSetting}
+                        handleBookmark={openBookmark}
                     />
                     <div className="absolute w-20 overflow-hidden">
                         <Sidebar />
@@ -79,7 +121,16 @@ function DaftarPinjaman({ auth, pinjamans }) {
                             />
                         </button>
                         <div className="-mt-7">
-                            <Sidebar viewicon={true} />
+                            <Sidebar
+                                viewicon={true}
+                                bukus={bukus.length}
+                                pinjamans={pinjamans.length}
+                                bukuDikembalikan={bukuDikembalikan.length}
+                                bukuDipinjam={bukuDipinjam.length}
+                                users={users.length}
+                                ratio={ratio}
+                                probabilitas={probabilitas}
+                            />
                         </div>
                     </div>
                     <div>

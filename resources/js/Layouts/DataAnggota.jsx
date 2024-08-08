@@ -3,18 +3,23 @@ import { Chart, registerables } from "chart.js";
 
 Chart.register(...registerables);
 
-const dataPengunjung = [
-    {
-        id: 1,
-        pria: 160,
-    },
-    {
-        id: 2,
-        wanita: 128,
-    },
-];
-
-function DataAnggota() {
+function DataAnggota({ users }) {
+    const jumlahWanita = users.filter(
+        (row) => row.gender.toLowerCase() === "wanita"
+    ).length;
+    const jumlahPria = users.filter(
+        (row) => row.gender.toLowerCase() === "pria"
+    ).length;
+    const dataPengunjung = [
+        {
+            id: 1,
+            pria: jumlahPria,
+        },
+        {
+            id: 2,
+            wanita: jumlahWanita,
+        },
+    ];
     const chartRef = useRef(null);
 
     useEffect(() => {

@@ -14,14 +14,20 @@ class AdminController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function dashboard()
     {
-        //
+        $users = User::orderBy('created_at', 'desc')->get();
+        $bukus = Buku::orderBy('created_at', 'desc')->get();
+        $pinjamans = Pinjaman::orderBy('created_at', 'desc')->get();
+        $analisis = Pinjaman::all();
+        return Inertia::render("Admin/Dashboard", ["users" => $users, "bukus" => $bukus, "pinjamans" => $pinjamans, "analisis" => $analisis]);
     }
     public function viewUser()
     {
-        $users = User::get();
-        return Inertia::render("Admin/User", ["users" => $users]);
+        $users = User::orderBy('created_at', 'desc')->get();
+        $bukus = Buku::orderBy('created_at', 'desc')->get();
+        $pinjamans = Pinjaman::orderBy('created_at', 'desc')->get();
+        return Inertia::render("Admin/User", ["users" => $users, "bukus" => $bukus, "pinjamans" => $pinjamans]);
     }
     public function viewUserDetail(String $id)
     {
@@ -37,21 +43,9 @@ class AdminController extends Controller
             'kontak' => 'required',
             'gender' => 'required',
             'status' => 'required',
-            // 'foto_profil' => 'required', // Optional file validation
         ]);
 
         $user = User::findOrFail($id);
-
-        // if ($request->hasFile('foto_profil')) {
-        //     // Optionally delete the old file
-        //     if ($user->foto_profil) {
-        //         Storage::delete($user->foto_profil);
-        //     }
-
-        //     $validatedData['foto_profil'] = $request->file('foto_profil')->store('foto_profil');
-        // }
-
-
         $user->update($validatedData);
     }
 
@@ -90,7 +84,6 @@ class AdminController extends Controller
         $book = Buku::findOrFail($id);
 
         $validatedData = $request->validate([
-            'imageUrl' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
             'caption' => 'required|string|max:255',
             'kategori' => 'required|string|max:255',
             'stok' => 'required|integer',
@@ -99,21 +92,26 @@ class AdminController extends Controller
             'edisi' => 'required|string|max:255',
             'desc' => 'required|string',
         ]);
-
-        // // Cek apakah ada file gambar yang diunggah
-        // if ($request->hasFile('imageUrl')) {
-        //     // Hapus gambar lama jika ada
-        //     if ($book->imageUrl) {
-        //         Storage::disk('public')->delete($book->imageUrl);
-        //     }
-
-        //     // Simpan gambar baru
-        //     $validatedData['imageUrl'] = $request->file('imageUrl')->store('buku', 'public');
-        // }
-
-        // // Perbarui data buku
         $book->update($validatedData);
     }
+
+    public function updateStokBukuPinjam(String $id)
+    {
+        $buku = Buku::findOrFail($id);
+        if ($buku->stok > 0) {
+            $buku->stok = $buku->stok - 1;
+            $buku->jumlah_dipinjam = $buku->jumlah_dipinjam + 1;
+            $buku->save();
+        }
+    }
+    public function updateStokBukuKembali(String $id)
+    {
+        $buku = Buku::findOrFail($id);
+        $buku->stok = $buku->stok + 1;
+        $buku->save();
+    }
+
+
 
     public function deleteBook(String $id)
     {
@@ -131,8 +129,10 @@ class AdminController extends Controller
 
     public function viewBuku()
     {
-        $bukus = Buku::all();
-        return Inertia::render("Admin/Buku", ["bukus" => $bukus]);
+        $users = User::orderBy('created_at', 'desc')->get();
+        $bukus = Buku::orderBy('created_at', 'desc')->get();
+        $pinjamans = Pinjaman::orderBy('created_at', 'desc')->get();
+        return Inertia::render("Admin/Buku", ["users" => $users, "bukus" => $bukus, "pinjamans" => $pinjamans]);
     }
     public function viewBukuDetail(String $id)
     {
@@ -142,12 +142,14 @@ class AdminController extends Controller
 
     public function viewDaftarPinjaman()
     {
-        $pinjamans = Pinjaman::all();
-        return Inertia::render("Admin/DaftarPinjaman", ["pinjamans" => $pinjamans]);
+        $users = User::orderBy('created_at', 'desc')->get();
+        $bukus = Buku::orderBy('created_at', 'desc')->get();
+        $pinjamans = Pinjaman::with('buku:id,imageUrl,caption')->with("user:id,nama,kontak")->orderBy('created_at', 'desc')->get();
+        return Inertia::render("Admin/DaftarPinjaman", ["users" => $users, "bukus" => $bukus, "pinjamans" => $pinjamans]);
     }
     public function viewDetailDaftarPinjaman(String $id)
     {
-        $pinjaman = Pinjaman::findOrFail($id);
+        $pinjaman = Pinjaman::with('buku:id,imageUrl,caption')->with("user:id,nama,kontak")->findOrFail($id);
         return response()->json($pinjaman);
     }
     public function updateDaftarPinjaman(Request $request, String $id)

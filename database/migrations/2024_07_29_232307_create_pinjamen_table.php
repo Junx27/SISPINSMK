@@ -20,10 +20,9 @@ return new class extends Migration
             $table->string("tanggal_pinjam");
             $table->string("tanggal_pengembalian");
             $table->string("status_peminjaman");
-            $table->string("keterangan");
+            $table->string("keterangan")->nullable();
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('buku_id')->constrained('bukus');
-            $table->string('foto_buku');
             $table->timestamps();
         });
     }

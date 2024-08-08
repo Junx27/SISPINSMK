@@ -9,7 +9,20 @@ import React, { useEffect, useState } from "react";
 import Riwayat from "../Frontend/Riwayat";
 import CreateBook from "@/Layouts/CreateBook";
 
-function Buku({ auth, bukus }) {
+function Buku({ auth, bukus, users, pinjamans }) {
+    const bukuDipinjam = pinjamans.filter(
+        (row) => row.status_peminjaman === "meminjam"
+    );
+    const bukuDikembalikan = pinjamans.filter(
+        (row) => row.status_peminjaman === "dikembalikan"
+    );
+    const totalBuku = bukus.length;
+    const jumlahAnggota = users.length;
+    const jumlahPeminjaman = pinjamans.length;
+    const hasilPembagian = totalBuku / jumlahAnggota;
+    const ratio = Math.round(hasilPembagian);
+    const probabilitas = Math.round(jumlahPeminjaman / jumlahAnggota);
+
     const userRole = auth.user.role;
     useEffect(() => {
         if (userRole === "anggota") {
@@ -30,14 +43,10 @@ function Buku({ auth, bukus }) {
         setOpenMenu(false);
     };
     const [openPopUpSetting, setOpenPopUpSetting] = useState(false);
-    const [openPopUpAnggota, setOpenPopUpAnggota] = useState(false);
     const [openPopUpBookmark, setOpenPopUpBookmark] = useState(false);
 
     const openSetting = () => {
         setOpenPopUpSetting(!openPopUpSetting);
-    };
-    const openAnggota = () => {
-        setOpenPopUpAnggota(!openPopUpAnggota);
     };
     const openBookmark = () => {
         setOpenPopUpBookmark(!openPopUpBookmark);
@@ -66,36 +75,7 @@ function Buku({ auth, bukus }) {
                                     className="w-3 h-3"
                                 />
                             </div>
-                            <EditUser />
-                        </div>
-                    </div>
-                    <div
-                        className={`overflow-auto transition-all duration-500 h-screen absolute z-50 bg-white ${
-                            openPopUpAnggota ? "w-[300px]" : "w-0"
-                        }`}
-                    >
-                        <div
-                            className={`transition-all duration-200 ${
-                                openPopUpAnggota ? "block" : "hidden"
-                            }`}
-                        >
-                            <div
-                                className="flex justify-end cursor-pointer"
-                                onClick={() => setOpenPopUpAnggota(false)}
-                            >
-                                <img
-                                    src="/close.png"
-                                    alt=""
-                                    className="w-3 h-3 mt-2 mr-2"
-                                />
-                            </div>
-
-                            <div className="text-xs mt-5 h-96 overflow-auto">
-                                <h1 className="font-bold fixed bg-white w-72 p-2 ml-2">
-                                    Daftar Peminjaman
-                                </h1>
-                                <div className=" mt-10 mx-5"></div>
-                            </div>
+                            <EditUser id={auth.user.id} />
                         </div>
                     </div>
                     <div
@@ -129,7 +109,6 @@ function Buku({ auth, bukus }) {
                         showIcon={openMenu ? false : true}
                         auth={auth.user.nama}
                         handleSetting={openSetting}
-                        handleAnggota={openAnggota}
                         handleBookmark={openBookmark}
                     />
                     <div className="absolute w-20 overflow-hidden">
@@ -150,7 +129,16 @@ function Buku({ auth, bukus }) {
                             />
                         </button>
                         <div className="-mt-7">
-                            <Sidebar viewicon={true} />
+                            <Sidebar
+                                viewicon={true}
+                                bukus={bukus.length}
+                                pinjamans={pinjamans.length}
+                                bukuDikembalikan={bukuDikembalikan.length}
+                                bukuDipinjam={bukuDipinjam.length}
+                                users={users.length}
+                                ratio={ratio}
+                                probabilitas={probabilitas}
+                            />
                         </div>
                     </div>
                     <div>

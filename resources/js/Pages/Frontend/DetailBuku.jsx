@@ -1,7 +1,9 @@
 import Button from "@/Components/Button";
 import PopOver from "@/Components/PopOver";
 import { url } from "@/Data/Url";
+import { Inertia } from "@inertiajs/inertia";
 import { useForm } from "@inertiajs/inertia-react";
+import { Head } from "@inertiajs/react";
 import React, { useEffect, useState } from "react";
 
 function DetailBuku({ buku, auth }) {
@@ -13,7 +15,7 @@ function DetailBuku({ buku, auth }) {
         return newDate;
     });
 
-    const { data, setData, post } = useForm({
+    const { data, setData, post, put } = useForm({
         nama_peminjam: auth.user.nama,
         kontak_peminjam: auth.user.email,
         nama_buku: buku.caption,
@@ -30,21 +32,42 @@ function DetailBuku({ buku, auth }) {
         status_peminjaman: "meminjam",
         user_id: auth.user.id,
         buku_id: buku.id,
-        foto_buku: buku.imageUrl,
     });
     const handleSubmit = (e) => {
         e.preventDefault();
         post("/buat-pinjaman-buku");
+        put(`/admin/buku-stok-pinjam/${buku.id}`);
+        setOpenPinjam(true);
+    };
+    const handleKonfirmasi = () => {
+        setOpenPinjam(false);
         window.location.href = "/daftar-buku";
     };
     return (
         <div className="w-full h-screen">
+            <Head title="Konfirmasi Peminjaman" />
             <img
                 src="/footer.jpg"
                 alt=""
                 className="w-full h-screen object-cover"
             />
-
+            {openPinjam && (
+                <PopOver>
+                    <div className="bg-white p-5 rounded-md w-64 h-32">
+                        <p className="text-center text-xs">
+                            Berhasil meminjam buku
+                        </p>
+                        <div
+                            className="flex justify-center mt-5 cursor-pointer"
+                            onClick={handleKonfirmasi}
+                        >
+                            <button className="bg-blue-500 text-white rounded-md w-32 p-2">
+                                ok
+                            </button>
+                        </div>
+                    </div>
+                </PopOver>
+            )}
             <div className="inset-0 absolute left-0 p-10 bg-opacity-10 bg-white/75">
                 <div className="bg-white p-5 rounded-lg mx-auto w-[800px]">
                     <div className="flex justify-end">
@@ -120,98 +143,80 @@ function DetailBuku({ buku, auth }) {
                         </div>
                     </div>
                 </div>
-                {openPinjam && (
-                    <PopOver>
-                        <div className="bg-white w-96 p-5 rounded-lg">
-                            <div
-                                className="flex justify-end cursor-pointer"
-                                onClick={() => setOpenPinjam(false)}
+                <div className="bg-white hidden w-96 p-5 rounded-lg">
+                    <div className="flex justify-end cursor-pointer">
+                        <img src="/close.png" alt="" className="w-4 h-4" />
+                    </div>
+                    <div>
+                        <form
+                            onSubmit={handleSubmit}
+                            className="mt-5 flex flex-col gap-5"
+                        >
+                            <input
+                                type="text"
+                                name="nama_peminjam"
+                                className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
+                                value={data.nama_peminjam}
+                                required
+                            />
+                            <input
+                                type="text"
+                                name="kontak_peminjam"
+                                className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
+                                value={data.kontak_peminjam}
+                                required
+                            />
+                            <input
+                                type="text"
+                                name="nama_buku"
+                                className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
+                                value={data.nama_buku}
+                                required
+                            />
+                            <input
+                                type="text"
+                                name="tanggal_pinjam"
+                                className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
+                                value={data.tanggal_pinjam}
+                                required
+                            />
+                            <input
+                                type="text"
+                                name="tanggal_pengembalian"
+                                className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
+                                value={data.tanggal_pengembalian}
+                                required
+                            />
+                            <input
+                                type="text"
+                                name="status_peminjaman"
+                                className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
+                                value={data.status_peminjaman}
+                                required
+                            />
+                            <input
+                                type="number"
+                                name="buku_id"
+                                className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
+                                value={data.buku_id}
+                                required
+                            />
+                            <input
+                                type="number"
+                                name="user_id"
+                                className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
+                                value={data.user_id}
+                                required
+                            />
+                            <button
+                                type="submit"
+                                className="bg-blue-500 text-white mt-5 rounded-md text-xs p-2"
                             >
-                                <img
-                                    src="/close.png"
-                                    alt=""
-                                    className="w-4 h-4"
-                                />
-                            </div>
-                            <div>
-                                <form
-                                    onSubmit={handleSubmit}
-                                    className="mt-5 flex flex-col gap-5"
-                                >
-                                    <input
-                                        type="text"
-                                        name="nama_peminjam"
-                                        className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
-                                        value={data.nama_peminjam}
-                                        readOnly
-                                    />
-                                    <input
-                                        type="text"
-                                        name="kontak_peminjam"
-                                        className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
-                                        value={data.kontak_peminjam}
-                                        readOnly
-                                    />
-                                    <input
-                                        type="text"
-                                        name="nama_buku"
-                                        className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
-                                        value={data.nama_buku}
-                                        readOnly
-                                    />
-                                    <input
-                                        type="text"
-                                        name="tanggal_pinjam"
-                                        className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
-                                        value={data.tanggal_pinjam}
-                                        readOnly
-                                    />
-                                    <input
-                                        type="text"
-                                        name="tanggal_pengembalian"
-                                        className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
-                                        value={data.tanggal_pengembalian}
-                                        readOnly
-                                    />
-                                    <input
-                                        type="text"
-                                        name="status_peminjaman"
-                                        className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
-                                        value={data.status_peminjaman}
-                                        readOnly
-                                    />
-                                    <input
-                                        type="text"
-                                        name="foto_buku"
-                                        className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
-                                        value={data.foto_buku}
-                                        readOnly
-                                    />
-                                    <input
-                                        type="number"
-                                        name="buku_id"
-                                        className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
-                                        value={data.buku_id}
-                                        readOnly
-                                    />
-                                    <input
-                                        type="number"
-                                        name="user_id"
-                                        className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
-                                        value={data.user_id}
-                                        readOnly
-                                    />
-                                    <button
-                                        type="submit"
-                                        className="bg-blue-500 text-white mt-5 rounded-md text-xs p-2"
-                                    >
-                                        Konfirmasi
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </PopOver>
-                )}
+                                Konfirmasi
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     );

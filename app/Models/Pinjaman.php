@@ -19,6 +19,13 @@ class Pinjaman extends Model
         'keterangan',
         'user_id',
         'buku_id',
-        'foto_buku',
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    public function buku()
+    {
+        return $this->belongsTo(Buku::class);
+    }
 }

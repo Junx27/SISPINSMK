@@ -71,6 +71,7 @@ function EditBuku({ id, handleClose }) {
                         className="w-full mt-3 text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
                         value={data.caption}
                         onChange={(e) => setData("caption", e.target.value)}
+                        required
                     />
                     <p className="font-bold">Kategori</p>
                     <input
@@ -79,6 +80,7 @@ function EditBuku({ id, handleClose }) {
                         className="w-full mt-3 text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
                         value={data.kategori}
                         onChange={(e) => setData("kategori", e.target.value)}
+                        required
                     />
                     <p className="font-bold mt-3">Stok</p>
                     <input
@@ -87,6 +89,7 @@ function EditBuku({ id, handleClose }) {
                         className="w-full mt-3 text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
                         value={data.stok}
                         onChange={(e) => setData("stok", e.target.value)}
+                        required
                     />
                 </div>
                 <div className="w-full">
@@ -97,6 +100,7 @@ function EditBuku({ id, handleClose }) {
                         className="w-full mt-3 text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
                         value={data.penerbit}
                         onChange={(e) => setData("penerbit", e.target.value)}
+                        required
                     />
                     <p className="font-bold mt-3">Tahun</p>
                     <input
@@ -105,6 +109,7 @@ function EditBuku({ id, handleClose }) {
                         className="w-full mt-3 text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
                         value={data.tahun}
                         onChange={(e) => setData("tahun", e.target.value)}
+                        required
                     />
                     <p className="font-bold mt-3">Edisi</p>
                     <input
@@ -113,6 +118,7 @@ function EditBuku({ id, handleClose }) {
                         className="w-full mt-3 text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
                         value={data.edisi}
                         onChange={(e) => setData("edisi", e.target.value)}
+                        required
                     />
                     <p className="font-bold mt-3">Deskripsi</p>
                     <textarea
@@ -121,12 +127,13 @@ function EditBuku({ id, handleClose }) {
                         value={data.desc}
                         rows={10}
                         onChange={(e) => setData("desc", e.target.value)}
+                        required
                     />
                     <button
                         type="submit"
                         className="bg-blue-500 text-white mt-3 rounded-md text-xs p-2 w-full"
                     >
-                        ok
+                        Simpan perubahan
                     </button>
                 </div>
             </form>

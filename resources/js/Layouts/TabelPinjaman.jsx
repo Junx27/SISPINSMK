@@ -167,7 +167,7 @@ function TabelPinjaman({ data }) {
                                 id="downloadInvoice"
                                 ref={pdfRef}
                             >
-                                <div className="flex flex-row gap-5 mt-5 border-b-2 pb-2 border-black border-double mb-5">
+                                <div className="flex flex-row gap-5 border-b-2 pb-2 border-black border-double mb-5">
                                     <div className="">
                                         <img
                                             src="/logo.png"
@@ -323,7 +323,7 @@ function TabelPinjaman({ data }) {
                                         Bobotsari,{" "}
                                         <span className="font-bold">
                                             harap dikembalikan sebagai bukti
-                                            pengemebalian peminjaman buku.
+                                            pengembalian peminjaman buku.
                                         </span>
                                     </p>
                                 </div>
@@ -334,9 +334,9 @@ function TabelPinjaman({ data }) {
                                         <img
                                             src="/ttd.png"
                                             alt=""
-                                            className="w-32 mx-auto"
+                                            className="w-32 mx-auto absolute"
                                         />
-                                        <p className="font-bold text-center">
+                                        <p className="mt-12 font-bold text-center pb-5">
                                             Sulistyo S.T., M.Pd.,
                                         </p>
                                     </div>

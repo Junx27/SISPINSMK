@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Buku;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -33,5 +34,30 @@ class ImageController extends Controller
         }
 
         Buku::findOrFail($id)->update($validatedData);
+    }
+    public function viewFotoUser(string $id)
+    {
+        $user = User::findOrFail($id);
+        return Inertia::render("Admin/EditFotoProfil", ["user" => $user]);
+    }
+    public function updateFotoUser(Request $request, string $id)
+    {
+        $user = User::findOrFail($id);
+        $validatedData = $request->validate([
+            'foto_profil' => 'file',
+        ]);
+
+
+        if ($request->file('foto_profil')) {
+
+            if ($user->foto_profil) {
+                Storage::disk('public')->delete($user->foto_profil);
+            }
+
+
+            $validatedData['foto_profil'] = $request->file('foto_profil')->store('foto_profil', 'public');
+        }
+
+        User::findOrFail($id)->update($validatedData);
     }
 }

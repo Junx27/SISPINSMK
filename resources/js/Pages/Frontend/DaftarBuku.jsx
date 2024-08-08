@@ -8,19 +8,14 @@ import { useEffect } from "react";
 import axios from "axios";
 import { url } from "@/Data/Url";
 import EditUser from "@/Layouts/EditUser";
-import QrCodeGenerator from "@/Components/QrCode";
+import { Head } from "@inertiajs/react";
 
 function DaftarBuku({ auth, bukus, pinjamans }) {
-    const pinjamanSelesai = pinjamans.filter(
-        (row) =>
-            row.status_peminjaman === "dikembalikan" &&
-            row.user_id === auth.user.id
-    );
     const pinjamanBelumSelesai = pinjamans.filter(
         (row) =>
             row.status_peminjaman === "meminjam" && row.user_id === auth.user.id
     );
-    const data = bukus;
+    const data = bukus.filter((row) => row.stok !== 0);
     const userRole = auth.user.role.toLowerCase();
     useEffect(() => {
         if (userRole === "admin") {
@@ -121,6 +116,7 @@ function DaftarBuku({ auth, bukus, pinjamans }) {
         <div>
             {userRole !== "admin" && (
                 <div>
+                    <Head title="Daftar Buku" />
                     <div
                         className={`transition-all duration-500 h-screen absolute z-50 backdrop-blur-md bg-opacity-10 bg-white/30 ${
                             handleSetting ? "w-[300px]" : "w-0"
@@ -154,32 +150,11 @@ function DaftarBuku({ auth, bukus, pinjamans }) {
                                 handleBookmark ? "block" : "hidden"
                             }`}
                         >
-                            <div
-                                className="flex justify-end cursor-pointer"
-                                onClick={() => openBookmark(false)}
-                            >
-                                <img
-                                    src="/close.png"
-                                    alt=""
-                                    className="w-3 h-3 mt-2 mr-2"
+                            <div className="text-xs h-screen overflow-auto mx-5">
+                                <Riwayat
+                                    pinjaman={pinjamanBelumSelesai}
+                                    handleClose={() => setHandleBookmark(false)}
                                 />
-                            </div>
-
-                            <div className="text-xs mt-5 h-96 overflow-auto">
-                                <h1 className="font-bold fixed bg-white w-72 p-2 ml-2">
-                                    Daftar Peminjaman
-                                </h1>
-                                <div className=" mt-10 mx-5">
-                                    <Riwayat pinjaman={pinjamanBelumSelesai} />
-                                </div>
-                            </div>
-                            <div className="fixed w-72 text-xs mt-10 h-96 overflow-auto">
-                                <h1 className="font-bold fixed bg-white w-72 p-2 ml-2">
-                                    Riwayat Peminjaman
-                                </h1>
-                                <div className="mt-10 mx-5">
-                                    <Riwayat pinjaman={pinjamanSelesai} />
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -189,6 +164,7 @@ function DaftarBuku({ auth, bukus, pinjamans }) {
                         handleSettting={openSetting}
                         handleBookmark={openBookmark}
                         auth={auth.user.nama}
+                        data={bukus}
                     />
                     <div>
                         <img
@@ -410,7 +386,10 @@ function DaftarBuku({ auth, bukus, pinjamans }) {
                                     </div>
                                 ) : (
                                     <div>
-                                        <Buku slides={getCurrentPageData()} />
+                                        <Buku
+                                            slides={getCurrentPageData()}
+                                            handleView={true}
+                                        />
                                     </div>
                                 )}
                             </div>
