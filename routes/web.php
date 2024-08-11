@@ -39,6 +39,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('admin/daftarpinjaman/{id}', [AdminController::class, "viewDetailDaftarPinjaman"]);
     Route::delete('admin/daftarpinjaman-delete/{id}', [AdminController::class, "deleteDaftarPinjaman"]);
     Route::put('admin/daftarpinjaman-update/{id}', [AdminController::class, "updateDaftarPinjaman"]);
+    Route::get('/generate/{id}', [QrCodeController::class, 'generate']);
+    Route::get('/buku/{id}', function () {
+        return Inertia::render("Frontend/SingleBuku");
+    });
+    Route::get('/qr-code', function () {
+        return Inertia::render('GenerateQrCode');
+    });
 
     Route::get('daftar-buku', [UserController::class, "index"])->name("daftar-buku");
     Route::get("daftar-buku-detail/{id}", [UserController::class, "show"]);
@@ -50,7 +57,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
 
-// Route::fallback([PageNotFoundController::class, "index"]);
+Route::fallback([PageNotFoundController::class, "index"]);
 
 
 
@@ -62,13 +69,7 @@ Route::middleware('auth')->group(function () {
 
 
 
-Route::get('/generate/{id}', [QrCodeController::class, 'generate']);
-Route::get('/buku/{id}', function () {
-    return Inertia::render("Frontend/SingleBuku");
-});
-Route::get('/qr-code', function () {
-    return Inertia::render('GenerateQrCode');
-});
+
 
 
 

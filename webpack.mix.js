@@ -2,17 +2,22 @@ const mix = require("laravel-mix");
 const path = require("path");
 
 mix.js("resources/js/app.js", "public/js")
-    .react() // Enable React support
-    .sass("resources/sass/app.scss", "public/css")
-    .setPublicPath("public")
+    .postCss("resources/css/app.css", "public/css", [require("tailwindcss")])
     .webpackConfig({
         resolve: {
             alias: {
-                "@": path.resolve("resources/js"), // Alias for easier imports
+                "@": path.resolve("resources/js"),
             },
         },
-        output: {
-            chunkFilename: "js/[name].js", // For dynamic imports
-            filename: "js/[name].js",
+    })
+    .vite("resources/js/app.jsx", {
+        build: {
+            outDir: "public/js",
+            manifest: true,
+            rollupOptions: {
+                input: "resources/js/app.jsx",
+            },
         },
-    });
+    })
+    .vue()
+    .version();

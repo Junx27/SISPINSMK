@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "@inertiajs/inertia-react";
 import { Inertia } from "@inertiajs/inertia";
 import { url } from "@/Data/Url";
+import { Link } from "@inertiajs/react";
 
 function EditUser({ id }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -120,6 +121,13 @@ function EditUser({ id }) {
                 >
                     {processing ? "Saving..." : "Simpan perubahan"}
                 </button>
+                <Link
+                    href="/logout"
+                    method="post"
+                    className="block md:hidden bg-black text-white mt-2 rounded-md text-xs p-2 text-center"
+                >
+                    Logout
+                </Link>
             </form>
         </div>
     );

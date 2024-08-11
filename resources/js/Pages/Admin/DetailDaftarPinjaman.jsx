@@ -45,11 +45,7 @@ function DetailDaftarPinjaman({ id, handleClose }) {
     }, [id]);
     const handleSubmit = (e) => {
         e.preventDefault();
-
         put(`/admin/daftarpinjaman-update/${id}`);
-        setKonfirmasiStokBuku(true);
-    };
-    const handleUpdateStok = () => {
         put(`/admin/buku-stok-kembali/${data.buku_id}`);
         window.location.reload();
     };
@@ -68,29 +64,6 @@ function DetailDaftarPinjaman({ id, handleClose }) {
                         KonfirmasiStokBuku ? " hidden" : "block"
                     }`}
                 />
-            </div>
-            <div
-                className={`text-xs text-center ${
-                    KonfirmasiStokBuku ? " block" : "hidden"
-                }`}
-            >
-                <h1 className="mt-3">Konfirmasi untuk update stok buku</h1>
-                <div className="mt-5 flex gap-5">
-                    <button
-                        type="button"
-                        className="bg-black text-white mt-3 rounded-md text-xs p-2 w-64"
-                        onClick={() => window.location.reload()}
-                    >
-                        Stok buku tetap
-                    </button>
-                    <button
-                        type="button"
-                        className="bg-blue-500 text-white mt-3 rounded-md text-xs p-2 w-64"
-                        onClick={handleUpdateStok}
-                    >
-                        Update stok buku
-                    </button>
-                </div>
             </div>
             <form
                 action=""

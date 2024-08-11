@@ -3,18 +3,14 @@ import Button from "@/Components/Button";
 import MyContext from "@/Components/CreateContext";
 import NavbarUser from "@/Components/NavbarUser";
 import React, { useContext, useState } from "react";
-import Riwayat from "./Riwayat";
 import { useEffect } from "react";
 import axios from "axios";
 import { url } from "@/Data/Url";
 import EditUser from "@/Layouts/EditUser";
 import { Head } from "@inertiajs/react";
+import Dropdown from "@/Components/Dropdown";
 
 function DaftarBuku({ auth, bukus, pinjamans }) {
-    const pinjamanBelumSelesai = pinjamans.filter(
-        (row) =>
-            row.status_peminjaman === "meminjam" && row.user_id === auth.user.id
-    );
     const data = bukus.filter((row) => row.stok !== 0);
     const userRole = auth.user.role.toLowerCase();
     useEffect(() => {
@@ -112,14 +108,32 @@ function DaftarBuku({ auth, bukus, pinjamans }) {
         fetchUserData(auth.user.id);
     }, [auth.user.id]);
 
+    const [filterTanggal, setFilterTanggal] = useState(null);
+
+    const uniqueTanggal = [
+        ...new Set(pinjamans.map((row) => row.tanggal_pengembalian)),
+    ];
+    const getCurrentPageDataPinjaman = () => {
+        let filteredData = pinjamans;
+        if (filterTanggal) {
+            filteredData = filteredData.filter((item) =>
+                item.tanggal_pengembalian
+                    .toLowerCase()
+                    .includes(filterTanggal.toLowerCase())
+            );
+        }
+
+        return filteredData;
+    };
+
     return (
         <div>
             {userRole !== "admin" && (
                 <div>
                     <Head title="Daftar Buku" />
                     <div
-                        className={`transition-all duration-500 h-screen absolute z-50 backdrop-blur-md bg-opacity-10 bg-white/30 ${
-                            handleSetting ? "w-[300px]" : "w-0"
+                        className={`transition-all duration-500 h-screen absolute z-50 bg-white ${
+                            handleSetting ? "w-full md:w-[300px]" : "w-0"
                         }`}
                     >
                         <div
@@ -142,7 +156,7 @@ function DaftarBuku({ auth, bukus, pinjamans }) {
                     </div>
                     <div
                         className={`overflow-auto transition-all duration-500 h-screen absolute z-50 bg-white ${
-                            handleBookmark ? "w-[300px]" : "w-0"
+                            handleBookmark ? "w-full md:w-[300px]" : "w-0"
                         }`}
                     >
                         <div
@@ -151,10 +165,102 @@ function DaftarBuku({ auth, bukus, pinjamans }) {
                             }`}
                         >
                             <div className="text-xs h-screen overflow-auto mx-5">
-                                <Riwayat
-                                    pinjaman={pinjamanBelumSelesai}
-                                    handleClose={() => setHandleBookmark(false)}
-                                />
+                                <div className="flex flex-col gap-3 pb-20">
+                                    <img
+                                        src="/close.png"
+                                        alt=""
+                                        className="w-3 h-3 absolute z-50 right-2 top-2 cursor-pointer"
+                                        onClick={openBookmark}
+                                    />
+                                    <div className="fixed bg-white w-[260px] pt-5 pb-2">
+                                        <div className="flex justify-between items-center text-[10px]">
+                                            <h1>Daftar Pinjaman</h1>
+                                            <div className="text-[10px]">
+                                                <Dropdown>
+                                                    <Dropdown.Trigger>
+                                                        <Button
+                                                            name={`${
+                                                                filterTanggal !==
+                                                                null
+                                                                    ? filterTanggal
+                                                                    : "Tanggal"
+                                                            }`}
+                                                        />
+                                                    </Dropdown.Trigger>
+                                                    <Dropdown.Content>
+                                                        <div className="">
+                                                            {uniqueTanggal.map(
+                                                                (
+                                                                    row,
+                                                                    index
+                                                                ) => (
+                                                                    <div
+                                                                        key={
+                                                                            index
+                                                                        }
+                                                                        className="hover:bg-blue-50 p-2"
+                                                                        onClick={() =>
+                                                                            setFilterTanggal(
+                                                                                row
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        <p>
+                                                                            {
+                                                                                row
+                                                                            }
+                                                                        </p>
+                                                                    </div>
+                                                                )
+                                                            )}
+                                                        </div>
+                                                    </Dropdown.Content>
+                                                </Dropdown>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="mt-10">
+                                        {getCurrentPageDataPinjaman().map(
+                                            (row) => (
+                                                <div
+                                                    key={row.id}
+                                                    className="hover:bg-blue-50 flex flex-row mt-2 gap-3 items-center cursor-pointer"
+                                                >
+                                                    <img
+                                                        src={
+                                                            (row.buku
+                                                                .imageUrl ===
+                                                                "null") |
+                                                            (row.buku
+                                                                .imageUrl ===
+                                                                null)
+                                                                ? "/default-book.jpg"
+                                                                : url +
+                                                                  row.buku
+                                                                      .imageUrl
+                                                        }
+                                                        alt=""
+                                                        className="w-8 h-12 object-cover"
+                                                    />
+                                                    <div>
+                                                        <p className="line-clamp-2 font-bold">
+                                                            {row.buku.caption}
+                                                        </p>
+                                                        <p className="text-red-500 text-[8px] mt-2">
+                                                            <span className="text-black mr-2">
+                                                                Tanggal
+                                                                kembalikan:
+                                                            </span>
+                                                            {
+                                                                row.tanggal_pengembalian
+                                                            }
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            )
+                                        )}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -173,9 +279,91 @@ function DaftarBuku({ auth, bukus, pinjamans }) {
                             className="w-full h-screen"
                         />
                     </div>
-                    <div className="inset-0 absolute top-20 left-0 p-5 bg-opacity-10 bg-white/75 rounded-lg overflow-auto">
+                    <div className="inset-0 absolute top-20 left-0 p-5 bg-opacity-10 bg-white/75 rounded-t-lg overflow-auto">
+                        <div className="block md:hidden text-xs sticky top-0 z-40">
+                            <div className="flex gap-5 mb-5">
+                                <p
+                                    className="p-1 bg-white/30 rounded-md w-32 text-center hover:bg-white cursor-pointer truncate"
+                                    onClick={handleReset}
+                                >
+                                    Refresh all
+                                </p>
+                                <Dropdown>
+                                    <Dropdown.Trigger>
+                                        <p className="p-1 bg-white/30 rounded-md w-[65px] text-center hover:bg-white cursor-pointer truncate">
+                                            {filterKategori === null
+                                                ? "Kategori"
+                                                : filterKategori}
+                                        </p>
+                                    </Dropdown.Trigger>
+                                    <Dropdown.Content>
+                                        <div className="w-full h-96 overflow-auto">
+                                            {kategori.map((row) => (
+                                                <div
+                                                    key={row.id}
+                                                    className="hover:bg-blue-50 p-2"
+                                                    onClick={() =>
+                                                        setFilterKategori(row)
+                                                    }
+                                                >
+                                                    <p className="">{row}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </Dropdown.Content>
+                                </Dropdown>
+                                <Dropdown>
+                                    <Dropdown.Trigger>
+                                        <p className="p-1 bg-white/30 rounded-md w-[65px] text-center hover:bg-white cursor-pointer truncate">
+                                            {filterEdisi === null
+                                                ? "Edisi"
+                                                : filterEdisi}
+                                        </p>
+                                    </Dropdown.Trigger>
+                                    <Dropdown.Content>
+                                        <div className="w-full h-96 overflow-auto">
+                                            {edisi.map((row) => (
+                                                <div
+                                                    key={row.id}
+                                                    className="hover:bg-blue-50 p-2"
+                                                    onClick={() =>
+                                                        setFilterEdisi(row)
+                                                    }
+                                                >
+                                                    <p className="">{row}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </Dropdown.Content>
+                                </Dropdown>
+                                <Dropdown>
+                                    <Dropdown.Trigger>
+                                        <p className="p-1 bg-white/30 rounded-md w-[65px] text-center hover:bg-white cursor-pointer truncate">
+                                            {filterTahun === null
+                                                ? "Tahun"
+                                                : filterTahun}
+                                        </p>
+                                    </Dropdown.Trigger>
+                                    <Dropdown.Content>
+                                        <div className="w-full h-96 overflow-auto">
+                                            {tahun.map((row) => (
+                                                <div
+                                                    key={row.id}
+                                                    className="hover:bg-blue-50 p-2"
+                                                    onClick={() =>
+                                                        setFilterTahun(row)
+                                                    }
+                                                >
+                                                    <p className="">{row}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </Dropdown.Content>
+                                </Dropdown>
+                            </div>
+                        </div>
                         <div className="grid">
-                            <div className="text-sm fixed bg-white w-[275px] z-20 h-screen rounded-lg p-5">
+                            <div className="text-sm hidden md:block fixed bg-white w-[275px] z-20 h-screen rounded-lg p-5">
                                 <div>
                                     <h1 className="font-bold pb-1">Kategori</h1>
                                     <div className="flex flex-col mt-3 cursor-pointer">
@@ -366,7 +554,7 @@ function DaftarBuku({ auth, bukus, pinjamans }) {
                                     </div>
                                 </div>
                             </div>
-                            <div className="ml-[300px] -mt-10">
+                            <div className="md:ml-[300px] -mt-10">
                                 {getCurrentPageData().length === 0 ? (
                                     <div className="mt-32">
                                         <p className="text-center text-3xl font-bold">

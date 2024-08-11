@@ -21,7 +21,7 @@ function Buku({ slides, handleView }) {
         return [];
     };
     return (
-        <div className="grid grid-cols-6 gap-5 mb-10 py-10">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-5 mb-10 py-10">
             {slides.map((slide) => (
                 <div
                     key={slide.id}

@@ -1,7 +1,5 @@
-import Carosel from "@/Components/Carosel";
 import Navbar from "@/Components/Navbar";
 import Sidebar from "@/Components/Sidebar";
-import { user } from "@/Data/DataUser";
 import { url } from "@/Data/Url";
 import CreateBook from "@/Layouts/CreateBook";
 import EditUser from "@/Layouts/EditUser";

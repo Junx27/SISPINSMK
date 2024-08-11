@@ -22,10 +22,10 @@ function Slider({ data }) {
         <div className="relative">
             <div
                 className={`transition-all duration-700 ${
-                    slide ? `-ml-[1220px]` : "ml-[70px]"
+                    slide ? `-ml-[800px] md:-ml-[1220px]` : "ml-2 md:ml-[70px]"
                 }`}
             >
-                <div className="flex flex-row gap-5 px-[10px] pt-10 h-[355px] overflow-hidden">
+                <div className="flex flex-row gap-5 px-[10px] pt-10 h-[355px] overflow-x-auto overflow-y-hidden md:overflow-hidden">
                     {data.map((row, index) => (
                         <div
                             key={index}
@@ -35,7 +35,7 @@ function Slider({ data }) {
                             onMouseOver={() => handleIndex(row.id)}
                             onMouseLeave={() => setSelectedIndex(null)}
                         >
-                            <div className="w-[196px] h-[240px]">
+                            <div className="w-[160px] md:w-[196px] h-[240px]">
                                 <img
                                     src={
                                         (row.imageUrl === "null") |
@@ -70,10 +70,10 @@ function Slider({ data }) {
                                         {row.caption}
                                     </p>
                                     <div className="flex gap-2">
-                                        <p className="mt-5 text-white text-[10px] w-20 text-center backdrop-opacity-10 bg-white/10 p-2 rounded-lg truncate">
+                                        <p className="mt-5 text-white text-[10px] w-[60px] md:w-20 text-center backdrop-opacity-10 bg-white/10 p-2 rounded-lg truncate">
                                             {row.kategori}
                                         </p>
-                                        <p className="mt-5 text-white text-[10px] w-20 text-center backdrop-opacity-10 bg-white/10 p-2 rounded-lg truncate">
+                                        <p className="mt-5 text-white text-[10px] w-[60px] md:w-20 text-center backdrop-opacity-10 bg-white/10 p-2 rounded-lg truncate">
                                             {row.edisi}
                                         </p>
                                     </div>
@@ -86,7 +86,7 @@ function Slider({ data }) {
             <div>
                 {panjangData > data.length && (
                     <button
-                        className="absolute z-30 top-10 hover:bg-gradient-to-r from-black to-transparent text-white text-2xl h-[240px] w-[50px] rounded-r-md font-bold p-2"
+                        className="hidden md:block absolute z-30 top-10 hover:bg-gradient-to-r from-black to-transparent text-white text-2xl h-[240px] w-[50px] rounded-r-md font-bold p-2"
                         onClick={handleClickKiri}
                     >
                         <img
@@ -98,7 +98,7 @@ function Slider({ data }) {
                 )}
                 {panjangData === data.length && (
                     <button
-                        className="absolute z-30 top-10 right-0 hover:bg-gradient-to-l from-black to-transparent text-white text-2xl h-[240px] w-[50px] rounded-l-md font-bold p-2"
+                        className="hidden md:block absolute z-30 top-10 right-0 hover:bg-gradient-to-l from-black to-transparent text-white text-2xl h-[240px] w-[50px] rounded-l-md font-bold p-2"
                         onClick={handleClickKanan}
                     >
                         <img

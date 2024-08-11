@@ -16,7 +16,7 @@ class UserController extends Controller
     {
         $bukus = Buku::all();
         $bukus = $bukus->shuffle();
-        $pinjamans = Pinjaman::with('buku:id,imageUrl,caption')->with("user:id,nama,kontak")->get();
+        $pinjamans = Pinjaman::where("status_peminjaman", "meminjam")->where('user_id', auth()->user()->id)->with('buku:id,imageUrl,caption')->with("user:id,nama,kontak")->get();
         return Inertia::render("Frontend/DaftarBuku", ["bukus" => $bukus, "pinjamans" => $pinjamans]);
     }
 

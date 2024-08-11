@@ -1,10 +1,9 @@
 import Button from "@/Components/Button";
 import PopOver from "@/Components/PopOver";
 import { url } from "@/Data/Url";
-import { Inertia } from "@inertiajs/inertia";
 import { useForm } from "@inertiajs/inertia-react";
 import { Head } from "@inertiajs/react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 function DetailBuku({ buku, auth }) {
     const [openPinjam, setOpenPinjam] = useState(false);
@@ -33,13 +32,13 @@ function DetailBuku({ buku, auth }) {
         user_id: auth.user.id,
         buku_id: buku.id,
     });
-    const handleSubmit = (e) => {
+    const handleSubmit = () => {
+        setOpenPinjam(true);
+    };
+    const handleKonfirmasi = (e) => {
         e.preventDefault();
         post("/buat-pinjaman-buku");
         put(`/admin/buku-stok-pinjam/${buku.id}`);
-        setOpenPinjam(true);
-    };
-    const handleKonfirmasi = () => {
         setOpenPinjam(false);
         window.location.href = "/daftar-buku";
     };
@@ -68,14 +67,14 @@ function DetailBuku({ buku, auth }) {
                     </div>
                 </PopOver>
             )}
-            <div className="inset-0 absolute left-0 p-10 bg-opacity-10 bg-white/75">
-                <div className="bg-white p-5 rounded-lg mx-auto w-[800px]">
+            <div className="inset-0 absolute left-0 p-5 md:p-10 bg-opacity-10 bg-white/75">
+                <div className="bg-white p-5 rounded-lg mx-auto w-full md:w-[800px]">
                     <div className="flex justify-end">
                         <a href="/daftar-buku">
                             <img src="/close.png" alt="" className="w-4 h-4" />
                         </a>
                     </div>
-                    <div className="mt-5 mx-5 text-xs flex justify-between">
+                    <div className="hidden md:flex mt-5 mx-5 text-xs justify-between">
                         <div>
                             <Button name={"Detail buku"} />
                         </div>
@@ -85,8 +84,8 @@ function DetailBuku({ buku, auth }) {
                             </button>
                         </div>
                     </div>
-                    <div className="mt-5 px-5 flex flex-row gap-10 w-full">
-                        <div className="w-[350px] h-[500px]">
+                    <div className="mt-5 px-0 md:px-5 flex flex-col md:flex-row gap-5 md:gap-10 w-full">
+                        <div className="w-full h-32 md:w-[350px] md:h-[500px]">
                             <img
                                 src={
                                     (buku.imageUrl === "null") |
@@ -99,37 +98,47 @@ function DetailBuku({ buku, auth }) {
                             />
                         </div>
                         <div className="">
-                            <h1 className="font-bold capitalize mt-3 truncate">
-                                {buku.caption}
-                            </h1>
+                            <div className="flex gap-5 items-center">
+                                <h1 className="font-bold capitalize mt-3 truncate">
+                                    {buku.caption}
+                                </h1>
+                                <div
+                                    className="block md:hidden cursor-pointer"
+                                    onClick={handleSubmit}
+                                >
+                                    <button className="p-2 text-xs bg-blue-500 hover:bg-blue-400 text-white rounded-md">
+                                        Pinjam sekarang
+                                    </button>
+                                </div>
+                            </div>
                             <div className="mt-5 text-xs">
                                 <div className="my-3">
                                     <h1 className="font-bold">Edisi</h1>
-                                    <p className="mt-3 w-96 bg-blue-50 p-2 rounded-md">
+                                    <p className="mt-3 w-full md:w-96 bg-blue-50 p-2 rounded-md">
                                         {buku.edisi}
                                     </p>
                                 </div>
                                 <div className="my-3">
                                     <h1 className="font-bold">Kategori</h1>
-                                    <p className="mt-3 w-96 bg-blue-50 p-2 rounded-md">
+                                    <p className="mt-3 w-full md:w-96 bg-blue-50 p-2 rounded-md">
                                         {buku.kategori}
                                     </p>
                                 </div>
                                 <div className="my-3">
                                     <h1 className="font-bold">Tahun</h1>
-                                    <p className="mt-3 w-96 bg-blue-50 p-2 rounded-md">
+                                    <p className="mt-3 w-full md:w-96 bg-blue-50 p-2 rounded-md">
                                         {buku.tahun}
                                     </p>
                                 </div>
                                 <div className="my-3">
                                     <h1 className="font-bold">Stok</h1>
-                                    <p className="mt-3 w-96 bg-blue-50 p-2 rounded-md">
+                                    <p className="mt-3 w-full md:w-96 bg-blue-50 p-2 rounded-md">
                                         {buku.stok}
                                     </p>
                                 </div>
                                 <div className="my-3">
                                     <h1 className="font-bold">Deskripsi</h1>
-                                    <p className="mt-3 w-96 h-32 bg-blue-50 p-2 rounded-md overflow-auto">
+                                    <p className="mt-3 w-full md:w-96 h-32 bg-blue-50 p-2 rounded-md overflow-auto">
                                         {buku.desc}
                                     </p>
                                 </div>

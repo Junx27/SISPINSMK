@@ -43,7 +43,6 @@ function Carosel({ data }) {
             };
 
             image.onerror = () => {
-                // Jika gambar gagal dimuat, atur warna dominan menjadi hitam
                 setDominantColor("#179BAE");
                 setLoading(false);
             };
@@ -52,7 +51,7 @@ function Carosel({ data }) {
         if (slides.length > 0 && slides[selectedIndex - 1].imageUrl) {
             loadImage();
         } else {
-            setDominantColor("#179BAE"); // Jika tidak ada gambar, setel hitam
+            setDominantColor("#179BAE");
             setLoading(false);
         }
     }, [selectedIndex, slides]);
@@ -67,7 +66,7 @@ function Carosel({ data }) {
         const sortedColors = Object.keys(colorMap).sort(
             (a, b) => colorMap[b] - colorMap[a]
         );
-        setDominantColor(sortedColors[0] || "#179BAE"); // Jika tidak ada warna yang dianalisis, setel hitam
+        setDominantColor(sortedColors[0] || "#179BAE");
         setLoading(false);
     };
 
@@ -111,8 +110,8 @@ function Carosel({ data }) {
                                 loading ? "opacity-0" : "opacity-1"
                             }`}
                         />
-                        <div className="absolute z-30 bottom-72 left-20">
-                            <h1 className="font-black text-white text-3xl uppercase w-[500px] truncate">
+                        <div className="absolute z-30 bottom-72 left-5 md:left-20">
+                            <h1 className="font-black text-white text-xl md:text-3xl uppercase w-[500px] truncate">
                                 {slide.caption}
                             </h1>
                             <div className="mt-10 flex flex-row gap-5">
@@ -126,13 +125,13 @@ function Carosel({ data }) {
                                     {slide.edisi}
                                 </p>
                             </div>
-                            <div className="mt-5 w-[500px] h-20">
+                            <div className="mt-5 w-[300px] md:w-[500px] h-20">
                                 <p className="text-xs text-white line-clamp-5">
                                     {slide.desc}
                                 </p>
                             </div>
                         </div>
-                        <div className="absolute z-20 inset-0 bg-gradient-to-t from-white from-10% via-white/50 via-30% to-transparent to-90% w-full h-full"></div>
+                        <div className="absolute z-20 -bottom-1 inset-0 bg-gradient-to-t from-white from-10% via-white/50 via-30% to-transparent to-90% w-full h-full"></div>
                         <div
                             className="absolute inset-0 w-full h-full"
                             style={{
@@ -142,14 +141,14 @@ function Carosel({ data }) {
                     </div>
                 </div>
             ))}
-            <div className="absolute bottom-64 left-20">
+            <div className="absolute bottom-64 left-5 md:left-20">
                 <div className="flex justify-center gap-1 mt-10">
                     {slides.map((slide) => (
                         <div
                             key={slide.id}
                             className={`relative overflow-hidden transition-all duration-1000 h-[5px] rounded-full ${
                                 slide.id === selectedIndex
-                                    ? "bg-gray-400 w-10"
+                                    ? "bg-white/30 w-10"
                                     : "bg-white w-[5px]"
                             }`}
                             onClick={() => setSelectedIndex(slide.id)}

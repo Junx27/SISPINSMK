@@ -1,12 +1,10 @@
-import Carosel from "@/Components/Carosel";
 import Navbar from "@/Components/Navbar";
 import Sidebar from "@/Components/Sidebar";
 import { url } from "@/Data/Url";
 import EditUser from "@/Layouts/EditUser";
 import TabelBuku from "@/Layouts/TabelBuku";
-import { Head, Link } from "@inertiajs/react";
+import { Head } from "@inertiajs/react";
 import React, { useEffect, useState } from "react";
-import Riwayat from "../Frontend/Riwayat";
 import CreateBook from "@/Layouts/CreateBook";
 
 function Buku({ auth, bukus, users, pinjamans }) {

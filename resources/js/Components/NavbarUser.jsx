@@ -55,10 +55,14 @@ function NavbarUser({
             )}
 
             <div className="absolute z-40 py-2 w-full">
-                <div className="flex px-10 justify-between items-center">
-                    <div className="flex items-center">
-                        <img src={logo} alt="" className="w-[50px] h-[50px]" />
-                        <h1 className="font-bold text-white text-xl uppercase ml-5">
+                <div className="flex px-5 py-2 md:py-0 md:px-10 justify-between items-center">
+                    <div className="hidden md:flex items-center">
+                        <img
+                            src="logo.png"
+                            alt=""
+                            className="w-[40px] h-[40px] md:w-[50px] md:h-[50px]"
+                        />
+                        <h1 className="hidden md:block font-bold text-white text-sm md:text-xl uppercase ml-2">
                             sispinsmk
                         </h1>
                     </div>
@@ -69,7 +73,7 @@ function NavbarUser({
                         >
                             <input
                                 type="text"
-                                className="w-[600px] text-xs rounded-lg outline-0 border-0 truncate"
+                                className=" w-[180px] md:w-[600px] text-xs rounded-lg outline-0 border-0 truncate"
                                 placeholder="cari buku..."
                                 value={valueNama}
                                 onChange={(e) => setValueNama(e.target.value)}
@@ -88,13 +92,13 @@ function NavbarUser({
                             )}
                         </div>
                         <button
-                            className="text-white w-20 text-xs py-2 rounded-lg text-center bg-blue-500"
+                            className="text-white w-12 md:w-20 text-xs py-2 rounded-lg text-center bg-blue-500"
                             onClick={handleCariBuku}
                         >
                             cari
                         </button>
                     </div>
-                    <div className="flex flex-row gap-10 items-center">
+                    <div className="hidden md:flex flex-row gap-10 items-center">
                         <a
                             href="https://wa.me/62813269032897?text=hallo..."
                             target="blank"
@@ -157,7 +161,7 @@ function NavbarUser({
                     </div>
                     <div
                         onClick={() => setPopUp(!popUp)}
-                        className="relative cursor-pointer"
+                        className="hidden md:block relative cursor-pointer"
                     >
                         <div className="flex gap-2 items-center">
                             <p className="text-white text-sm font-bold w-12 truncate capitalize">
@@ -179,6 +183,16 @@ function NavbarUser({
                                 <span className="absolute -mt-3 rotate-45 w-3 h-3 bg-white"></span>
                             </Link>
                         )}
+                    </div>
+                    <div onClick={handleBookmark} className="block md:hidden">
+                        <img src="/bookmark.png" alt="" className="w-8 h-8" />
+                    </div>
+                    <div onClick={handleSettting} className="block md:hidden">
+                        <img
+                            src={profile}
+                            alt=""
+                            className="w-10 h-10 rounded-full object-cover"
+                        />
                     </div>
                 </div>
             </div>

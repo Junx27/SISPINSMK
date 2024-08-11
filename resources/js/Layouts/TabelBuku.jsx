@@ -130,7 +130,6 @@ function TabelBuku({ data }) {
     };
     const dataBuku = "data-buku";
     const dataBukuPDF = "data-buku-pdf";
-    console.log(viewBuku);
 
     return (
         <div>
