@@ -37,7 +37,7 @@ function NavbarUser({
             {openRecomen ? (
                 <div onClick={() => setOpenRecom(false)}>
                     {valueNama.length > 0 && (
-                        <div className="absolute text-sm bg-white rounded-lg shadow-lg w-[600px] z-50 top-20 left-64 overflow-hidden">
+                        <div className="absolute text-sm bg-white rounded-lg shadow-lg w-[600px] z-50 top-20 left-5 md:left-64 overflow-hidden">
                             {recomendasiNama.slice(0, 12).map((row) => (
                                 <div
                                     key={row.id}

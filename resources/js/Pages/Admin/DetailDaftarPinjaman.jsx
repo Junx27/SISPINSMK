@@ -4,12 +4,11 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 function DetailDaftarPinjaman({ id, handleClose }) {
-    const [KonfirmasiStokBuku, setKonfirmasiStokBuku] = useState(false);
     const handleOptionChange = (e) => {
         setData("status_peminjaman", e.target.value);
     };
 
-    const { data, setData, put } = useForm({
+    const { data, setData, put, post } = useForm({
         nama_peminjam: "",
         kontak_peminjam: "",
         nama_buku: "",
@@ -43,33 +42,23 @@ function DetailDaftarPinjaman({ id, handleClose }) {
         };
         getPinjamanById();
     }, [id]);
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        put(`/admin/daftarpinjaman-update/${id}`);
-        put(`/admin/buku-stok-kembali/${data.buku_id}`);
-        window.location.reload();
+        await put(`/admin/daftarpinjaman-update/${id}`);
+        await put(`/admin/buku-stok-kembali/${data.buku_id}`);
+        window.location.href = "/admin/daftarpinjaman";
     };
 
     return (
-        <div
-            className={`bg-white p-5 rounded-lg ${
-                KonfirmasiStokBuku ? " w-[300px]" : "w-[650px]"
-            }`}
-        >
+        <div className="bg-white p-5 rounded-lg w-[650px]">
             <div className="flex justify-end" onClick={handleClose}>
                 <img
                     src="/close.png"
                     alt=""
-                    className={`w-5 h-5 cursor-pointer ${
-                        KonfirmasiStokBuku ? " hidden" : "block"
-                    }`}
+                    className="w-5 h-5 cursor-pointer"
                 />
             </div>
-            <form
-                action=""
-                onSubmit={handleSubmit}
-                className={`${KonfirmasiStokBuku ? " hidden" : "block"}`}
-            >
+            <form action="" onSubmit={handleSubmit}>
                 <div className="flex gap-8">
                     <div className="w-full h-[450px]">
                         <img
