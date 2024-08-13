@@ -32,12 +32,12 @@ function DetailBuku({ buku, auth }) {
         user_id: auth.user.id,
         buku_id: buku.id,
     });
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        post("/buat-pinjaman-buku");
         setOpenPinjam(true);
     };
     const handleKonfirmasi = (e) => {
-        e.preventDefault();
-        post("/buat-pinjaman-buku");
         put(`/admin/buku-stok-pinjam/${buku.id}`);
         setOpenPinjam(false);
         window.location.href = "/daftar-buku";
@@ -74,18 +74,11 @@ function DetailBuku({ buku, auth }) {
                             <img src="/close.png" alt="" className="w-4 h-4" />
                         </a>
                     </div>
-                    <div className="hidden md:flex mt-5 mx-5 text-xs justify-between">
-                        <div>
-                            <Button name={"Detail buku"} />
-                        </div>
-                        <div className="cursor-pointer" onClick={handleSubmit}>
-                            <button className="p-2 bg-blue-500 hover:bg-blue-400 text-white rounded-md">
-                                Pinjam sekarang
-                            </button>
-                        </div>
-                    </div>
-                    <div className="mt-5 px-0 md:px-5 flex flex-col md:flex-row gap-5 md:gap-10 w-full">
-                        <div className="w-full h-32 md:w-[350px] md:h-[500px]">
+                    <div className="mt-5 px-0 md:px-5 flex flex-col md:flex-row gap-5 md:gap-10 w-full mb-5">
+                        <div className="w-full h-32 md:w-[350px] md:h-[450px]">
+                            <h1 className="mb-5 font-bold capitalize truncate">
+                                {buku.caption}
+                            </h1>
                             <img
                                 src={
                                     (buku.imageUrl === "null") |
@@ -96,21 +89,14 @@ function DetailBuku({ buku, auth }) {
                                 alt=""
                                 className="w-full h-full object-cover brightness-95 rounded-lg"
                             />
-                        </div>
-                        <div className="">
-                            <div className="flex gap-5 items-center">
-                                <h1 className="font-bold capitalize mt-3 truncate">
-                                    {buku.caption}
-                                </h1>
-                                <div
-                                    className="block md:hidden cursor-pointer"
-                                    onClick={handleSubmit}
-                                >
-                                    <button className="p-2 text-xs bg-blue-500 hover:bg-blue-400 text-white rounded-md">
-                                        Pinjam sekarang
-                                    </button>
+                            <div className="hidden md:block text-xs text-blue-500 mt-3">
+                                <div className="flex flex-col gap-1">
+                                    <p>Tata cara meminjam buku</p>
+                                    <p>Tata cara pengembalian buku</p>
                                 </div>
                             </div>
+                        </div>
+                        <div className="mt-5">
                             <div className="mt-5 text-xs">
                                 <div className="my-3">
                                     <h1 className="font-bold">Edisi</h1>
@@ -136,94 +122,83 @@ function DetailBuku({ buku, auth }) {
                                         {buku.stok}
                                     </p>
                                 </div>
-                                <div className="my-3">
+                                <div className="mt-3">
                                     <h1 className="font-bold">Deskripsi</h1>
                                     <p className="mt-3 w-full md:w-96 h-32 bg-blue-50 p-2 rounded-md overflow-auto">
                                         {buku.desc}
                                     </p>
                                 </div>
+                                <div className="flex justify-end w-full">
+                                    <form
+                                        onSubmit={handleSubmit}
+                                        className="mt-0 flex flex-col gap-5"
+                                    >
+                                        <input
+                                            type="text"
+                                            name="nama_peminjam"
+                                            className="hidden text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
+                                            value={data.nama_peminjam}
+                                            required
+                                        />
+                                        <input
+                                            type="text"
+                                            name="kontak_peminjam"
+                                            className="hidden text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
+                                            value={data.kontak_peminjam}
+                                            required
+                                        />
+                                        <input
+                                            type="text"
+                                            name="nama_buku"
+                                            className="hidden text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
+                                            value={data.nama_buku}
+                                            required
+                                        />
+                                        <input
+                                            type="text"
+                                            name="tanggal_pinjam"
+                                            className="hidden text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
+                                            value={data.tanggal_pinjam}
+                                            required
+                                        />
+                                        <input
+                                            type="text"
+                                            name="tanggal_pengembalian"
+                                            className="hidden text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
+                                            value={data.tanggal_pengembalian}
+                                            required
+                                        />
+                                        <input
+                                            type="text"
+                                            name="status_peminjaman"
+                                            className="hidden text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
+                                            value={data.status_peminjaman}
+                                            required
+                                        />
+                                        <input
+                                            type="number"
+                                            name="buku_id"
+                                            className="hidden text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
+                                            value={data.buku_id}
+                                            required
+                                        />
+                                        <input
+                                            type="number"
+                                            name="user_id"
+                                            className="hidden text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
+                                            value={data.user_id}
+                                            required
+                                        />
+                                        <button
+                                            type="submit"
+                                            className="bg-blue-500 hover:bg-blue-400 text-white mt-5 rounded-md text-xs p-2"
+                                        >
+                                            Pinjam buku sekarang
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="ml-5 text-xs text-blue-500 mt-3">
-                        <div className="flex flex-col gap-1">
-                            <p>Tata cara meminjam buku</p>
-                            <p>Tata cara pengembalian buku</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="bg-white hidden w-96 p-5 rounded-lg">
-                    <div className="flex justify-end cursor-pointer">
-                        <img src="/close.png" alt="" className="w-4 h-4" />
-                    </div>
-                    <div>
-                        <form
-                            onSubmit={handleSubmit}
-                            className="mt-5 flex flex-col gap-5"
-                        >
-                            <input
-                                type="text"
-                                name="nama_peminjam"
-                                className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
-                                value={data.nama_peminjam}
-                                required
-                            />
-                            <input
-                                type="text"
-                                name="kontak_peminjam"
-                                className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
-                                value={data.kontak_peminjam}
-                                required
-                            />
-                            <input
-                                type="text"
-                                name="nama_buku"
-                                className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
-                                value={data.nama_buku}
-                                required
-                            />
-                            <input
-                                type="text"
-                                name="tanggal_pinjam"
-                                className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
-                                value={data.tanggal_pinjam}
-                                required
-                            />
-                            <input
-                                type="text"
-                                name="tanggal_pengembalian"
-                                className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
-                                value={data.tanggal_pengembalian}
-                                required
-                            />
-                            <input
-                                type="text"
-                                name="status_peminjaman"
-                                className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
-                                value={data.status_peminjaman}
-                                required
-                            />
-                            <input
-                                type="number"
-                                name="buku_id"
-                                className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
-                                value={data.buku_id}
-                                required
-                            />
-                            <input
-                                type="number"
-                                name="user_id"
-                                className="text-xs bg-blue-50 hover:bg-blue-100 cursor-pointer rounded-sm outline-none border-0"
-                                value={data.user_id}
-                                required
-                            />
-                            <button
-                                type="submit"
-                                className="bg-blue-500 text-white mt-5 rounded-md text-xs p-2"
-                            >
-                                Konfirmasi
-                            </button>
-                        </form>
                     </div>
                 </div>
             </div>
