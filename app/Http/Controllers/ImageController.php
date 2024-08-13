@@ -33,7 +33,7 @@ class ImageController extends Controller
             $validatedData['imageUrl'] = $request->file('imageUrl')->store('buku', 'public');
         }
 
-        Buku::findOrFail($id)->update($validatedData);
+        $buku->update($validatedData);
     }
     public function viewFotoUser(string $id)
     {
@@ -58,6 +58,6 @@ class ImageController extends Controller
             $validatedData['foto_profil'] = $request->file('foto_profil')->store('foto_profil', 'public');
         }
 
-        User::findOrFail($id)->update($validatedData);
+        $user->update($validatedData);
     }
 }

@@ -30,18 +30,18 @@ function EditFotoBuku({ buku }) {
                     <h2 className="text-xl font-semibold mb-4">
                         Edit Foto Buku
                     </h2>
+                    <div className="mb-4">
+                        <img
+                            src={
+                                data.imageUrl
+                                    ? URL.createObjectURL(data.imageUrl)
+                                    : url + buku.imageUrl
+                            }
+                            alt="Current Book"
+                            className="w-full h-64 object-cover rounded-lg"
+                        />
+                    </div>
                     <form onSubmit={handleSubmit} encType="multipart/form-data">
-                        <div className="mb-4">
-                            <img
-                                src={
-                                    data.imageUrl
-                                        ? URL.createObjectURL(data.imageUrl)
-                                        : url + buku.imageUrl
-                                }
-                                alt="Current Book"
-                                className="w-full h-64 object-cover rounded-lg"
-                            />
-                        </div>
                         <div className="mb-4">
                             <input
                                 type="file"
