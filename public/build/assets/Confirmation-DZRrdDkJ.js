@@ -1,0 +1,1 @@
+import{j as e}from"./app-CIR9jD88.js";import{P as r}from"./PopOver-D0qxf1oD.js";function o(){return e.jsx("div",{children:e.jsx(r,{children:e.jsx("div",{className:"bg-white w-20 h-20 rounded-md p-5",children:e.jsx("button",{className:"bg-black p-2 rounded-md text-white w-20",children:"ok"})})})})}export{o as default};

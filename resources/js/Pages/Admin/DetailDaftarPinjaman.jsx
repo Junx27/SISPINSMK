@@ -5,7 +5,6 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 function DetailDaftarPinjaman({ id, handleClose }) {
-    const [openPopup, setOpenPopup] = useState(false);
     const handleOptionChange = (e) => {
         setData("status_peminjaman", e.target.value);
     };
@@ -46,40 +45,13 @@ function DetailDaftarPinjaman({ id, handleClose }) {
     }, [id]);
     const handleSubmit = (e) => {
         e.preventDefault();
-        setOpenPopup(true);
         put(`/admin/daftarpinjaman-update/${id}`);
-    };
-
-    const handleUpdate = () => {
         put(`/admin/buku-stok-kembali/${data.buku_id}`);
         window.location.href = "/admin/daftarpinjaman";
     };
 
     return (
         <div className="bg-white p-5 rounded-lg w-[650px]">
-            {openPopup && (
-                <PopOver>
-                    <div className="bg-white p-5 rounded-md w-72 h-32">
-                        <p className="text-center text-xs">
-                            Data berhasil dirubah, konfirmasi stok buku
-                        </p>
-                        <div className="flex justify-between gap-3 text-xs mt-5 cursor-pointer">
-                            <button
-                                className="bg-black text-white rounded-md w-32 p-2"
-                                onClick={() => window.location.reload()}
-                            >
-                                Stok buku tetap
-                            </button>
-                            <button
-                                className="bg-blue-500 text-white rounded-md w-32 p-2"
-                                onClick={handleUpdate}
-                            >
-                                Update stok buku
-                            </button>
-                        </div>
-                    </div>
-                </PopOver>
-            )}
             <div className="flex justify-end" onClick={handleClose}>
                 <img
                     src="/close.png"
