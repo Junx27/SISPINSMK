@@ -13,8 +13,15 @@ function EditFotoBuku({ buku }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        put(`/admin/buku-foto/${buku.id}`);
-        window.location.href = "/admin/buku";
+
+        const formData = new FormData();
+        formData.append("imageUrl", data.imageUrl);
+
+        put(`/admin/buku-foto/${buku.id}`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
     };
 
     return (
@@ -41,7 +48,7 @@ function EditFotoBuku({ buku }) {
                             className="w-full h-64 object-cover rounded-lg"
                         />
                     </div>
-                    <form onSubmit={handleSubmit} encType="multipart/form-data">
+                    <form onSubmit={handleSubmit}>
                         <div className="mb-4">
                             <input
                                 type="file"

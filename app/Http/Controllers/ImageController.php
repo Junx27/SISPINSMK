@@ -17,23 +17,24 @@ class ImageController extends Controller
     }
     public function updateFotoBuku(Request $request, string $id)
     {
-        $buku = Buku::findOrFail($id);
-        $validatedData = $request->validate([
-            'imageUrl' => 'file',
-        ]);
+        // $buku = Buku::findOrFail($id);
+        // $validatedData = $request->validate([
+        //     'imageUrl' => 'file',
+        // ]);
 
 
-        if ($request->file('imageUrl')) {
+        // if ($request->hasFile('imageUrl')) {
 
-            if ($buku->imageUrl) {
-                Storage::disk('public')->delete($buku->imageUrl);
-            }
+        //     if ($buku->imageUrl) {
+        //         Storage::disk('public')->delete($buku->imageUrl);
+        //     }
 
 
-            $validatedData['imageUrl'] = $request->file('imageUrl')->store('buku', 'public');
-        }
+        //     $validatedData['imageUrl'] = $request->file('imageUrl')->store('buku', 'public');
+        // }
 
-        $buku->update($validatedData);
+        // $buku->update($validatedData);
+        dd($request->all());
     }
     public function viewFotoUser(string $id)
     {
@@ -48,7 +49,7 @@ class ImageController extends Controller
         ]);
 
 
-        if ($request->file('foto_profil')) {
+        if ($request->hasFile('foto_profil')) {
 
             if ($user->foto_profil) {
                 Storage::disk('public')->delete($user->foto_profil);

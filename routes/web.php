@@ -17,28 +17,28 @@ use Inertia\Inertia;
 Route::get('/', [UserController::class, "landingPage"]);
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('admin/dashboard', [AdminController::class, "dashboard"])->name('dashboard');
-    Route::post('admin/buku-create', [AdminController::class, "createBook"]);
-    Route::put('admin/buku-update/{id}', [AdminController::class, "updateBook"]);
-    Route::get('admin/buku', [AdminController::class, "viewBuku"])->name("buku");
-    Route::get('admin/buku/{id}', [AdminController::class, "viewBukuDetail"]);
-    Route::get('admin/buku-foto/{id}', [ImageController::class, "viewFotoBuku"]);
-    Route::put('admin/buku-foto/{id}', [ImageController::class, "updateFotoBuku"]);
-    Route::get('admin/user-foto/{id}', [ImageController::class, "viewFotoUser"]);
-    Route::put('admin/user-foto/{id}', [ImageController::class, "updateFotoUser"]);
-    Route::delete('admin/buku/{id}', [AdminController::class, "deleteBook"]);
-    Route::put('admin/buku-stok-pinjam/{id}', [AdminController::class, "updateStokBukuPinjam"]);
-    Route::put('admin/buku-stok-kembali/{id}', [AdminController::class, "updateStokBukuKembali"]);
-    Route::get('admin/user', [AdminController::class, "viewUser"]);
-    Route::get('admin/user/{id}', [AdminController::class, "viewUserDetail"]);
-    Route::delete('admin/user/{id}', [AdminController::class, "deleteUser"]);
-    Route::put('admin/user-update/{id}', [AdminController::class, "updateUser"]);
+    Route::get('/admin/dashboard', [AdminController::class, "dashboard"])->name('dashboard');
+    Route::post('/admin/buku-create', [AdminController::class, "createBook"]);
+    Route::put('/admin/buku-update/{id}', [AdminController::class, "updateBook"]);
+    Route::get('/admin/buku', [AdminController::class, "viewBuku"])->name("buku");
+    Route::get('/admin/buku/{id}', [AdminController::class, "viewBukuDetail"]);
+    Route::get('/admin/buku-foto/{id}', [ImageController::class, "viewFotoBuku"]);
+    Route::put('/admin/buku-foto/{id}', [ImageController::class, "updateFotoBuku"]);
+    Route::get('/admin/user-foto/{id}', [ImageController::class, "viewFotoUser"]);
+    Route::put('/admin/user-foto/{id}', [ImageController::class, "updateFotoUser"]);
+    Route::delete('/admin/buku/{id}', [AdminController::class, "deleteBook"]);
+    Route::put('/admin/buku-stok-pinjam/{id}', [AdminController::class, "updateStokBukuPinjam"]);
+    Route::put('/admin/buku-stok-kembali/{id}', [AdminController::class, "updateStokBukuKembali"]);
+    Route::get('/admin/user', [AdminController::class, "viewUser"]);
+    Route::get('/admin/user/{id}', [AdminController::class, "viewUserDetail"]);
+    Route::delete('/admin/user/{id}', [AdminController::class, "deleteUser"]);
+    Route::put('/admin/user-update/{id}', [AdminController::class, "updateUser"]);
     Route::post("/import", [ImportDataController::class, "import"]);
     Route::get("/import", [ImportDataController::class, "view"]);
-    Route::get('admin/daftarpinjaman', [AdminController::class, "viewDaftarPinjaman"]);
-    Route::get('admin/daftarpinjaman/{id}', [AdminController::class, "viewDetailDaftarPinjaman"]);
-    Route::delete('admin/daftarpinjaman-delete/{id}', [AdminController::class, "deleteDaftarPinjaman"]);
-    Route::put('admin/daftarpinjaman-update/{id}', [AdminController::class, "updateDaftarPinjaman"]);
+    Route::get('/admin/daftarpinjaman', [AdminController::class, "viewDaftarPinjaman"]);
+    Route::get('/admin/daftarpinjaman/{id}', [AdminController::class, "viewDetailDaftarPinjaman"]);
+    Route::delete('/admin/daftarpinjaman-delete/{id}', [AdminController::class, "deleteDaftarPinjaman"]);
+    Route::put('/admin/daftarpinjaman-update/{id}', [AdminController::class, "updateDaftarPinjaman"]);
     Route::get('/generate/{id}', [QrCodeController::class, 'generate']);
     Route::get('/buku/{id}', function () {
         return Inertia::render("Frontend/SingleBuku");
@@ -47,10 +47,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('GenerateQrCode');
     });
 
-    Route::get('daftar-buku', [UserController::class, "index"])->name("daftar-buku");
-    Route::get("daftar-buku-detail/{id}", [UserController::class, "show"]);
-    Route::post("buat-pinjaman-buku", [UserController::class, "store"]);
-    Route::put("update-pinjaman-buku/{id}", [UserController::class, "update"]);
+    Route::get('/daftar-buku', [UserController::class, "index"])->name("daftar-buku");
+    Route::get("/daftar-buku-detail/{id}", [UserController::class, "show"]);
+    Route::post("/buat-pinjaman-buku", [UserController::class, "store"]);
+    Route::put("/update-pinjaman-buku/{id}", [UserController::class, "update"]);
 });
 
 
