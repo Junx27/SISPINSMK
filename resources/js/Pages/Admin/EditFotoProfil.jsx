@@ -1,8 +1,10 @@
 import { useForm } from "@inertiajs/inertia-react";
-import React from "react";
+import React, { useState } from "react";
 import { url } from "@/Data/Url";
+import PopOver from "@/Components/PopOver";
 
 function EditFotoProfil({ user }) {
+    const [openPopup, setOpenPopup] = useState(false);
     const { data, setData, post, progress } = useForm({
         _method: "PUT",
         foto_profil: null,
@@ -17,11 +19,32 @@ function EditFotoProfil({ user }) {
         post(`/admin/user-foto/${user.id}`, {
             forceFormData: true,
         });
+        setOpenPopup(true);
+    };
+
+    const handleKonfirmasi = () => {
         window.location.href = "/admin/user";
     };
 
     return (
         <div className="w-full h-screen">
+            {openPopup && (
+                <PopOver>
+                    <div className="bg-white p-5 rounded-md w-64 h-32">
+                        <p className="text-center text-xs">
+                            Data berhasil dirubah
+                        </p>
+                        <div
+                            className="flex justify-center mt-5 cursor-pointer"
+                            onClick={handleKonfirmasi}
+                        >
+                            <button className="bg-blue-500 text-white rounded-md w-32 p-2">
+                                ok
+                            </button>
+                        </div>
+                    </div>
+                </PopOver>
+            )}
             <img
                 src="/footer.jpg"
                 alt=""

@@ -24,7 +24,7 @@ class AdminController extends Controller
     }
     public function viewUser()
     {
-        $users = User::orderBy('created_at', 'desc')->get();
+        $users = User::where("role", "anggota")->orderBy('created_at', 'desc')->get();
         $bukus = Buku::orderBy('created_at', 'desc')->get();
         $pinjamans = Pinjaman::orderBy('created_at', 'desc')->get();
         return Inertia::render("Admin/User", ["users" => $users, "bukus" => $bukus, "pinjamans" => $pinjamans]);
