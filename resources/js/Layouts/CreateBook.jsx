@@ -1,7 +1,9 @@
+import PopOver from "@/Components/PopOver";
 import { Inertia } from "@inertiajs/inertia";
 import React, { useState } from "react";
 
 function CreateBook() {
+    const [openPopup, setOpenPopup] = useState(false);
     const [formData, setFormData] = useState({
         imageUrl: null,
         caption: "",
@@ -50,6 +52,7 @@ function CreateBook() {
                     setProcessing(false);
                 },
             });
+            setOpenPopup(true);
         } catch (error) {
             console.error("Error creating book:", error);
             setProcessing(false);
@@ -57,6 +60,23 @@ function CreateBook() {
     };
     return (
         <div>
+            {openPopup && (
+                <PopOver>
+                    <div className="bg-white p-5 rounded-md w-64 h-32">
+                        <p className="text-center text-xs">
+                            Buku berhasil ditambahkan
+                        </p>
+                        <div
+                            className="flex justify-center mt-5 cursor-pointer"
+                            onClick={() => window.location.reload()}
+                        >
+                            <button className="bg-blue-500 text-white rounded-md w-32 p-2">
+                                ok
+                            </button>
+                        </div>
+                    </div>
+                </PopOver>
+            )}
             <form
                 className="text-xs mx-5 flex flex-col gap-3"
                 onSubmit={handleSubmit}

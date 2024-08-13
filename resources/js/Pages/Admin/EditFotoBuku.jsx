@@ -3,7 +3,8 @@ import React from "react";
 import { url } from "@/Data/Url";
 
 function EditFotoBuku({ buku }) {
-    const { data, setData, put, progress } = useForm({
+    const { data, setData, post, progress } = useForm({
+        _method: "PUT",
         imageUrl: null,
     });
 
@@ -13,15 +14,10 @@ function EditFotoBuku({ buku }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        const formData = new FormData();
-        formData.append("imageUrl", data.imageUrl);
-
-        put(`/admin/buku-foto/${buku.id}`, formData, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
+        post(`/admin/buku-foto/${buku.id}`, {
+            forceFormData: true,
         });
+        window.location.href = "/admin/buku";
     };
 
     return (
@@ -37,22 +33,22 @@ function EditFotoBuku({ buku }) {
                     <h2 className="text-xl font-semibold mb-4">
                         Edit Foto Buku
                     </h2>
-                    <div className="mb-4">
-                        <img
-                            src={
-                                data.imageUrl
-                                    ? URL.createObjectURL(data.imageUrl)
-                                    : url + buku.imageUrl
-                            }
-                            alt="Current Book"
-                            className="w-full h-64 object-cover rounded-lg"
-                        />
-                    </div>
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit} encType="multipart/form-data">
+                        <div className="mb-4">
+                            <img
+                                src={
+                                    data.imageUrl
+                                        ? URL.createObjectURL(data.imageUrl)
+                                        : url + buku.imageUrl
+                                }
+                                alt="Current Book"
+                                className="w-full h-64 object-cover rounded-lg"
+                            />
+                        </div>
                         <div className="mb-4">
                             <input
                                 type="file"
-                                name="imageUrl"
+                                name="foto_profil"
                                 accept="image/*"
                                 className="block w-full text-sm text-gray-500
                                    file:mr-4 file:py-2 file:px-4
