@@ -38,8 +38,8 @@ function EditBuku({ id, handleClose }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        put(`/admin/buku-update/${id}`);
         setOpenPopup(true);
+        put(`/admin/buku-update/${id}`);
     };
 
     return (

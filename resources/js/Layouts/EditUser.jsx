@@ -39,8 +39,8 @@ function EditUser({ id }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        Inertia.put(`/admin/user-update/${id}`, data);
         setOpenPopup(true);
+        Inertia.put(`/admin/user-update/${id}`, data);
     };
     return (
         <div>

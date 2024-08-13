@@ -21,6 +21,7 @@ function ImportBuku({ auth }) {
     const handleSubmit = (event) => {
         event.preventDefault();
 
+        setOpenPopUp(true);
         post("/import", {
             forceFormData: true,
             onSuccess: () => {
@@ -30,7 +31,6 @@ function ImportBuku({ auth }) {
                 console.log("File upload failed");
             },
         });
-        setOpenPopUp(true);
     };
     const downloadCSV = (url, filename, link) => {
         url = "/CSV.xlsx";

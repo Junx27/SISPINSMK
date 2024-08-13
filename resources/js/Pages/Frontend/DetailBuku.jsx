@@ -34,8 +34,8 @@ function DetailBuku({ buku, auth }) {
     });
     const handleSubmit = (e) => {
         e.preventDefault();
-        post("/buat-pinjaman-buku");
         setOpenPinjam(true);
+        post("/buat-pinjaman-buku");
     };
     const handleKonfirmasi = (e) => {
         put(`/admin/buku-stok-pinjam/${buku.id}`);

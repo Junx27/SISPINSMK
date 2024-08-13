@@ -1,1 +1,0 @@
-import{j as e}from"./app-CycvKacP.js";function t({children:i}){return e.jsx("div",{children:e.jsx("div",{className:"fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50",children:e.jsx("div",{children:i})})})}export{t as P};

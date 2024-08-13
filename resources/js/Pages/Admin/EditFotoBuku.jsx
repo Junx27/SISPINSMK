@@ -16,10 +16,10 @@ function EditFotoBuku({ buku }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setOpenPopup(true);
         post(`/admin/buku-foto/${buku.id}`, {
             forceFormData: true,
         });
-        setOpenPopup(true);
     };
 
     const handleKonfirmasi = () => {

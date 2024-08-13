@@ -16,10 +16,10 @@ function EditFotoProfil({ user }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setOpenPopup(true);
         post(`/admin/user-foto/${user.id}`, {
             forceFormData: true,
         });
-        setOpenPopup(true);
     };
 
     const handleKonfirmasi = () => {

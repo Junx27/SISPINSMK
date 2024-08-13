@@ -46,8 +46,8 @@ function DetailDaftarPinjaman({ id, handleClose }) {
     }, [id]);
     const handleSubmit = (e) => {
         e.preventDefault();
-        put(`/admin/daftarpinjaman-update/${id}`);
         setOpenPopup(true);
+        put(`/admin/daftarpinjaman-update/${id}`);
     };
 
     const handleUpdate = () => {
