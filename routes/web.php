@@ -57,7 +57,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
 
-Route::fallback([PageNotFoundController::class, "index"]);
+// Route::fallback([PageNotFoundController::class, "index"]);
 
 
 
