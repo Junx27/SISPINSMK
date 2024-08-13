@@ -3,8 +3,10 @@ import { useForm } from "@inertiajs/inertia-react";
 import { Inertia } from "@inertiajs/inertia";
 import { url } from "@/Data/Url";
 import { Link } from "@inertiajs/react";
+import PopOver from "@/Components/PopOver";
 
 function EditUser({ id }) {
+    const [openPopup, setOpenPopup] = useState(false);
     const { data, setData, post, processing, errors, reset } = useForm({
         nama: "",
         email: "",
@@ -38,10 +40,27 @@ function EditUser({ id }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         Inertia.put(`/admin/user-update/${id}`, data);
-        window.location.reload();
+        setOpenPopup(true);
     };
     return (
         <div>
+            {openPopup && (
+                <PopOver>
+                    <div className="bg-white p-5 rounded-md w-64 h-32">
+                        <p className="text-center text-xs">
+                            Data berhasil dirubah
+                        </p>
+                        <div
+                            className="flex justify-center mt-5 cursor-pointer"
+                            onClick={() => window.location.reload()}
+                        >
+                            <button className="bg-blue-500 text-white rounded-md w-32 p-2">
+                                ok
+                            </button>
+                        </div>
+                    </div>
+                </PopOver>
+            )}
             <a href={`/admin/user-foto/${id}`}>
                 <img
                     src={url + data.foto_profil}

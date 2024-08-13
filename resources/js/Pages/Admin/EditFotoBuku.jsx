@@ -3,8 +3,7 @@ import React from "react";
 import { url } from "@/Data/Url";
 
 function EditFotoBuku({ buku }) {
-    const { data, setData, post, progress } = useForm({
-        _method: "PUT",
+    const { data, setData, put, progress } = useForm({
         imageUrl: null,
     });
 
@@ -14,9 +13,7 @@ function EditFotoBuku({ buku }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post(`/admin/buku-foto/${buku.id}`, {
-            forceFormData: true,
-        });
+        put(`/admin/buku-foto/${buku.id}`);
         window.location.href = "/admin/buku";
     };
 

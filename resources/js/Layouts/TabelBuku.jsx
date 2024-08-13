@@ -408,6 +408,9 @@ function TabelBuku({ data }) {
                                     Edisi
                                 </th>
                                 <th className="border-r px-2 md:px-3 py-4 font-bold text-start text-sm w-20">
+                                    Stok
+                                </th>
+                                <th className="border-r px-2 md:px-3 py-4 font-bold text-start text-sm w-20">
                                     Edit
                                 </th>
                             </tr>
@@ -437,6 +440,9 @@ function TabelBuku({ data }) {
                                     </td>
                                     <td className="border-r py-1 px-3 capitalize leading-6">
                                         {data.edisi}
+                                    </td>
+                                    <td className="border-r py-1 px-3 capitalize leading-6">
+                                        {data.stok}
                                     </td>
                                     <td
                                         className="relative group border-r py-1 px-3 capitalize text-center hover:bg-blue-50 cursor-pointer"
@@ -548,6 +554,9 @@ function TabelBuku({ data }) {
                                     Edisi
                                 </th>
                                 <th className="border-r px-2 md:px-3 py-4 font-bold text-start text-sm w-20">
+                                    Stok
+                                </th>
+                                <th className="border-r px-2 md:px-3 py-4 font-bold text-start text-sm w-20">
                                     Edit
                                 </th>
                             </tr>
@@ -588,6 +597,9 @@ function TabelBuku({ data }) {
                                     </td>
                                     <td className="border-r py-1 px-3 capitalize leading-6">
                                         {data.edisi}
+                                    </td>
+                                    <td className="border-r py-1 px-3 capitalize leading-6">
+                                        {data.stok}
                                     </td>
                                     <td
                                         className="relative group border-r py-1 px-3 capitalize text-center hover:bg-blue-50 cursor-pointer"

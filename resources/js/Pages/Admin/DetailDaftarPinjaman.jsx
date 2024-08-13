@@ -1,9 +1,11 @@
+import PopOver from "@/Components/PopOver";
 import { url } from "@/Data/Url";
 import { useForm } from "@inertiajs/inertia-react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 function DetailDaftarPinjaman({ id, handleClose }) {
+    const [openPopup, setOpenPopup] = useState(false);
     const handleOptionChange = (e) => {
         setData("status_peminjaman", e.target.value);
     };
@@ -42,15 +44,42 @@ function DetailDaftarPinjaman({ id, handleClose }) {
         };
         getPinjamanById();
     }, [id]);
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        await put(`/admin/daftarpinjaman-update/${id}`);
-        await put(`/admin/buku-stok-kembali/${data.buku_id}`);
+        put(`/admin/daftarpinjaman-update/${id}`);
+        setOpenPopup(true);
+    };
+
+    const handleUpdate = () => {
+        put(`/admin/buku-stok-kembali/${data.buku_id}`);
         window.location.href = "/admin/daftarpinjaman";
     };
 
     return (
         <div className="bg-white p-5 rounded-lg w-[650px]">
+            {openPopup && (
+                <PopOver>
+                    <div className="bg-white p-5 rounded-md w-72 h-32">
+                        <p className="text-center text-xs">
+                            Data berhasil dirubah, konfirmasi stok buku
+                        </p>
+                        <div className="flex justify-between gap-3 text-xs mt-5 cursor-pointer">
+                            <button
+                                className="bg-black text-white rounded-md w-32 p-2"
+                                onClick={() => window.location.reload()}
+                            >
+                                Stok buku tetap
+                            </button>
+                            <button
+                                className="bg-blue-500 text-white rounded-md w-32 p-2"
+                                onClick={handleUpdate}
+                            >
+                                Update stok buku
+                            </button>
+                        </div>
+                    </div>
+                </PopOver>
+            )}
             <div className="flex justify-end" onClick={handleClose}>
                 <img
                     src="/close.png"
@@ -83,6 +112,7 @@ function DetailDaftarPinjaman({ id, handleClose }) {
                                 onChange={(e) =>
                                     setData("nama_peminjam", e.target.value)
                                 }
+                                required
                             />
                         </div>
                         <div>
@@ -95,6 +125,7 @@ function DetailDaftarPinjaman({ id, handleClose }) {
                                 onChange={(e) =>
                                     setData("nama_buku", e.target.value)
                                 }
+                                required
                             />
                         </div>
                         <div>
@@ -107,6 +138,7 @@ function DetailDaftarPinjaman({ id, handleClose }) {
                                 onChange={(e) =>
                                     setData("tanggal_pinjam", e.target.value)
                                 }
+                                required
                             />
                         </div>
                         <div>
@@ -124,6 +156,7 @@ function DetailDaftarPinjaman({ id, handleClose }) {
                                         e.target.value
                                     )
                                 }
+                                required
                             />
                         </div>
                         <div>

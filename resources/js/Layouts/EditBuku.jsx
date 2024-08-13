@@ -1,9 +1,10 @@
+import PopOver from "@/Components/PopOver";
 import { url } from "@/Data/Url";
 import { useForm } from "@inertiajs/inertia-react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 function EditBuku({ id, handleClose }) {
-    // Make sure 'id' is passed as a prop
+    const [openPopup, setOpenPopup] = useState(false);
     const { data, setData, put } = useForm({
         caption: "",
         kategori: "",
@@ -38,11 +39,28 @@ function EditBuku({ id, handleClose }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         put(`/admin/buku-update/${id}`);
-        window.location.reload();
+        setOpenPopup(true);
     };
 
     return (
         <div className="bg-white p-5 rounded-lg w-[700px] shadow-lg">
+            {openPopup && (
+                <PopOver>
+                    <div className="bg-white p-5 rounded-md w-64 h-32">
+                        <p className="text-center text-xs">
+                            Data berhasil dirubah
+                        </p>
+                        <div
+                            className="flex justify-center mt-5 cursor-pointer"
+                            onClick={() => window.location.reload()}
+                        >
+                            <button className="bg-blue-500 text-white rounded-md w-32 p-2">
+                                ok
+                            </button>
+                        </div>
+                    </div>
+                </PopOver>
+            )}
             <div className="flex justify-end" onClick={handleClose}>
                 <img src="/close.png" alt="" className="w-5 h-5" />
             </div>
