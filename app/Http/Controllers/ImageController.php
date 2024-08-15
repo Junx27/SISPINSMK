@@ -34,6 +34,7 @@ class ImageController extends Controller
         }
 
         $buku->update($validatedData);
+        return Inertia::location("/admin/buku");
     }
     public function viewFotoUser(string $id)
     {
@@ -59,5 +60,12 @@ class ImageController extends Controller
         }
 
         $user->update($validatedData);
+
+        if ($user->role = "anggota") {
+            if ($user->role = "admin") {
+                return Inertia::location("/admin/user");
+            }
+            return Inertia::location("/daftar-buku");
+        }
     }
 }

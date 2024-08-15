@@ -818,7 +818,12 @@ function TabelPinjaman({ data }) {
                                             : data.keterangan}
                                     </td>
                                     <td
-                                        className="relative group border-r py-1 px-3 capitalize text-center hover:bg-blue-50 cursor-pointer"
+                                        className={`relative group border-r py-1 px-3 capitalize text-center hover:bg-blue-50 cursor-pointer ${
+                                            data.status_peminjaman ===
+                                            "dikembalikan"
+                                                ? "hidden"
+                                                : "block"
+                                        }`}
                                         onClick={() =>
                                             handleViewDetail(data.id)
                                         }

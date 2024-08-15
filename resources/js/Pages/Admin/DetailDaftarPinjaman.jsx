@@ -2,14 +2,14 @@ import PopOver from "@/Components/PopOver";
 import { url } from "@/Data/Url";
 import { useForm } from "@inertiajs/inertia-react";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 function DetailDaftarPinjaman({ id, handleClose }) {
     const handleOptionChange = (e) => {
         setData("status_peminjaman", e.target.value);
     };
 
-    const { data, setData, put, post } = useForm({
+    const { data, setData, put } = useForm({
         nama_peminjam: "",
         kontak_peminjam: "",
         nama_buku: "",
@@ -46,10 +46,7 @@ function DetailDaftarPinjaman({ id, handleClose }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         put(`/admin/daftarpinjaman-update/${id}`);
-        put(`/admin/buku-stok-kembali/${data.buku_id}`);
-        window.location.href = "/admin/daftarpinjaman";
     };
-
     return (
         <div className="bg-white p-5 rounded-lg w-[650px]">
             <div className="flex justify-end" onClick={handleClose}>

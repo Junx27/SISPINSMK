@@ -598,7 +598,13 @@ function TabelBuku({ data }) {
                                     <td className="border-r py-1 px-3 capitalize leading-6">
                                         {data.edisi}
                                     </td>
-                                    <td className="border-r py-1 px-3 capitalize leading-6">
+                                    <td
+                                        className={`border-r py-1 px-3 capitalize leading-6 ${
+                                            data.stok === 0
+                                                ? "text-red-500"
+                                                : ""
+                                        }`}
+                                    >
                                         {data.stok}
                                     </td>
                                     <td

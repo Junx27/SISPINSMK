@@ -367,7 +367,7 @@ function DaftarBuku({ auth, bukus, pinjamans }) {
                                 <div>
                                     <h1 className="font-bold pb-1">Kategori</h1>
                                     <div className="flex flex-col mt-3 cursor-pointer">
-                                        {kategori.slice(0, 6).map((row) => (
+                                        {kategori.slice(0, 4).map((row) => (
                                             <div
                                                 key={row.id}
                                                 onClick={() =>

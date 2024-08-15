@@ -44,6 +44,13 @@ class UserController extends Controller
         ]);
 
         Pinjaman::create($validatedData);
+        $buku = Buku::findOrFail($validatedData["buku_id"]);
+        if ($buku->stok > 0) {
+            $buku->stok = $buku->stok - 1;
+            $buku->jumlah_dipinjam = $buku->jumlah_dipinjam + 1;
+            $buku->save();
+        }
+        return Inertia::location("/daftar-buku");
     }
 
     /**

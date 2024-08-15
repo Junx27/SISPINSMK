@@ -1,10 +1,8 @@
 import { useForm } from "@inertiajs/inertia-react";
-import React, { useState } from "react";
+import React from "react";
 import { url } from "@/Data/Url";
-import PopOver from "@/Components/PopOver";
 
 function EditFotoProfil({ user }) {
-    const [openPopup, setOpenPopup] = useState(false);
     const { data, setData, post, progress } = useForm({
         _method: "PUT",
         foto_profil: null,
@@ -16,35 +14,12 @@ function EditFotoProfil({ user }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setOpenPopup(true);
         post(`/admin/user-foto/${user.id}`, {
             forceFormData: true,
         });
     };
-
-    const handleKonfirmasi = () => {
-        window.location.href = "/admin/user";
-    };
-
     return (
         <div className="w-full h-screen">
-            {openPopup && (
-                <PopOver>
-                    <div className="bg-white p-5 rounded-md w-64 h-32">
-                        <p className="text-center text-xs">
-                            Data berhasil dirubah
-                        </p>
-                        <div
-                            className="flex justify-center mt-5 cursor-pointer"
-                            onClick={handleKonfirmasi}
-                        >
-                            <button className="bg-blue-500 text-white rounded-md w-32 p-2">
-                                ok
-                            </button>
-                        </div>
-                    </div>
-                </PopOver>
-            )}
             <img
                 src="/footer.jpg"
                 alt=""
@@ -53,9 +28,11 @@ function EditFotoProfil({ user }) {
 
             <div className="inset-0 absolute left-0 p-5 bg-opacity-10 bg-white/75">
                 <div className="bg-white p-5 rounded-lg shadow-lg w-96 mx-auto">
-                    <h2 className="text-xl font-semibold mb-4">
-                        Edit Foto Buku
-                    </h2>
+                    <a href="/admin/user">
+                        <div className="flex justify-end mb-5">
+                            <img src="/close.png" alt="" className="w-5 h-5" />
+                        </div>
+                    </a>
                     <form onSubmit={handleSubmit} encType="multipart/form-data">
                         <div className="mb-4">
                             <img

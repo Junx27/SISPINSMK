@@ -78,6 +78,7 @@ class AdminController extends Controller
             $validatedData['imageUrl'] = $request->file('imageUrl')->store('buku', 'public');
         }
         Buku::create($validatedData);
+        return Inertia::location("/admin/buku");
     }
     public function updateBook(Request $request, string $id)
     {
@@ -93,22 +94,7 @@ class AdminController extends Controller
             'desc' => 'required|string',
         ]);
         $book->update($validatedData);
-    }
-
-    public function updateStokBukuPinjam(String $id)
-    {
-        $buku = Buku::findOrFail($id);
-        if ($buku->stok > 0) {
-            $buku->stok = $buku->stok - 1;
-            $buku->jumlah_dipinjam = $buku->jumlah_dipinjam + 1;
-            $buku->save();
-        }
-    }
-    public function updateStokBukuKembali(String $id)
-    {
-        $buku = Buku::findOrFail($id);
-        $buku->stok = $buku->stok + 1;
-        $buku->save();
+        return Inertia::location("/admin/buku");
     }
 
 
@@ -157,9 +143,14 @@ class AdminController extends Controller
         $validatedData = $request->validate([
             "status_peminjaman" => "required",
             "keterangan" => "required",
+            "buku_id" => "required",
         ]);
         $pinjaman = Pinjaman::findOrFail($id);
         $pinjaman->update($validatedData);
+        $buku = Buku::findOrFail($validatedData["buku_id"]);
+        $buku->stok = $buku->stok + 1;
+        $buku->save();
+        return Inertia::location("/admin/daftarpinjaman");
     }
     public function deleteDaftarPinjaman(String $id)
     {
